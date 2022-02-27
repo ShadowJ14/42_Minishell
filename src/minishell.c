@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:07:52 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 18:33:11 by lprates          ###   ########.fr       */
+/*   Updated: 2022/02/27 19:56:03 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**msh_split_line(char *line)
 {
 	char	**args;
 
-	args = local_split(line, "\'\"");
+	args = local_split(line);
 	if (!args)
 		return (NULL);
 	return (args);

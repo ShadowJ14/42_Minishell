@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 18:46:48 by lprates          ###   ########.fr       */
+/*   Updated: 2022/02/27 19:47:33 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,21 @@ void	set_builtin_funcs(char **builtin_funcs)
 	builtin_funcs[6] = "exit";
 }
 
-int	execute_builtins(char *cmd)
+/*int	execute_builtins(char *cmd)
 {
-}
+}*/
 
 int	builtin(char *cmd, char **builtin_funcs, char **args)
 {
 	int idx;
+	(void) args;
 
 	idx = -1;
 	while (++idx < BUILTIN_FUNCS_NB)
 	{
 		if (!ft_strcmp(cmd, builtin_funcs[idx]))
 		{
-			execute_builtins(cmd);
+			//execute_builtins(cmd);
 			return (1);
 		}
 	}

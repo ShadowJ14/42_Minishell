@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:06:24 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 18:33:49 by lprates          ###   ########.fr       */
+/*   Updated: 2022/02/27 19:37:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 # define BUILTIN_FUNCS_NB 7
 
-char	**local_split(char const *s, char *delim);
+char	**local_split(char const *s);
 char	*check_sysfunction(char *func);
 int		exec_sysfunction(char **args);
 void	set_builtin_funcs(char **builtin_funcs);
