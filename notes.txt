@@ -1,0 +1,18 @@
+1) display a prompt for user to input
+2) user inputs command with or without arguments and pipes and redirections
+3) env variables should be expanded before processing
+4a) if pipes
+	the output of each command is connected to the input of the next command
+   if redirections
+	< should redirect input;
+	> should redirect output;
+	<< should be given a delimiter, then read the input until a line containing the
+	delimiter is seen. However, it doesn’t have to update the history!
+	>> should redirect output in append mode
+4b) execute the commands taking into account pipes and/redirections
+
+how to handle pipes??
+from StackOverflow: Each part of a Linux pipelined command (e.g. cat foo | wc -l) creates and runs in its own subshell (a separate process). If you need to do that using fork, then you should look at dup or dup2 so that you can control the proper redirection of output from one process to the input of another that way.
+
+dup or dup2 - duplicates an existing process and returns the new file descriptor to the calling process. In dup2 the value for the new file descriptor is already provided
+
