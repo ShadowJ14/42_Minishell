@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:07:52 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 19:56:03 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/04 02:18:22 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	msh_execute(char **args, char **builtin_funcs)
 {
-	int return_code;
+	int	return_code;
 
 	return_code = builtin(args[0], builtin_funcs, args);
 	if (!return_code)
@@ -77,7 +77,7 @@ void	msh_loop(char **builtin_funcs)
 
 int	main(void)
 {
-	char *builtin_funcs[BUILTIN_FUNCS_NB];
+	char	*builtin_funcs[BUILTIN_FUNCS_NB];
 	
 	set_builtin_funcs(builtin_funcs);
 	msh_loop(builtin_funcs);

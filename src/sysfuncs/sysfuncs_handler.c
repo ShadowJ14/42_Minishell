@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 18:32:45 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/04 02:19:26 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char	*check_sysfunction(char *func)
 {
-	char *envs;
-	char **ret;
-	char *cmd;
-	int ret_access;
+	char	*envs;
+	char	**ret;
+	char	*cmd;
+	int		ret_access;
 
 	envs = getenv("PATH");
 	ret = ft_split(envs, ':');
@@ -35,9 +35,9 @@ char	*check_sysfunction(char *func)
 
 int	exec_sysfunction(char **args)
 {
-	int	pid;
-	int	status;
-	char *cmd;
+	int		pid;
+	int		status;
+	char	*cmd;
 
 	cmd = check_sysfunction(args[0]);
 	if (cmd)
