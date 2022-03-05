@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   local_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 19:45:46 by lprates          ###   ########.fr       */
+/*   Updated: 2022/02/26 21:39:07 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ static long long	w_cnt(char *s)
 		if (*s != ' ')
 		{
 			cnt++;
-			s = move_to_delim((char *)s, ' ', s);
+			if (*s == '"')
+				s = move_to_delim((char *)s, '"', s);
+			else if (*s == '\'')
+				s = move_to_delim((char *)s, '\'', s);
+			else
+				s = move_to_delim((char *)s, ' ', s);
 		}
 		if (*s != 0)
 			s++;
@@ -48,7 +53,7 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 	*dst = 0;
 }
 
-char	**local_split(char const *s)
+char	**local_split(char const *s, char *delim)
 {
 	char		**ret;
 	long long	idx;
@@ -63,7 +68,10 @@ char	**local_split(char const *s)
 		if (*s != ' ')
 		{
 			from = (char *)s;
-			s = move_to_delim((char *)s, ' ', from);
+			if (ft_strchr(delim, *s))
+				s = move_to_delim((char *)s, *s, ++from);
+			else
+				s = move_to_delim((char *)s, ' ', from);
 			ret[idx] = (char *)malloc(s - from + 1);
 			loc_strcpy(ret[idx++], from, (char *)s);
 		}

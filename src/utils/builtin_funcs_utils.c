@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/04 02:23:19 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/05 12:28:52 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	execute_builtins(char *cmd, char **args)
 int	builtin(char *cmd, char **builtin_funcs, char **args)
 {
 	int idx;
-	(void) args;
 
 	idx = -1;
 	while (++idx < BUILTIN_FUNCS_NB)
