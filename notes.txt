@@ -16,3 +16,13 @@ from StackOverflow: Each part of a Linux pipelined command (e.g. cat foo | wc -l
 
 dup or dup2 - duplicates an existing process and returns the new file descriptor to the calling process. In dup2 the value for the new file descriptor is already provided
 
+export:
+	Mark each name to be passed to child processes in the environment. The return status is zero unless an invalid option is supplied, one of the names is not a valid shell variable name, or -f is supplied with a name that is not a shell function.
+
+exit:
+	Exit the shell, returning a status of n to the shell’s parent. If n is omitted, the exit status is that of the last command executed. Any trap on EXIT is executed before the shell terminates.
+
+cd:
+	Change the current working directory to directory. If directory is not supplied, the value of the HOME shell variable is used. Any additional arguments following directory are ignored. If the shell variable CDPATH exists, it is used as a search path: each directory name in CDPATH is searched for directory, with alternative directory names in CDPATH separated by a colon (‘:’). If directory begins with a slash, CDPATH is not used.
+	If a non-empty directory name from CDPATH is used, or if ‘-’ is the first argument, and the directory change is successful, the absolute pathname of the new working directory is written to the standard output.
+	The return status is zero if the directory is successfully changed, non-zero otherwise.

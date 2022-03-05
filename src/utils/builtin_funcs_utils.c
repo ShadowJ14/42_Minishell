@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/05 12:28:52 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/05 14:51:40 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	set_builtin_funcs(char **builtin_funcs)
 int	execute_builtins(char *cmd, char **args)
 {
 	char	*path;
+	extern char **environ;
 
 	if (!ft_strcmp(cmd, "cd"))
 		chdir(args[1]);
@@ -37,13 +38,19 @@ int	execute_builtins(char *cmd, char **args)
 	if (!ft_strcmp(cmd, "echo"))
 	{
 		if (!ft_strcmp(args[1], "-n"))
-			printf("%s", args[2]);
+			write(1, args[2], ft_strlen(args[2]));
 		else
-			printf("%s\n", args[1]);
+		{
+			write(1, args[1], ft_strlen(args[1]));
+			write(1, "\n", 1);
+		}
+			//printf("%s\n", args[1]);
 	}
 	/*if (cmd == "export")
-	if (cmd == "unset")
-	if (cmd == "env")*/
+	if (cmd == "unset")*/
+	if (!ft_strcmp(cmd, "env"))
+		while (*environ)
+			printf("%s\n", *(environ++));
 	if (!ft_strcmp(cmd, "exit"))
 	{
 		if (args[1])
