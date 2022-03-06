@@ -11,6 +11,8 @@
 	>> should redirect output in append mode
 4b) execute the commands taking into account pipes and/redirections
 
+I don't know how many pipes/redirections are going to be
+
 how to handle pipes??
 from StackOverflow: Each part of a Linux pipelined command (e.g. cat foo | wc -l) creates and runs in its own subshell (a separate process). If you need to do that using fork, then you should look at dup or dup2 so that you can control the proper redirection of output from one process to the input of another that way.
 

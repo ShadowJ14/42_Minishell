@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:07:52 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/05 14:51:32 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/06 11:44:57 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,15 @@ int	msh_execute(char **args, char **builtin_funcs)
 char	**msh_split_line(char *line)
 {
 	char	**args;
+	/*char	**commands;
 
-	args = local_split(line, "\'\"");
+	commands = local_split(line, "|");
+	while (*commands)
+	{
+		printf("command: %s\n", *commands);
+		commands++;
+	}*/
+	args = local_split(line, " ");
 	if (!args)
 		return (NULL);
 	return (args);

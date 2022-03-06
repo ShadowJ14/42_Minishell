@@ -6,14 +6,14 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:06:24 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/27 18:33:49 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/06 10:53:14 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "../libs/libft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>

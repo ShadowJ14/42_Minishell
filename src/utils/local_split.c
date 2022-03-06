@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   local_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/02/26 21:39:07 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/06 11:46:22 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@ static char	*move_to_delim(char *s, char delim, char *from)
 	from++;
 	while (*s && *s != delim)
 		++s;
-	if (*s == 0 && delim != ' ')
-		return (NULL);
 	return (s);
 }
 
-static long long	w_cnt(char *s)
+static long long	w_cnt(char *s, char *delim)
 {
 	long long	cnt;
 
@@ -33,16 +31,13 @@ static long long	w_cnt(char *s)
 		if (*s != ' ')
 		{
 			cnt++;
-			if (*s == '"')
-				s = move_to_delim((char *)s, '"', s);
-			else if (*s == '\'')
-				s = move_to_delim((char *)s, '\'', s);
-			else
-				s = move_to_delim((char *)s, ' ', s);
+			if (ft_strchr(delim, *s))
+				s = move_to_delim((char *)s, *s, s);
 		}
-		if (*s != 0)
+		if (s && *s != 0)
 			s++;
 	}
+	printf("cnt %lli\n", cnt);
 	return (cnt);
 }
 
@@ -59,7 +54,7 @@ char	**local_split(char const *s, char *delim)
 	long long	idx;
 	char		*from;
 
-	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s) + 1);
+	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s, delim) + 1);
 	if (!s || !ret)
 		return (NULL);
 	idx = 0;
