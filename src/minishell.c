@@ -6,34 +6,60 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:07:52 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/06 11:44:57 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/11 00:03:10 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	msh_execute(char **args, char **builtin_funcs)
+int	msh_execute(char ***args, char **builtin_funcs)
 {
 	int	return_code;
 
-	return_code = builtin(args[0], builtin_funcs, args);
+	return_code = builtin(*args[0], builtin_funcs, *args);
 	if (!return_code)
-		return_code = exec_sysfunction(args);
+		return_code = exec_sysfunction(*args);
 	return (return_code);
 }
 
-char	**msh_split_line(char *line)
+char	***msh_split_line(char *line)
 {
-	char	**args;
-	/*char	**commands;
+	char	***args;
+	char	**commands;
+	int		i = 0;
 
-	commands = local_split(line, "|");
+	commands = local_split(line, "|<>");
+	char **start = commands;
+	char ***starttwo;
+	while (*commands++)
+		i++;
+	printf("nb of commands: %i\n", i);
+	args = malloc(sizeof(char ***) * i);
+	i = 0;
+	commands = start;
+	starttwo = args;
 	while (*commands)
 	{
 		printf("command: %s\n", *commands);
+		*args = local_split(*commands, " ");
+		args++;
 		commands++;
-	}*/
-	args = local_split(line, " ");
+	}
+	*args = 0;
+	i = 0;
+	args = starttwo;
+	while (*args)
+	{
+		while (**args)
+		{
+			printf("cmd %i args %s\n", i, **args);
+			(*args)++;
+		}
+		i++;
+		args++;
+	}
+	write(1, "Aqui\n", 5);
+	args = starttwo;
 	if (!args)
 		return (NULL);
 	return (args);
@@ -58,7 +84,7 @@ char	*msh_readline(void)
 void	msh_loop(char **builtin_funcs)
 {
 	char	*line;
-	char	**args;
+	char	***args;
 	int		status;
 
 	status = 1;

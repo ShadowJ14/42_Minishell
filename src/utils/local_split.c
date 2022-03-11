@@ -6,20 +6,20 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/06 11:46:22 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/10 23:43:09 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*move_to_delim(char *s, char delim, char *from)
+/*static char	*move_to_delim(char *s, char delim, char *from)
 {
 	from = (char *)++s;
 	from++;
 	while (*s && *s != delim)
 		++s;
 	return (s);
-}
+}*/
 
 static long long	w_cnt(char *s, char *delim)
 {
@@ -28,13 +28,16 @@ static long long	w_cnt(char *s, char *delim)
 	cnt = 0;
 	while (*s)
 	{
-		if (*s != ' ')
+		if (!ft_strchr(delim, *s))
 		{
 			cnt++;
-			if (ft_strchr(delim, *s))
-				s = move_to_delim((char *)s, *s, s);
+			while (!ft_strchr(delim, *s))
+				s++;
+			if ((*s == '>' && *(s + 1) == '>')
+				|| (*s == '<' && *(s + 1) == '<'))
+				s++;
 		}
-		if (s && *s != 0)
+		if (*s != 0)
 			s++;
 	}
 	printf("cnt %lli\n", cnt);
@@ -60,15 +63,21 @@ char	**local_split(char const *s, char *delim)
 	idx = 0;
 	while (*s)
 	{
-		if (*s != ' ')
+		if (!ft_strchr(delim, *s))
 		{
+			if ((*s == '>' && *(s - 1) == '>')
+				|| (*s == '<' && *(s - 1) == '<'))
+				s++;
 			from = (char *)s;
-			if (ft_strchr(delim, *s))
-				s = move_to_delim((char *)s, *s, ++from);
-			else
-				s = move_to_delim((char *)s, ' ', from);
+			while (!ft_strchr(delim, *s) && *s)
+				s++;
 			ret[idx] = (char *)malloc(s - from + 1);
-			loc_strcpy(ret[idx++], from, (char *)s);
+			if ((*s == '>' && *(s + 1) == '>')
+				|| (*s == '<' && *(s + 1) == '<'))
+				loc_strcpy(ret[idx++], from, (char *)s + 2);
+			else
+				loc_strcpy(ret[idx++], from, (char *)s + 1);
+
 		}
 		if (*s != 0)
 			++s;

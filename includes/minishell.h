@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:06:24 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/06 10:53:14 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/11 00:08:10 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,12 @@ char	*check_sysfunction(char *func);
 int		exec_sysfunction(char **args);
 void	set_builtin_funcs(char **builtin_funcs);
 int		builtin(char *cmd, char **builtin_funcs, char **args);
+
+typedef struct s_command
+{
+	char	*command;
+	char	*args;
+	
+}				t_command;
 
 #endif
