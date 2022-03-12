@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -c
+CFLAGS = -Wall -Wextra -Werror -c -g -fsanitize=address
 
 NAME = ./libft.a
 SOURCES = $(filter-out $(BONUS), $(wildcard ft_*.c))

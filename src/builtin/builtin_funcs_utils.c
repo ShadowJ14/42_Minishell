@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/05 14:51:40 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/12 19:04:55 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,48 +23,82 @@ void	set_builtin_funcs(char **builtin_funcs)
 	builtin_funcs[6] = "exit";
 }
 
+/* implements echo with -n option builtin
+*/
+
+void	do_echo(char **args)
+{
+	int	idx;
+
+	if (!ft_strcmp(args[1], "-n"))
+	{
+		idx = 1;
+		while (args[++idx])
+		{
+			if (idx != 2)
+				write(1, " ", 1);
+			write(1, args[idx], ft_strlen(args[idx]));
+		}
+	}
+	else
+	{
+		idx = 0;
+		while (args[++idx])
+			write(1, args[idx], ft_strlen(args[idx]));
+		write(1, "\n", 1);
+	}
+}
+
+/* implements cd builtin
+** returns 1 on success
+** returns 0 on failure
+*/
+int	do_cd(char *path)
+{
+	if (!chdir(path))
+		return (1);
+	write(1, "cd: no such file or directory: ", 32);
+	write(1, path, ft_strlen(path));
+	write(1, "\n", 2);
+	return (0);
+}
+
+void	do_exit(char **args)
+{
+	if (args[1])
+		exit(ft_atoi(args[1]));
+	else
+		exit(1);
+}
+
+/* hub for executing builtin functions
+** returns 1 on success
+** returns 0 on failure
+** needs error handling
+*/
 int	execute_builtins(char *cmd, char **args)
 {
-	char	*path;
 	extern char **environ;
 
 	if (!ft_strcmp(cmd, "cd"))
-		chdir(args[1]);
+		do_cd(args[1]);
 	if (!ft_strcmp(cmd, "pwd"))
-	{
-		path = getcwd(NULL, 0);
-		printf("current path is: %s\n", path);
-	}
+		printf("current path is: %s\n", getcwd(NULL, 0));
 	if (!ft_strcmp(cmd, "echo"))
-	{
-		if (!ft_strcmp(args[1], "-n"))
-			write(1, args[2], ft_strlen(args[2]));
-		else
-		{
-			write(1, args[1], ft_strlen(args[1]));
-			write(1, "\n", 1);
-		}
-			//printf("%s\n", args[1]);
-	}
+		do_echo(args);
 	/*if (cmd == "export")
 	if (cmd == "unset")*/
 	if (!ft_strcmp(cmd, "env"))
 		while (*environ)
 			printf("%s\n", *(environ++));
 	if (!ft_strcmp(cmd, "exit"))
-	{
-		if (args[1])
-			exit(ft_atoi(args[1]));
-		else
-			exit(1);
-	}
-	(void)path;
+		do_exit(args);
 	return (1);
 }
 
 int	builtin(char *cmd, char **builtin_funcs, char **args)
 {
-	int idx;
+	int	idx;
 
 	idx = -1;
 	while (++idx < BUILTIN_FUNCS_NB)

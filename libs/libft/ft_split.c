@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:12:57 by lprates           #+#    #+#             */
-/*   Updated: 2021/02/15 21:21:28 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/12 17:51:56 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**ft_split(char const *s, char c)
 	long long	idx;
 	char		*from;
 
-	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s, c) + 1);
+	ret = (char **)malloc(sizeof(char *) * (w_cnt((char *)s, c) + 1));
 	if (!s || !ret)
 		return (NULL);
 	idx = 0;

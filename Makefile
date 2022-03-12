@@ -7,7 +7,7 @@ SRC = $(call rwildcard,src,*.c)
 OBJ := $(SRC:.c=.o)
 RM = rm -f
 MAKE = make
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 CC = gcc
 
 all: libft.a $(NAME) 

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:06:24 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/12 04:01:18 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/12 14:22:31 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@
 typedef struct s_command
 {
 	char	*command;
-	char	*args;
+	char	**args;
 	int		chain;
 }				t_command;
 
 t_command	*local_split(char const *s, char *delim);
 char	*check_sysfunction(char *func);
-int		exec_sysfunction(char **args);
+int		exec_sysfunction(char *cmd, char **args);
 void	set_builtin_funcs(char **builtin_funcs);
 int		builtin(char *cmd, char **builtin_funcs, char **args);
 t_command	*get_commands(char *line);

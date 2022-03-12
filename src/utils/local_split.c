@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/12 04:36:32 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/12 17:40:50 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 t_command	handle_cmd(char *ret, char delim, char append)
 {
 	char		*from;
+	char		*tmp;
 	t_command	cmd;
 
 	from = ret;
@@ -101,13 +102,15 @@ t_command	handle_cmd(char *ret, char delim, char append)
 	loc_strcpy(cmd.command, from, (char *)ret);
 	while (ft_isblank(*ret))
 		ret++;
-	from = ret;
+	//from = ret;
 	while (*ret)
 		ret++;
 	while (ft_isblank(*(ret - 1)))
 		ret--;
-	cmd.args = (char *)malloc(ret - from + 1);
-	loc_strcpy(cmd.args, from, (char *)ret);
+	tmp = (char *)malloc(ret - from + 1);
+	loc_strcpy(tmp, from, (char *)ret);
+	cmd.args = malloc(sizeof(char *) + 1);
+	cmd.args = ft_split(tmp, ' ');
 	cmd.chain = set_chain(delim, append);
 	return (cmd);
 }
@@ -134,6 +137,8 @@ t_command	*local_split(char const *s, char *delim)
 			while (!ft_strchr(delim, *s) && *s)
 				s++;
 			ret = (char *)malloc(s - from + 1);
+			if (!ret || !cmd)
+				return (NULL);
 			loc_strcpy(ret, from, (char *)s);
 			if (ft_strchr(delim, *s) && *s)
 			{
@@ -146,7 +151,11 @@ t_command	*local_split(char const *s, char *delim)
 				s++;
 		}
 	}
-	printf("command1: %s args: %s sep: %i\n", cmd[0].command, cmd[0].args, cmd[0].chain);
-	printf("command2: %s args: %s sep: %i\n", cmd[1].command, cmd[1].args, cmd[1].chain);
+	//printf("command1: %s args: %s sep: \n", cmd[0].command, cmd[0].args);
+	//printf("command2: %s args: %s sep: %i\n", cmd[1].command, cmd[1].args, cmd[1].chain);
+	//printf("command3: %s args: %s sep: %i\n", cmd[2].command, cmd[2].args, cmd[2].chain);
+	//printf("command4: %s args: %s sep: %i\n", cmd[3].command, cmd[3].args, cmd[3].chain);
+	//printf("command5: %s args: %s sep: %i\n", cmd[4].command, cmd[4].args, cmd[4].chain);
+
 	return (cmd);
 }
