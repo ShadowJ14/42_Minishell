@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/10 23:43:09 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/12 04:36:32 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 	while (*s && *s != delim)
 		++s;
 	return (s);
-}*/
+}
 
 static long long	w_cnt(char *s, char *delim)
 {
@@ -42,6 +42,44 @@ static long long	w_cnt(char *s, char *delim)
 	}
 	printf("cnt %lli\n", cnt);
 	return (cnt);
+}*/
+
+int	set_chain(char delim, char append)
+{
+	if (delim == '>')
+	{
+		if (delim == append)
+			return (APPENDO);
+		else
+			return (REDIRECTO);
+	}
+	if (delim == '<')
+	{
+		if (delim == append)
+			return (APPENDI);
+		else
+			return (REDIRECTI);
+	}
+	if (delim == '|')
+		return (PIPE);
+	return (0);
+}
+
+static t_command	*realloc_n_initialize_cmd(t_command *cmd, int idx)
+{
+	int	tmp;
+
+	tmp = sizeof(t_command);
+	if (idx == 0)
+		cmd = malloc(sizeof(t_command));
+	else
+		cmd = ft_realloc(cmd, tmp * (idx + 1), tmp * (idx + 2));
+	if (!cmd)
+		return (NULL);
+	cmd[idx].args = 0;
+	cmd[idx].chain = 0;
+	cmd[idx].command = 0;
+	return (cmd);
 }
 
 static void	loc_strcpy(char *dst, char *from, char *until)
@@ -51,37 +89,64 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 	*dst = 0;
 }
 
-char	**local_split(char const *s, char *delim)
+t_command	handle_cmd(char *ret, char delim, char append)
 {
-	char		**ret;
+	char		*from;
+	t_command	cmd;
+
+	from = ret;
+	while (!ft_strchr(" ", *ret) && *ret)
+		ret++;
+	cmd.command = (char *)malloc(ret - from + 1);
+	loc_strcpy(cmd.command, from, (char *)ret);
+	while (ft_isblank(*ret))
+		ret++;
+	from = ret;
+	while (*ret)
+		ret++;
+	while (ft_isblank(*(ret - 1)))
+		ret--;
+	cmd.args = (char *)malloc(ret - from + 1);
+	loc_strcpy(cmd.args, from, (char *)ret);
+	cmd.chain = set_chain(delim, append);
+	return (cmd);
+}
+
+t_command	*local_split(char const *s, char *delim)
+{
+	char		*ret;
 	long long	idx;
 	char		*from;
+	t_command	*cmd;
 
-	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s, delim) + 1);
-	if (!s || !ret)
-		return (NULL);
 	idx = 0;
+	cmd = NULL;
+	cmd = realloc_n_initialize_cmd(cmd, idx);
+	if (!s || !cmd)
+		return (NULL);
 	while (*s)
 	{
+		while (ft_isblank(*s))
+			s++;
 		if (!ft_strchr(delim, *s))
 		{
-			if ((*s == '>' && *(s - 1) == '>')
-				|| (*s == '<' && *(s - 1) == '<'))
-				s++;
 			from = (char *)s;
 			while (!ft_strchr(delim, *s) && *s)
 				s++;
-			ret[idx] = (char *)malloc(s - from + 1);
-			if ((*s == '>' && *(s + 1) == '>')
-				|| (*s == '<' && *(s + 1) == '<'))
-				loc_strcpy(ret[idx++], from, (char *)s + 2);
+			ret = (char *)malloc(s - from + 1);
+			loc_strcpy(ret, from, (char *)s);
+			if (ft_strchr(delim, *s) && *s)
+			{
+				cmd[idx++] = handle_cmd(ret, *s, *(s + 1));
+				cmd = realloc_n_initialize_cmd(cmd, idx);
+			}
 			else
-				loc_strcpy(ret[idx++], from, (char *)s + 1);
-
+				cmd[idx++] = handle_cmd(ret, 0, 0);
+			while (ft_strchr(delim, *s) && *s)
+				s++;
 		}
-		if (*s != 0)
-			++s;
 	}
-	ret[idx] = 0;
-	return (ret);
+	printf("command1: %s args: %s sep: %i\n", cmd[0].command, cmd[0].args, cmd[0].chain);
+	printf("command2: %s args: %s sep: %i\n", cmd[1].command, cmd[1].args, cmd[1].chain);
+	return (cmd);
 }

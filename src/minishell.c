@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 04:07:52 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/11 00:03:10 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/12 04:01:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,45 +24,21 @@ int	msh_execute(char ***args, char **builtin_funcs)
 
 char	***msh_split_line(char *line)
 {
-	char	***args;
-	char	**commands;
-	int		i = 0;
+	t_command	*cmd;
 
-	commands = local_split(line, "|<>");
-	char **start = commands;
-	char ***starttwo;
-	while (*commands++)
-		i++;
-	printf("nb of commands: %i\n", i);
-	args = malloc(sizeof(char ***) * i);
-	i = 0;
-	commands = start;
-	starttwo = args;
-	while (*commands)
+	//cmd = get_commands(line);
+	cmd = local_split(line, "|<>");
+	/*while (*cmd)
 	{
 		printf("command: %s\n", *commands);
-		*args = local_split(*commands, " ");
-		args++;
-		commands++;
-	}
-	*args = 0;
-	i = 0;
-	args = starttwo;
-	while (*args)
-	{
-		while (**args)
-		{
-			printf("cmd %i args %s\n", i, **args);
-			(*args)++;
-		}
+		cmd[i].command = strtok(*commands, " \t\r\n\a");
 		i++;
-		args++;
-	}
+		commands++;
+	}*/
+	printf("command1: %s sep: %i\n", cmd[0].command, cmd[0].chain);
+	printf("command2: %s sep: %i\n", cmd[1].command, cmd[1].chain);
 	write(1, "Aqui\n", 5);
-	args = starttwo;
-	if (!args)
-		return (NULL);
-	return (args);
+	return (NULL);
 }
 
 char	*msh_readline(void)
