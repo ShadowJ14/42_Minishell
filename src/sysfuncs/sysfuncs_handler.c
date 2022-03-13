@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/12 19:21:17 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/13 16:54:55 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,10 @@ int	exec_sysfunction(char *command, char **args)
 	char	*cmd;
 	int		my_pipe[2];
 
-	if(pipe(my_pipe) == -1)
+	if (pipe(my_pipe) == -1)
 	{
 		perror("Error creating pipe");
 	}
-
 	cmd = check_sysfunction(command);
 	if (cmd)
 	{
@@ -78,5 +77,5 @@ int	exec_sysfunction(char *command, char **args)
 		}
 		free(cmd);
 	}
-	return (1);
+	return (0);
 }

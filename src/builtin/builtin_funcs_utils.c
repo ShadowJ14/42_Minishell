@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/12 19:04:55 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/13 17:36:11 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	do_echo(char **args)
 {
 	int	idx;
 
-	if (!ft_strcmp(args[1], "-n"))
+	if (args[1] && !ft_strcmp(args[1], "-n"))
 	{
 		idx = 1;
 		while (args[++idx])
@@ -44,7 +44,11 @@ void	do_echo(char **args)
 	{
 		idx = 0;
 		while (args[++idx])
+		{
+			if (idx != 1)
+				write(1, " ", 1);
 			write(1, args[idx], ft_strlen(args[idx]));
+		}
 		write(1, "\n", 1);
 	}
 }
@@ -52,6 +56,7 @@ void	do_echo(char **args)
 /* implements cd builtin
 ** returns 1 on success
 ** returns 0 on failure
+** needs to update old pwd because of cd -
 */
 int	do_cd(char *path)
 {
@@ -76,10 +81,8 @@ void	do_exit(char **args)
 ** returns 0 on failure
 ** needs error handling
 */
-int	execute_builtins(char *cmd, char **args)
+int	execute_builtins(char *cmd, char **args, char **environ)
 {
-	extern char **environ;
-
 	if (!ft_strcmp(cmd, "cd"))
 		do_cd(args[1]);
 	if (!ft_strcmp(cmd, "pwd"))
@@ -96,16 +99,16 @@ int	execute_builtins(char *cmd, char **args)
 	return (1);
 }
 
-int	builtin(char *cmd, char **builtin_funcs, char **args)
+int	builtin(t_command *cmd, char **builtin_funcs, char **environ)
 {
 	int	idx;
 
 	idx = -1;
 	while (++idx < BUILTIN_FUNCS_NB)
 	{
-		if (!ft_strcmp(cmd, builtin_funcs[idx]))
+		if (!ft_strcmp(cmd->command, builtin_funcs[idx]))
 		{
-			execute_builtins(cmd, args);
+			execute_builtins(cmd->command, cmd->args, environ);
 			return (1);
 		}
 	}
