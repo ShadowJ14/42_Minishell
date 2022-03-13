@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/10/27 09:56:41 by lprates           #+#    #+#             */
+/*   Updated: 2021/01/04 21:58:53 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+size_t	ft_strlen(const char *str)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	int	i;
 
 	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
+	while (str[i] != '\0')
 	{
-		dmemory[i] = smemory[i];
 		i++;
 	}
-	return (dest);
+	return (i);
 }

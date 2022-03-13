@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2022/03/13 20:46:12 by lprates           #+#    #+#             */
+/*   Updated: 2022/03/13 20:46:21 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "minishell.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+/* implements cd builtin
+** returns 1 on success
+** returns 0 on failure
+** needs to update old pwd because of cd -
+*/
+int	do_cd(char *path)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
-
-	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
-	{
-		dmemory[i] = smemory[i];
-		i++;
-	}
-	return (dest);
+	if (!chdir(path))
+		return (1);
+	write(1, "cd: no such file or directory: ", 32);
+	write(1, path, ft_strlen(path));
+	write(1, "\n", 2);
+	return (0);
 }

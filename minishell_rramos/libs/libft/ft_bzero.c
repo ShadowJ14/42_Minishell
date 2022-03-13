@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/12/08 15:44:27 by lprates           #+#    #+#             */
+/*   Updated: 2020/12/13 21:57:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	unsigned int	i;
+	unsigned char	*memory;
 
 	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
+	memory = s;
+	while (i < n)
 	{
-		dmemory[i] = smemory[i];
+		memory[i] = '\0';
 		i++;
 	}
-	return (dest);
+	return ;
 }

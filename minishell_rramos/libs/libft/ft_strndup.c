@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/12/26 04:16:24 by lprates           #+#    #+#             */
+/*   Updated: 2020/12/26 04:36:20 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+char	*ft_strndup(char *src, int n)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	int		i;
+	char	*target;
 
 	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
+	while (src[i] != '\0')
+		i++;
+	target = malloc((n + 1) * sizeof(char));
+	if (!target)
 		return (NULL);
-	while (i < n && smemory[i])
+	i = 0;
+	while (src[i] != '\0' && i < n)
 	{
-		dmemory[i] = smemory[i];
+		target[i] = src[i];
 		i++;
 	}
-	return (dest);
+	target[i] = '\0';
+	return (target);
 }

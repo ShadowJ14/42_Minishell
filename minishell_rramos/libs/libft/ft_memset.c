@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/12/08 14:07:16 by lprates           #+#    #+#             */
+/*   Updated: 2020/12/08 15:39:29 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	unsigned int	i;
+	unsigned char	*memory;
+	unsigned char	value;
 
 	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
+	memory = s;
+	value = c;
+	while (i < n)
 	{
-		dmemory[i] = smemory[i];
+		memory[i] = value;
 		i++;
 	}
-	return (dest);
+	return (memory);
 }

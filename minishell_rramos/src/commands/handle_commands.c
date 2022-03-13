@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/05 12:09:44 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/13 20:51:12 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,19 @@ static void	handle_exit_command(void)
 	}
 }
 
-void	handle_commands(void)
+//? should be return code
+int	msh_execute(t_command *command, char **builtin_funcs, char **environment)
 {
+	int	return_code;
+
+	return_code = builtin(command, builtin_funcs, environment);
+	if (!return_code)
+		return_code = exec_sysfunction(command[0].command, command[0].args);
+	return (1);
+}
+
+void	handle_commands(t_command *cmd, char **env, char **builtin_funcs)
+{
+	msh_execute(cmd, builtin_funcs, env);
 	handle_exit_command();
 }

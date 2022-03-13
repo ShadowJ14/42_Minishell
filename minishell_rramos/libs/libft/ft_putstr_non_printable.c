@@ -1,33 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_non_printable.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/10/29 10:19:06 by lprates           #+#    #+#             */
+/*   Updated: 2021/01/08 00:07:35 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+static void	print_hex(int np)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	char	*hex;
+
+	hex = "0123456789abcdef";
+	if (np >= 16)
+	{
+		print_hex(np / 16);
+		print_hex(np % 16);
+	}
+	else
+		write(1, &hex[np], 1);
+}
+
+void	ft_putstr_non_printable(char *str)
+{
+	int	i;
 
 	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
+	while (str[i])
 	{
-		dmemory[i] = smemory[i];
+		if ((str[i] <= 31 && str[i] > 0) || str[i] >= 127)
+		{
+			write(1, "\\", 1);
+			if (str[i] < 16)
+				write(1, "0", 1);
+			print_hex(str[i]);
+		}
+		else
+			write(1, &str[i], 1);
 		i++;
 	}
-	return (dest);
 }

@@ -1,33 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/10/28 15:04:52 by lprates           #+#    #+#             */
+/*   Updated: 2020/12/19 13:50:29 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	const char		*s;
+	unsigned int	n;
 
-	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
+	s = src;
+	n = size;
+	if (!src)
+		return (0);
+	if (n != 0)
 	{
-		dmemory[i] = smemory[i];
-		i++;
+		while (--n != 0)
+		{
+			*dest = *s++;
+			if (*dest++ == '\0')
+				break ;
+		}
 	}
-	return (dest);
+	if (n == 0)
+	{
+		if (size != 0)
+			*dest = '\0';
+		while (*s++)
+			;
+	}
+	return (s - src - 1);
 }

@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/12/26 01:57:55 by lprates           #+#    #+#             */
+/*   Updated: 2020/12/26 02:10:24 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	size_t	i;
+	char	*tmp;
 
-	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
+	i = -1;
+	tmp = malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!s || !tmp)
 		return (NULL);
-	while (i < n && smemory[i])
-	{
-		dmemory[i] = smemory[i];
-		i++;
-	}
-	return (dest);
+	while (s[++i] != 0)
+		tmp[i] = f(i, s[i]);
+	tmp[i] = 0;
+	return (tmp);
 }

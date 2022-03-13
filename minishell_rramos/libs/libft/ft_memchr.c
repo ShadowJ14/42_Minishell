@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2020/12/13 10:11:06 by lprates           #+#    #+#             */
+/*   Updated: 2020/12/21 13:53:10 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	unsigned int		i;
 	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	unsigned char		stop;
+	unsigned char		bytes;
+	unsigned char		i;
 
+	smemory = s;
+	stop = c;
+	bytes = n;
 	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	while (i < n && smemory[i])
+	while (i < bytes)
 	{
-		dmemory[i] = smemory[i];
+		if (*smemory == stop)
+			return ((unsigned char *)smemory);
+		smemory++;
+		if (*smemory == 0 && stop != 0)
+			break ;
 		i++;
 	}
-	return (dest);
+	return (NULL);
 }

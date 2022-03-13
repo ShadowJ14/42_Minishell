@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   split_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/08 15:47:19 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 22:18:26 by lprates          ###   ########.fr       */
+/*   Created: 2022/03/13 19:45:27 by lprates           #+#    #+#             */
+/*   Updated: 2022/03/13 19:45:43 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "minishell.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+t_command	*msh_split_line(char *line)
 {
-	unsigned int		i;
-	const unsigned char	*smemory;
-	unsigned char		*dmemory;
+	t_command	*cmd;
 
-	i = 0;
-	smemory = src;
-	dmemory = dest;
-	if (dest == NULL && src == NULL)
+	cmd = local_split(line, "|<>");
+	if (!cmd)
 		return (NULL);
-	while (i < n && smemory[i])
-	{
-		dmemory[i] = smemory[i];
-		i++;
-	}
-	return (dest);
+	return (cmd);
 }

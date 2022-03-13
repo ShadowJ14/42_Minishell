@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/12 17:19:16 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/13 21:35:45 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,17 @@
 // "STDOUT_FILENO" macros.
 # include <unistd.h>
 
+# include "../libs/libft/libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+
+# define BUILTIN_FUNCS_NB 7
+# define PIPE 1
+# define REDIRECTI 2
+# define REDIRECTO 3
+# define APPENDI 4
+# define APPENDO 5
+
 typedef struct s_global
 {
 	char	*input;
@@ -69,6 +80,15 @@ typedef struct s_terminal
 	char			*path;
 }	t_terminal;
 
+// The s_command struct saves the command and the arguments
+// from the user input, as well as the type of redirection/pipe.
+typedef struct s_command
+{
+	char	*command;
+	char	**args;
+	int		chain;
+}				t_command;
+
 t_global	g_global;
 
 // Function declarations.
@@ -76,11 +96,22 @@ void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
 t_environment_element	*format_environment(char **environment);
 void					free_memory(char **memory_pointer);
-void					handle_commands(void);
+void					handle_commands(t_command *cmd, char **env, char **builtin_funcs);
 void					handle_signals(void);
 void					open_terminal(t_terminal *terminal);
 void					print_error_message(char *error_message);
 void					print_message(char *message);
 void					read_input_until_new_line(t_terminal terminal);
+
+// lprates
+t_command				*msh_split_line(char *line);
+t_command				*realloc_n_initialize_cmd(t_command *cmd, int idx);
+t_command				*local_split(char const *s, char *delim);
+void					do_echo(char **args);
+int						do_cd(char *path);
+void					do_exit(char **args);
+void					set_builtin_funcs(char **builtin_funcs);
+int						exec_sysfunction(char *command, char **args);
+int						builtin(t_command *cmd, char **builtin_funcs, char **environ);
 
 #endif

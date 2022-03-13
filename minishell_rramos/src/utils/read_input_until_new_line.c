@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input_until_new_line.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:58:47 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/13 16:40:23 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/13 21:41:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ return 0 if no input is inserted, or return the amount of bytes inserted without
 ending in a newline (since the "enter" key wasn't pressed).
 */
 
-static void	handle_control_d(const size_t amount_of_bytes_to_read, \
+/*static void	handle_control_d(const size_t amount_of_bytes_to_read, \
 	ssize_t amount_of_bytes_read, char *buffer)
 {
 	if (false && (amount_of_bytes_read == 0 || \
@@ -57,9 +57,9 @@ static void	add_buffer_to_input(ssize_t amount_of_bytes_read, char *buffer)
 	}
 	input[index_1 + index_2] = '\0';
 	g_global.input = input;
-}
+}*/
 
-static void	print_input(ssize_t *index, ssize_t amount_of_bytes_read,
+/*static void	print_input(ssize_t *index, ssize_t amount_of_bytes_read,
 	char *buffer)
 {
 	while (*index < amount_of_bytes_read)
@@ -69,17 +69,9 @@ static void	print_input(ssize_t *index, ssize_t amount_of_bytes_read,
 		(*index)++;
 	}
 	write(STDOUT_FILENO, buffer, *index + 1);
-}
+}*/
 
-void	read_input_until_new_line(t_terminal terminal)
-{
-	ssize_t			amount_of_bytes_read;
-	const size_t	amount_of_bytes_to_read = 1024;
-	char			*buffer;
-	ssize_t			index;
-
-	buffer = allocate_memory(sizeof(*buffer) * amount_of_bytes_to_read);
-	while (true)
+	/*while (true)
 	{
 		amount_of_bytes_read = read(terminal.file_descriptor, buffer, \
 			amount_of_bytes_to_read);
@@ -89,10 +81,19 @@ void	read_input_until_new_line(t_terminal terminal)
 		print_input(&index, amount_of_bytes_read, buffer);
 		if (buffer[index] == '\n')
 			break ;
-	}
-	index = 0;
+	}*/
+	//ssize_t			amount_of_bytes_read;
+	//const size_t	amount_of_bytes_to_read = 1024;
+	//char			*buffer;
+	//buffer = allocate_memory(sizeof(*buffer) * amount_of_bytes_to_read);
+	//free_memory(&buffer);
+	/*index = 0;
 	while (g_global.input[index] != '\n')
 		index++;
-	write(STDOUT_FILENO, g_global.input, index + 1);
-	free_memory(&buffer);
+	write(STDOUT_FILENO, g_global.input, index + 1);*/
+	//ssize_t			index;
+void	read_input_until_new_line(t_terminal terminal)
+{
+	(void) terminal;
+	g_global.input = readline("minishell> ");
 }

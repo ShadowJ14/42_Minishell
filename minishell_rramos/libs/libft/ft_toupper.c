@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   allocate_memory.c                                  :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/11 18:03:09 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/13 11:29:39 by rramos           ###   ########.fr       */
+/*   Created: 2020/12/17 02:30:19 by lprates           #+#    #+#             */
+/*   Updated: 2021/01/04 21:59:57 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	*allocate_memory(size_t size)
+int	ft_toupper(int c)
 {
-	void	*memory_pointer;
-
-	memory_pointer = malloc(size);
-	return (memory_pointer);
+	if (c < -1)
+		return ((unsigned char)c);
+	if (c >= 'a' && c <= 'z')
+		return (c - 32);
+	return (c);
 }
