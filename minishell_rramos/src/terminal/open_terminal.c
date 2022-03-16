@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_terminal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 00:28:50 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/13 11:29:45 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/16 01:58:36 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	change_terminal_attributes(t_terminal *terminal)
 {
 	if (tcgetattr(terminal->file_descriptor, &terminal->attributes) == -1)
 		print_error_message("Failure getting the terminal attributes.\n");
-	terminal->attributes.c_lflag &= ~(ECHO | ICANON | ISIG);
+	terminal->attributes.c_lflag &= ~(ECHOCTL);
 	if (tcsetattr(terminal->file_descriptor, TCSANOW, &terminal->attributes) \
 		== -1)
 		print_error_message("Failure setting the terminal attributes.\n");

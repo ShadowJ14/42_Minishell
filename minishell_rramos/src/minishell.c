@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/13 21:48:12 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/16 01:01:51 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,23 @@ the "Start Debugging" button (green arrow icon) on the top.
 Installed the "C/C++" extension ("C/C++ IntelliSense, debugging, and code
 browsing.") and setted up the "launch.json" the "tasks.json" files in the folder.
 */
+
+void	test_print_commands(t_command *command)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = -1;
+	while (command[++i].command)
+	{
+		j = -1;
+		printf("command%i: %s args:\n", i, command[i].command);
+		while (command[i].args[++j])
+			printf("%s ", command[i].args[j]);
+		printf("\n");
+	}
+}
 
 int	main(int amount_of_program_arguments, char **program_arguments, \
 	char **environment)
@@ -42,9 +59,10 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		read_input_until_new_line(terminal);
 		printf("input: %s\n", g_global.input);
 		command = msh_split_line(g_global.input);
-		printf("test: %s args: %s\n", command[0].command, command[0].args[0]);
-		printf("test2: %s\n args %s\n", command[1].command, command[1].args[0]);
+		test_print_commands(command);
+		ft_putstr("Aqui2\n");
 		handle_commands(command, environment, builtin_funcs);
 	}
+	(void) environment_linked_list;
 	return (EXIT_SUCCESS);
 }

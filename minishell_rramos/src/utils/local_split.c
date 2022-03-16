@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 21:46:06 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/16 01:03:45 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,7 @@ int	ops(char const *s, char *delim, t_command *cmd, int idx)
 		return (-1);
 	loc_strcpy(ret, from, (char *)s);
 	if (ft_strchr(delim, *s) && *s)
-	{
 		cmd[idx++] = handle_cmd(ret, *s, *(s + 1));
-		cmd = realloc_n_initialize_cmd(cmd, idx);
-	}
 	else
 		cmd[idx++] = handle_cmd(ret, 0, 0);
 	while (ft_strchr(delim, *s) && *s)
@@ -106,6 +103,8 @@ t_command	*local_split(char const *s, char *delim)
 		if (!ft_strchr(delim, *s))
 		{
 			s += ops(s, delim, cmd, idx++);
+			if (*s)
+				cmd = realloc_n_initialize_cmd(cmd, idx);
 		}
 	}
 	return (cmd);
