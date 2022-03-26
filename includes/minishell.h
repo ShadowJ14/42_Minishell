@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 12:30:51 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/26 17:42:02 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,12 @@ t_global	g_global;
 // Function declarations.
 void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
-void					do_export(char **args, char **environ);
-void					do_unset(char **args, char **environ);
+void					do_export(char **args, \
+	t_environment_element **environment_linked_list);
+void					do_unset(char **args, \
+	t_environment_element **environment_linked_list);
 t_environment_element	*format_environment(char **environment);
 void					free_memory(char **memory_pointer);
-void					handle_commands(t_command *cmd, char **env, char **builtin_funcs);
 void					handle_signals(void);
 void					open_terminal(t_terminal *terminal);
 void					print_error_message(char *error_message);
@@ -108,6 +109,8 @@ void					print_message(char *message);
 void					read_input_until_new_line(t_terminal terminal);
 
 // lprates
+int						msh_execute(t_command *command, char **builtin_funcs, \
+	t_environment_element **environment_linked_list);
 t_command				*msh_split_line(char *line);
 t_command				*realloc_n_initialize_cmd(t_command *cmd, int idx);
 t_command				*local_split(char const *s, char *delim);
@@ -116,6 +119,7 @@ int						do_cd(char *path);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
 int						exec_sysfunction(t_command command);
-int						builtin(t_command *cmd, char **builtin_funcs, char **environ);
+int						builtin(t_command *command, char **builtin_funcs, \
+	t_environment_element **environment_linked_list);
 
 #endif

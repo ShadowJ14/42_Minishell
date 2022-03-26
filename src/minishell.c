@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 13:27:00 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/26 17:41:27 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		printf("input: %s\n", g_global.input);
 		command = msh_split_line(g_global.input);
 		test_print_commands(command);
-		handle_commands(command, environment, builtin_funcs);
+		msh_execute(command, builtin_funcs, &environment_linked_list);
 	}
 	(void) environment_linked_list;
 	return (EXIT_SUCCESS);

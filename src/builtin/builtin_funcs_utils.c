@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/26 12:23:40 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/26 17:42:33 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ void	set_builtin_funcs(char **builtin_funcs)
 ** needs error handling
 ** export and unset missing
 */
-int	execute_builtins(char *cmd, char **args, char **environ)
+static int	execute_builtins(char *cmd, char **args, \
+	t_environment_element **environment_linked_list)
 {
+	t_environment_element	*environment_element;
+
 	if (!ft_strcmp(cmd, "cd"))
 		do_cd(args[1]);
 	if (!ft_strcmp(cmd, "pwd"))
@@ -38,18 +41,23 @@ int	execute_builtins(char *cmd, char **args, char **environ)
 	if (!ft_strcmp(cmd, "echo"))
 		do_echo(args);
 	if (!ft_strcmp(cmd, "export"))
-		do_export(args, environ);
+		do_export(args, environment_linked_list);
 	if (!ft_strcmp(cmd, "unset"))
-		do_unset(args, environ);
+		do_unset(args, environment_linked_list);
+	environment_element = *environment_linked_list;
 	if (!ft_strcmp(cmd, "env"))
-		while (*environ)
-			printf("%s\n", *(environ++));
+		while (environment_element != NULL)
+		{
+			printf("%s=%s\n", environment_element->name, environment_element->value);
+			environment_element = environment_element->next_element;
+		}
 	if (!ft_strcmp(cmd, "exit"))
 		do_exit(args);
 	return (1);
 }
 
-int	builtin(t_command *cmd, char **builtin_funcs, char **environ)
+int	builtin(t_command *cmd, char **builtin_funcs, \
+	t_environment_element **environment_linked_list)
 {
 	int	idx;
 
@@ -58,7 +66,7 @@ int	builtin(t_command *cmd, char **builtin_funcs, char **environ)
 	{
 		if (!ft_strcmp(cmd->command, builtin_funcs[idx]))
 		{
-			execute_builtins(cmd->command, cmd->args, environ);
+			execute_builtins(cmd->command, cmd->args, environment_linked_list);
 			return (1);
 		}
 	}
