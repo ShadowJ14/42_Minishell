@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 12:16:20 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/26 12:30:51 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	msh_execute(t_command *command, char **builtin_funcs, char **environment)
 
 	return_code = builtin(command, builtin_funcs, environment);
 	if (!return_code)
-		return_code = exec_sysfunction(command[0].command, command[0].args);
+		return_code = exec_sysfunction(command[0]);
 	return (1);
 }
 

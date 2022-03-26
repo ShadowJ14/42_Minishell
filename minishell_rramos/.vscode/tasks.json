@@ -17,8 +17,9 @@
 				"-L../libs/libft/",
 				"-lft",
                 "-lncurses",
+				"-lreadline",
                 "-o",
-                "${fileDirname}/${workspaceFolderBasename}",
+                "${workspaceFolder}/minishell",
                 "-Wall",
                 "-Werror",
                 "-Wextra"

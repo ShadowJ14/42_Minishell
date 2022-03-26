@@ -20,7 +20,7 @@ libft = -L libs/libft -lft
 readline = -lreadline
 turn_warnings_into_errors := -Werror
 
-default_rule: clear_terminal remove_program norminette compile execute_program
+default_rule: clear_terminal remove_program compile execute_program
 
 clear_terminal:
 	@${clear_terminal}
