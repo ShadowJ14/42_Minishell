@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_funcs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/26 12:23:40 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/26 16:20:14 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

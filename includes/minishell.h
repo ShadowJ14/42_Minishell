@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 12:30:51 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/26 17:03:48 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void					do_echo(char **args);
 int						do_cd(char *path);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(t_command command);
+int						exec_sysfunction(t_command *command);
 int						builtin(t_command *cmd, char **builtin_funcs, char **environ);
 
 #endif

@@ -20,7 +20,7 @@ libft = -L libs/libft -lft
 readline = -lreadline
 turn_warnings_into_errors := -Werror
 
-default_rule: clear_terminal remove_program compile execute_program
+default_rule: clear_terminal remove_program norminette compile execute_program
 
 clear_terminal:
 	@${clear_terminal}
@@ -30,7 +30,7 @@ remove_program:
 
 norminette:
 	@$(eval norminette_errors=`${norminette} ${header_file} ${source_files} | grep --invert-match 'OK'`)
-	@if [ "${norminette_errors}" != "" ]; then\
+#	@if [ "${norminette_errors}" != "" ]; then\
 		echo "${norminette_errors}";\
 		exit 1;\
 	fi
