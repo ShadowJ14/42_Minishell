@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/16 01:01:51 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/19 19:19:59 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	test_print_commands(t_command *command)
 		printf("command%i: %s args:\n", i, command[i].command);
 		while (command[i].args[++j])
 			printf("%s ", command[i].args[j]);
-		printf("\n");
+		printf("link: %i\n", command[i].chain);
 	}
 }
 
@@ -60,7 +60,6 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		printf("input: %s\n", g_global.input);
 		command = msh_split_line(g_global.input);
 		test_print_commands(command);
-		ft_putstr("Aqui2\n");
 		handle_commands(command, environment, builtin_funcs);
 	}
 	(void) environment_linked_list;

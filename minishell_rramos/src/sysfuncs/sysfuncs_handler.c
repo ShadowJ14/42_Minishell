@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 20:54:48 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/20 14:31:20 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,23 @@ char	*check_sysfunction(char *func)
 	return (NULL);
 }
 
-/*int	exec_sysfunction(char *command, char **args)
+int	append_output(int pipe)
+{
+	char	reading_buf[1];
+	int		file;
+
+	file = open("./test.txt", O_RDWR);
+	while (read(file, reading_buf, 1) > 0)
+		;
+	while (read(pipe, reading_buf, 1) > 0)
+	{
+		write(file, reading_buf, 1);
+	}
+	close(file);
+	return (EXIT_SUCCESS);
+}
+
+int	exec_sysfunction(t_command command)
 {
 	int		pid;
 	int		status;
@@ -47,7 +63,7 @@ char	*check_sysfunction(char *func)
 	{
 		perror("Error creating pipe");
 	}
-	cmd = check_sysfunction(command);
+	cmd = check_sysfunction(command.command);
 	if (cmd)
 	{
 		pid = fork();
@@ -55,11 +71,12 @@ char	*check_sysfunction(char *func)
 		{
 			close(my_pipe[0]);
 			dup2(my_pipe[1], 1);
-			if (execve(cmd, args, NULL) == -1)
+			if (execve(cmd, command.args, NULL) == -1)
 			{
 				perror("msh");
 				exit(EXIT_FAILURE);
 			}
+			close(my_pipe[1]);
 		}
 		else if (pid < 0)
 			perror("msh");
@@ -69,17 +86,23 @@ char	*check_sysfunction(char *func)
 			while (!WIFEXITED(status) && !WIFSIGNALED(status))
 				waitpid(pid, &status, WUNTRACED);
 			close(my_pipe[1]);
-			char reading_buf[1];
-			while(read(my_pipe[0], reading_buf, 1) > 0)
+			if (command.chain == APPENDO)
+				append_output(my_pipe[0]);
+			else
 			{
-				write(1, reading_buf, 1);
+				char	reading_buf[1];
+				while (read(my_pipe[0], reading_buf, 1) > 0)
+					write(1, reading_buf, 1);
 			}
+			close(my_pipe[0]);
+			ft_putstr("parent out pipe closing\n");
 		}
 		free(cmd);
 	}
 	return (0);
-}*/
+}
 
+/*
 int	exec_sysfunction(char *command, char **args)
 {
 	int		pid;
@@ -108,3 +131,4 @@ int	exec_sysfunction(char *command, char **args)
 	}
 	return (0);
 }
+*/

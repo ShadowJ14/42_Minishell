@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/15 22:19:26 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/20 14:25:45 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void					do_echo(char **args);
 int						do_cd(char *path);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(char *command, char **args);
+int						exec_sysfunction(t_command command);
 int						builtin(t_command *cmd, char **builtin_funcs, char **environ);
 
 #endif
