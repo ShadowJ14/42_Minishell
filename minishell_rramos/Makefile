@@ -55,7 +55,7 @@ all: libft.a ${program_file}
 		${turn_warnings_into_errors} \
 		${compile_option} $< \
 		${output_name_option} $@ \
-		${includes} 
+		${includes} -I${HOME}/.brew/opt/readline/include
 
 ${NAME}: ${object_files}
 	@${compile} \
@@ -64,7 +64,7 @@ ${NAME}: ${object_files}
 		${output_name_option} ${program_file} \
 		${object_files} \
 		${library_option}${new_curses_library}\
-		${includes} ${libft} ${readline}
+		${includes} ${libft} ${readline} -L${HOME}/.brew/opt/readline/lib
 
 clean:
 	make clean -C ./libs/libft

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_funcs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 20:46:50 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/26 12:23:40 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ int	execute_builtins(char *cmd, char **args, char **environ)
 		printf("current path is: %s\n", getcwd(NULL, 0));
 	if (!ft_strcmp(cmd, "echo"))
 		do_echo(args);
+	if (!ft_strcmp(cmd, "export"))
+		do_export(args, environ);
+	if (!ft_strcmp(cmd, "unset"))
+		do_unset(args, environ);
 	if (!ft_strcmp(cmd, "env"))
 		while (*environ)
 			printf("%s\n", *(environ++));

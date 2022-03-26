@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_commands.c                                  :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 12:16:20 by rramos           ###   ########.fr       */
+/*   Created: 2022/03/18 18:27:58 by rramos            #+#    #+#             */
+/*   Updated: 2022/03/26 11:54:51 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//? should be return code
-int	msh_execute(t_command *command, char **builtin_funcs, char **environment)
+static void	unset_args(char **args, char **environ)
 {
-	int	return_code;
-
-	return_code = builtin(command, builtin_funcs, environment);
-	if (!return_code)
-		return_code = exec_sysfunction(command[0].command, command[0].args);
-	return (1);
+	(void)args;
+	(void)environ;
 }
 
-void	handle_commands(t_command *cmd, char **env, char **builtin_funcs)
+// implements unset builtin
+void	do_unset(char **args, char **environ)
 {
-	msh_execute(cmd, builtin_funcs, env);
+	if (args[1] == NULL)
+	{
+		print_error_message("unset: not enough arguments\n");
+		return ;
+	}
+	unset_args(args, environ);
 }

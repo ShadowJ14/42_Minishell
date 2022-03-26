@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/15 22:19:26 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/26 12:23:00 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ t_global	g_global;
 // Function declarations.
 void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
+void					do_export(char **args, char **environ);
+void					do_unset(char **args, char **environ);
 t_environment_element	*format_environment(char **environment);
 void					free_memory(char **memory_pointer);
 void					handle_commands(t_command *cmd, char **env, char **builtin_funcs);
@@ -113,7 +115,7 @@ void					do_echo(char **args);
 int						do_cd(char *path);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(char *command, char **args);
+int						exec_sysfunction(t_command command);
 int						builtin(t_command *cmd, char **builtin_funcs, char **environ);
 
 #endif
