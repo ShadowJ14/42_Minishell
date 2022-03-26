@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   handle_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/26 01:57:55 by lprates           #+#    #+#             */
-/*   Updated: 2020/12/26 02:10:24 by lprates          ###   ########.fr       */
+/*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
+/*   Updated: 2022/03/26 12:36:20 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+//? should be return code
+int	msh_execute(t_command *command, char **builtin_funcs, char **environment)
 {
-	size_t	i;
-	char	*tmp;
+	int	return_code;
 
-	i = -1;
-	tmp = malloc(sizeof(char) * ft_strlen(s) + 1);
-	if (!s || !tmp)
-		return (NULL);
-	while (s[++i] != 0)
-		tmp[i] = f(i, s[i]);
-	tmp[i] = 0;
-	return (tmp);
+	return_code = builtin(command, builtin_funcs, environment);
+	if (!return_code)
+		return_code = exec_sysfunction(command[0]);
+	return (1);
+}
+
+void	handle_commands(t_command *cmd, char **env, char **builtin_funcs)
+{
+	msh_execute(cmd, builtin_funcs, env);
 }

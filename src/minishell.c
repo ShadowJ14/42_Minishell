@@ -5,78 +5,63 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/11 04:07:52 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 21:53:03 by lprates          ###   ########.fr       */
+/*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
+/*   Updated: 2022/03/26 13:27:00 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	msh_execute(t_command *cmd, char **builtin_funcs, char **environ)
+// environment[0] = "PATH=" + getenv("PATH");
+
+/*
+To debug the code while the program is running, have this file active (opened
+with the window focused), go to the "Run and Debug" tab on the left, then click
+the "Start Debugging" button (green arrow icon) on the top.
+Installed the "C/C++" extension ("C/C++ IntelliSense, debugging, and code
+browsing.") and setted up the "launch.json" the "tasks.json" files in the folder.
+*/
+
+void	test_print_commands(t_command *command)
 {
-	int	return_code;
+	int	i;
+	int	j;
 
-	return_code = builtin(cmd, builtin_funcs, environ);
-	if (!return_code)
-		return_code = exec_sysfunction(cmd[0].command, cmd[0].args);
-	//? should be return code
-	return (1);
-}
-
-t_command	*msh_split_line(char *line)
-{
-	t_command	*cmd;
-
-	cmd = local_split(line, "|<>");
-	if (!cmd)
-		return (NULL);
-	return (cmd);
-}
-
-char	*msh_readline(void)
-{
-	char	*line;
-
-	line = readline("Enter a command> ");
-	if (line && *line)
-		add_history(line);
-	//! unnecessary for now
-	// if (!ft_strcmp(line, "history"))
-	// {
-	// 	printf("Teste\n");
-	// 	//rl_redisplay();
-	// }
-	return (line);
-}
-
-void	msh_loop(char **builtin_funcs, char **environ)
-{
-	char		*line;
-	t_command	*cmd;
-	int			status;
-
-	status = 1;
-	while (status)
+	i = -1;
+	j = -1;
+	while (command[++i].command)
 	{
-		line = msh_readline();
-		cmd = msh_split_line(line);
-		if (!cmd)
-		{
-			printf("Erro caralho!\n");
-			return ;
-		}
-		status = msh_execute(cmd, builtin_funcs, environ);
-		free(line);
-		free(cmd);
+		j = -1;
+		printf("command%i: %s args:\n", i, command[i].command);
+		while (command[i].args[++j])
+			printf("%s ", command[i].args[j]);
+		printf("link: %i\n", command[i].chain);
 	}
 }
 
-int	main(int ac, char **av, char **environ)
+int	main(int amount_of_program_arguments, char **program_arguments, \
+	char **environment)
 {
-	char	*builtin_funcs[BUILTIN_FUNCS_NB];
+	t_environment_element	*environment_linked_list;
+	t_terminal				terminal;
+	t_command				*command;
+	char					*builtin_funcs[BUILTIN_FUNCS_NB];
 
-	(void)ac;
-	(void)av;
+	(void)amount_of_program_arguments;
+	(void)program_arguments;
+	handle_signals();
+	environment_linked_list = format_environment(environment);
+	open_terminal(&terminal);
+	g_global.input = NULL;
 	set_builtin_funcs(builtin_funcs);
-	msh_loop(builtin_funcs, environ);
+	while (true)
+	{
+		read_input_until_new_line(terminal);
+		printf("input: %s\n", g_global.input);
+		command = msh_split_line(g_global.input);
+		test_print_commands(command);
+		handle_commands(command, environment, builtin_funcs);
+	}
+	(void) environment_linked_list;
+	return (EXIT_SUCCESS);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_funcs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 17:36:11 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/26 12:23:40 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,63 +23,11 @@ void	set_builtin_funcs(char **builtin_funcs)
 	builtin_funcs[6] = "exit";
 }
 
-/* implements echo with -n option builtin
-*/
-
-void	do_echo(char **args)
-{
-	int	idx;
-
-	if (args[1] && !ft_strcmp(args[1], "-n"))
-	{
-		idx = 1;
-		while (args[++idx])
-		{
-			if (idx != 2)
-				write(1, " ", 1);
-			write(1, args[idx], ft_strlen(args[idx]));
-		}
-	}
-	else
-	{
-		idx = 0;
-		while (args[++idx])
-		{
-			if (idx != 1)
-				write(1, " ", 1);
-			write(1, args[idx], ft_strlen(args[idx]));
-		}
-		write(1, "\n", 1);
-	}
-}
-
-/* implements cd builtin
-** returns 1 on success
-** returns 0 on failure
-** needs to update old pwd because of cd -
-*/
-int	do_cd(char *path)
-{
-	if (!chdir(path))
-		return (1);
-	write(1, "cd: no such file or directory: ", 32);
-	write(1, path, ft_strlen(path));
-	write(1, "\n", 2);
-	return (0);
-}
-
-void	do_exit(char **args)
-{
-	if (args[1])
-		exit(ft_atoi(args[1]));
-	else
-		exit(1);
-}
-
 /* hub for executing builtin functions
 ** returns 1 on success
 ** returns 0 on failure
 ** needs error handling
+** export and unset missing
 */
 int	execute_builtins(char *cmd, char **args, char **environ)
 {
@@ -89,8 +37,10 @@ int	execute_builtins(char *cmd, char **args, char **environ)
 		printf("current path is: %s\n", getcwd(NULL, 0));
 	if (!ft_strcmp(cmd, "echo"))
 		do_echo(args);
-	/*if (cmd == "export")
-	if (cmd == "unset")*/
+	if (!ft_strcmp(cmd, "export"))
+		do_export(args, environ);
+	if (!ft_strcmp(cmd, "unset"))
+		do_unset(args, environ);
 	if (!ft_strcmp(cmd, "env"))
 		while (*environ)
 			printf("%s\n", *(environ++));
