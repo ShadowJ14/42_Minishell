@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 17:42:02 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/26 17:55:10 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void					do_echo(char **args);
 int						do_cd(char *path);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(t_command command);
+int						exec_sysfunction(t_command *command);
 int						builtin(t_command *command, char **builtin_funcs, \
 	t_environment_element **environment_linked_list);
 

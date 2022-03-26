@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 00:38:33 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/18 16:11:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/26 16:51:10 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 static void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
-		printf("Control+C pressed \n");
+		printf("minishell> \n");
 	if (rl_on_new_line() == -1)
 		exit(1);
 	rl_replace_line("", 1);

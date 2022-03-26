@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:58:47 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/18 16:11:23 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/26 16:53:42 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	read_input_until_new_line(t_terminal terminal)
 	str = readline("minishell> ");
 	if (!str)
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 1);
 		exit(-1);
 	}
 	else if (*str == '\0')
