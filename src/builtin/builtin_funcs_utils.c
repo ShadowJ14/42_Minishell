@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_funcs_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/26 17:56:15 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/29 00:01:32 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ static int	execute_builtins(char *cmd, char **args, \
 {
 	t_environment_element	*environment_element;
 
+	environment_element = *environment_linked_list;
 	if (!ft_strcmp(cmd, "cd"))
-		do_cd(args[1]);
+		do_cd(args[1], environment_linked_list);
 	if (!ft_strcmp(cmd, "pwd"))
 		printf("current path is: %s\n", getcwd(NULL, 0));
 	if (!ft_strcmp(cmd, "echo"))
@@ -44,7 +45,6 @@ static int	execute_builtins(char *cmd, char **args, \
 		do_export(args, environment_linked_list);
 	if (!ft_strcmp(cmd, "unset"))
 		do_unset(args, environment_linked_list);
-	environment_element = *environment_linked_list;
 	if (!ft_strcmp(cmd, "env"))
 		while (environment_element != NULL)
 		{

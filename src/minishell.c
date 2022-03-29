@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 17:41:27 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/28 23:08:16 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	t_terminal				terminal;
 	t_command				*command;
 	char					*builtin_funcs[BUILTIN_FUNCS_NB];
+	char					*input;
 
 	(void)amount_of_program_arguments;
 	(void)program_arguments;
@@ -56,11 +57,14 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	set_builtin_funcs(builtin_funcs);
 	while (true)
 	{
-		read_input_until_new_line(terminal);
-		printf("input: %s\n", g_global.input);
-		command = msh_split_line(g_global.input);
-		test_print_commands(command);
-		msh_execute(command, builtin_funcs, &environment_linked_list);
+		input = read_input_until_new_line(terminal);
+		if (input)
+		{
+			printf("input: %s\n", input);
+			command = msh_split_line(input);
+			test_print_commands(command);
+			msh_execute(command, builtin_funcs, &environment_linked_list);
+		}
 	}
 	(void) environment_linked_list;
 	return (EXIT_SUCCESS);

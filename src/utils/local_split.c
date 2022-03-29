@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/16 01:03:45 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/28 23:52:39 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_command	handle_cmd(char *ret, char delim, char append)
 	tmp = (char *)malloc(ret - from + 1);
 	loc_strcpy(tmp, from, (char *)ret);
 	cmd.args = malloc(sizeof(char *) + 1);
-	cmd.args = ft_split(tmp, ' ');
+	cmd.args = smart_split(tmp, " \"\'");
 	cmd.chain = set_chain(delim, append);
 	return (cmd);
 }

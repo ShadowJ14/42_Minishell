@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/26 17:48:55 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/28 23:34:56 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ char	*check_sysfunction(char *func)
 		cmd = ft_strjoin(*ret, ft_strjoin("/", func));
 		ret_access = access(cmd, X_OK);
 		if (ret_access == 0)
-		{
 			return (cmd);
-		}
+		ret_access = access(func, X_OK);
+		if (ret_access == 0)
+			return (func);
 		free(cmd);
 		if (*ret)
 			ret++;
@@ -94,34 +95,41 @@ int	exec_sysfunction(t_command *command)
 	cmd = check_sysfunction(command[0].command);
 	if (cmd)
 	{
-		pid = fork();
-		if (!pid)
-		{
-			close(my_pipe[0]);
-			dup2(my_pipe[1], 1);
-			if (execve(cmd, command[0].args, NULL) == -1)
-			{
-				perror("msh");
-				exit(EXIT_FAILURE);
-			}
-			close(my_pipe[1]);
-		}
-		else if (pid < 0)
-			perror("msh");
+		if (command[0].chain == 0)
+			execve(cmd, command[0].args, NULL);
 		else
 		{
-			waitpid(pid, &status, WUNTRACED);
-			while (!WIFEXITED(status) && !WIFSIGNALED(status))
+			pid = fork();
+			if (!pid)
+			{
+				close(my_pipe[0]);
+				dup2(my_pipe[1], 1);
+				if (execve(cmd, command[0].args, NULL) == -1)
+				{
+					perror("msh");
+					exit(EXIT_FAILURE);
+				}
+				close(my_pipe[1]);
+			}
+			else if (pid < 0)
+				perror("msh");
+			else
+			{
 				waitpid(pid, &status, WUNTRACED);
-			close(my_pipe[1]);
-			if (command[0].chain == APPENDO || command[0].chain == REDIRECTO)
-				send_output(my_pipe[0], command[1].args[0], command[0].chain);
-			else if (command[0].chain == PIPE)
-				do_pipe(my_pipe[0], command[1]);
-			close(my_pipe[0]);
-			ft_putstr("parent out pipe closing\n");
+				while (!WIFEXITED(status) && !WIFSIGNALED(status))
+					waitpid(pid, &status, WUNTRACED);
+				close(my_pipe[1]);
+				if (command[0].chain == APPENDO || command[0].chain == REDIRECTO)
+					send_output(my_pipe[0], command[1].args[0], command[0].chain);
+				else if (command[0].chain == PIPE)
+					do_pipe(my_pipe[0], command[1]);
+				close(my_pipe[0]);
+				ft_putstr("parent out pipe closing\n");
+			}
 		}
 		free(cmd);
 	}
+	else
+		printf("Command '%s' not found.\n", command[0].command);
 	return (0);
 }
