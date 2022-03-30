@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   handle_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 17:56:15 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/29 23:06:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //? should be return code
-int	msh_execute(t_command *command, char **builtin_funcs, t_environment_element **environment_linked_list)
+int	msh_execute(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list)
 {
 	int	return_code;
 

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/28 23:08:16 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/29 23:38:09 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ Installed the "C/C++" extension ("C/C++ IntelliSense, debugging, and code
 browsing.") and setted up the "launch.json" the "tasks.json" files in the folder.
 */
 
-void	test_print_commands(t_command *command)
+static void	test_print_commands(t_command *command, t_environment_element \
+		*environment_linked_list)
 {
 	int	i;
 	int	j;
@@ -34,7 +35,11 @@ void	test_print_commands(t_command *command)
 		j = -1;
 		printf("command%i: %s args:\n", i, command[i].command);
 		while (command[i].args[++j])
+		{
+			if (ft_strchr(command[i].args[j], '$'))
+				command[i].args[j] = expand_env_var(environment_linked_list, ft_strchr(command[i].args[j], '$') + 1);
 			printf("%s ", command[i].args[j]);
+		}
 		printf("link: %i\n", command[i].chain);
 	}
 }
@@ -62,8 +67,8 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		{
 			printf("input: %s\n", input);
 			command = msh_split_line(input);
-			test_print_commands(command);
-			msh_execute(command, builtin_funcs, &environment_linked_list);
+			test_print_commands(command, environment_linked_list);
+			msh_execute(command, builtin_funcs, environment_linked_list);
 		}
 	}
 	(void) environment_linked_list;

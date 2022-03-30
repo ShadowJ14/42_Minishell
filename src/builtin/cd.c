@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 20:46:12 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/29 01:29:13 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/30 01:50:13 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,29 @@
 ** needs to update old pwd because of cd -
 ** old pwd implemented but needs cleaning
 ** cd with no arguments is implemented but needs cleaning
+** added OLDPWD and PWD update
 ** needs to implement "~" to expand variable
 */
-int	do_cd(char *path, t_environment_element **environment_linked_list)
+int	do_cd(char *path, t_environment_element *environment_linked_list)
 {
 	t_environment_element	*environment_element;
-	char					*old_pwd;
 
-	environment_element = *environment_linked_list;
-	if (!path || !ft_strcmp(path, "-"))
+	environment_element = environment_linked_list;
+	if (!path)
 	{
+		path = expand_env_var(environment_linked_list, "HOME");
 		if (!path)
-			path = malloc(sizeof(char *) + 1);
-		old_pwd = malloc(sizeof(char *) + 1);
-		if (!path || !old_pwd)
 			return (0);
-		while (environment_element != NULL)
-		{
-			if (!ft_strcmp(environment_element->name, "HOME") && ft_strcmp(path, "-"))
-				path = environment_element->value;
-			if (!ft_strcmp(environment_element->name, "OLDPWD"))
-			{
-				old_pwd = ft_strdup(environment_element->value);
-				environment_element->value = getcwd(NULL, 0);
-				if (!ft_strcmp(path, "-"))
-				{
-					if (!chdir(old_pwd))
-						return (1);
-				}
-			}
-			environment_element = environment_element->next_element;
-		}
+	}
+	if (!ft_strcmp(path, "-"))
+		path = expand_env_var(environment_linked_list, "OLDPWD");
+	while (environment_element != NULL)
+	{
+		if (!ft_strcmp(environment_element->name, "OLDPWD"))
+			environment_element->value = getcwd(NULL, 0);
+		if (!ft_strcmp(environment_element->name, "PWD"))
+			environment_element->value = path;
+		environment_element = environment_element->next_element;
 	}
 	if (!chdir(path))
 		return (1);

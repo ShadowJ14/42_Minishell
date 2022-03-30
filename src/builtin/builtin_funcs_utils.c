@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/29 00:01:32 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/29 23:03:50 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ void	set_builtin_funcs(char **builtin_funcs)
 ** export and unset missing
 */
 static int	execute_builtins(char *cmd, char **args, \
-	t_environment_element **environment_linked_list)
+	t_environment_element *environment_linked_list)
 {
 	t_environment_element	*environment_element;
 
-	environment_element = *environment_linked_list;
+	environment_element = environment_linked_list;
 	if (!ft_strcmp(cmd, "cd"))
 		do_cd(args[1], environment_linked_list);
 	if (!ft_strcmp(cmd, "pwd"))
@@ -57,7 +57,7 @@ static int	execute_builtins(char *cmd, char **args, \
 }
 
 int	builtin(t_command *cmd, char **builtin_funcs, \
-	t_environment_element **environment_linked_list)
+	t_environment_element *environment_linked_list)
 {
 	int	idx;
 

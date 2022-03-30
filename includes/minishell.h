@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/29 00:03:42 by lprates          ###   ########.fr       */
+/*   Updated: 2022/03/30 01:50:13 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ t_global	g_global;
 void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
 void					do_export(char **args, \
-	t_environment_element **environment_linked_list);
+	t_environment_element *environment_linked_list);
 void					do_unset(char **args, \
-	t_environment_element **environment_linked_list);
+	t_environment_element *environment_linked_list);
 t_environment_element	*format_environment(char **environment);
 void					free_memory(char **memory_pointer);
 void					handle_signals(void);
@@ -110,17 +110,20 @@ char					*read_input_until_new_line(t_terminal terminal);
 
 // lprates
 int						msh_execute(t_command *command, char **builtin_funcs, \
-	t_environment_element **environment_linked_list);
+	t_environment_element *environment_linked_list);
 t_command				*msh_split_line(char *line);
 t_command				*realloc_n_initialize_cmd(t_command *cmd, int idx);
 t_command				*local_split(char const *s, char *delim);
 void					do_echo(char **args);
-int						do_cd(char *path, t_environment_element **environment_linked_list);
+int						do_cd(char *path, \
+	t_environment_element *environment_linked_list);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
 int						exec_sysfunction(t_command *command);
 int						builtin(t_command *command, char **builtin_funcs, \
-	t_environment_element **environment_linked_list);
+	t_environment_element *environment_linked_list);
 char					**smart_split(char const *s, char *delim);
+char					*expand_env_var(t_environment_element *environment_linked_list,
+							char *env_name);
 
 #endif

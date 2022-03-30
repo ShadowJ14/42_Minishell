@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 17:42:59 by rramos           ###   ########.fr       */
+/*   Updated: 2022/03/29 23:05:44 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ static void	verify_args(char **args)
 }
 
 // implements export builtin
-void	do_export(char **args, t_environment_element **environment_linked_list)
+void	do_export(char **args, t_environment_element *environment_linked_list)
 {
 	if (args[1] == NULL)
 	{
-		print_export(*environment_linked_list);
+		print_export(environment_linked_list);
 		return ;
 	}
 	verify_args(args);
