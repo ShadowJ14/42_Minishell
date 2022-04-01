@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:58 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/29 23:05:10 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/01 23:51:40 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,32 @@
 
 static void	unset_args(char **args, t_environment_element *environment_linked_list)
 {
-	t_environment_element	*environment_element;
-	t_environment_element	*environment_element_unsetted;
+	t_environment_element	**environment_element;
+	t_environment_element	*environment_element_freed;
 	size_t					index;
 
 	index = 1;
 	while (args[index] != NULL)
 	{
 		environment_element = environment_linked_list;
-		if (!ft_strcmp(environment_element->name, args[index]))
+		if (!ft_strcmp((*environment_element)->name, args[index]))
 		{
-			printf("Log 1.\n");
-			environment_linked_list = environment_linked_list->next_element;
-			free(environment_element);
+			*environment_linked_list = (*environment_linked_list)->next_element;
+			free_memory((void **)environment_element);
 			index++;
 			continue ;
 		}
-		while (environment_element != NULL)
+		while (*environment_element != NULL)
 		{
-			if (!ft_strcmp(environment_element->name, args[index]))
+			if (!ft_strcmp((*environment_element)->name, args[index]))
 			{
-				printf("Log 2.\n");
-				environment_element_unsetted = environment_element;
-				free(environment_element_unsetted);
+				environment_element_freed = *environment_element;
+				*environment_element = (*environment_element)->next_element;
+				free_memory((void **)&environment_element_freed);
 				break ;
+			} else {
+				environment_element = &(*environment_element)->next_element;
 			}
-			environment_element = environment_element->next_element;
 		}
 		index++;
 	}

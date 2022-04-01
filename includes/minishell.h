@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/30 01:50:13 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/01 23:50:58 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@
 # define APPENDI 4
 # define APPENDO 5
 
+typedef struct s_argument
+{
+	char	*name;
+	bool	set_value;
+	char	*value;
+}	t_argument;
+
 typedef struct s_global
 {
 	char	*input;
@@ -101,7 +108,7 @@ void					do_export(char **args, \
 void					do_unset(char **args, \
 	t_environment_element *environment_linked_list);
 t_environment_element	*format_environment(char **environment);
-void					free_memory(char **memory_pointer);
+void					free_memory(void **memory_pointer);
 void					handle_signals(void);
 void					open_terminal(t_terminal *terminal);
 void					print_error_message(char *error_message);
