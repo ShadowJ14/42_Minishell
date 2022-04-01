@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/01 23:50:58 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/02 00:52:15 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ t_global	g_global;
 void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
 void					do_export(char **args, \
-	t_environment_element *environment_linked_list);
+	t_environment_element **environment_linked_list);
 void					do_unset(char **args, \
-	t_environment_element *environment_linked_list);
+	t_environment_element **environment_linked_list);
 t_environment_element	*format_environment(char **environment);
 void					free_memory(void **memory_pointer);
 void					handle_signals(void);

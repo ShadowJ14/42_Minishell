@@ -6,13 +6,13 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:58 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/01 23:51:40 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/02 00:51:40 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	unset_args(char **args, t_environment_element *environment_linked_list)
+static void	unset_args(char **args, t_environment_element **environment_linked_list)
 {
 	t_environment_element	**environment_element;
 	t_environment_element	*environment_element_freed;
@@ -46,7 +46,7 @@ static void	unset_args(char **args, t_environment_element *environment_linked_li
 }
 
 // implements unset builtin
-void	do_unset(char **args, t_environment_element *environment_linked_list)
+void	do_unset(char **args, t_environment_element **environment_linked_list)
 {
 	if (args[1] == NULL)
 	{
