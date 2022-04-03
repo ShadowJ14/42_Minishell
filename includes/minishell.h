@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/02 00:52:15 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/03 18:01:28 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void					open_terminal(t_terminal *terminal);
 void					print_error_message(char *error_message);
 void					print_message(char *message);
 char					*read_input_until_new_line(t_terminal terminal);
+void					print_export(t_environment_element *environment_linked_list);
 
 // lprates
 int						msh_execute(t_command *command, char **builtin_funcs, \
@@ -126,11 +127,14 @@ int						do_cd(char *path, \
 	t_environment_element *environment_linked_list);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(t_command *command);
+int						exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list);
 int						builtin(t_command *command, char **builtin_funcs, \
 	t_environment_element *environment_linked_list);
 char					**smart_split(char const *s, char *delim);
 char					*expand_env_var(t_environment_element *environment_linked_list,
 							char *env_name);
+int						exec_sysfunction_two(t_command *command);
+int						msh_execute_two(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list);
+char					*check_sysfunction(char *func);
 
 #endif

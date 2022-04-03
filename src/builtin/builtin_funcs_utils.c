@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/02 00:53:11 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:07:51 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@ void	set_builtin_funcs(char **builtin_funcs)
 static int	execute_builtins(char *cmd, char **args, \
 	t_environment_element *environment_linked_list)
 {
-	t_environment_element	*environment_element;
-
-	environment_element = environment_linked_list;
 	if (!ft_strcmp(cmd, "cd"))
 		do_cd(args[1], environment_linked_list);
 	if (!ft_strcmp(cmd, "pwd"))
@@ -46,11 +43,7 @@ static int	execute_builtins(char *cmd, char **args, \
 	if (!ft_strcmp(cmd, "unset"))
 		do_unset(args, &environment_linked_list);
 	if (!ft_strcmp(cmd, "env"))
-		while (environment_element != NULL)
-		{
-			printf("%s=%s\n", environment_element->name, environment_element->value);
-			environment_element = environment_element->next_element;
-		}
+		print_export(environment_linked_list);
 	if (!ft_strcmp(cmd, "exit"))
 		do_exit(args);
 	return (1);

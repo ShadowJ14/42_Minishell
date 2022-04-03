@@ -6,13 +6,13 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/02 00:50:23 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:06:14 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_export(t_environment_element *environment_linked_list)
+void	print_export(t_environment_element *environment_linked_list)
 {
 	t_environment_element	*environment_element;
 
@@ -107,7 +107,10 @@ static void	set_args(char **args, \
 		{
 			new_environment_element = allocate_memory(sizeof(*new_environment_element));
 			new_environment_element->name = argument->name;
-			new_environment_element->value = argument->value;
+			if (argument->value)
+				new_environment_element->value = argument->value;
+			else
+				new_environment_element->value = 0;
 			(*environment_element)->next_element = new_environment_element;
 		}
 		index++;
