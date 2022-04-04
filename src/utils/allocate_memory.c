@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   allocate_memory.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 18:03:09 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/16 01:36:46 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/04 13:58:45 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ void	*allocate_memory(size_t size)
 	void	*memory_pointer;
 
 	memory_pointer = malloc(size);
+	if (memory_pointer == NULL)
+		print_error_message("Failed to allocate memory.\n");
 	return (memory_pointer);
 }
