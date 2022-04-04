@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/30 21:54:44 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/04 19:00:11 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ t_global	g_global;
 // Function declarations.
 void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
+char 					**convert_linked_list_to_array(\
+	t_environment_element *environment_element);
 void					do_export(char **args, \
 	t_environment_element **environment_linked_list);
 void					do_unset(char **args, \
@@ -125,7 +127,8 @@ void					do_echo(char **args);
 int						do_cd(char *path);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(t_command *command);
+int						exec_sysfunction(t_command *command, \
+	char **environment_array);
 int						builtin(t_command *command, char **builtin_funcs, \
 	t_environment_element **environment_linked_list);
 

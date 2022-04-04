@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sysfuncs_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/26 17:48:55 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/04 19:07:58 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,13 @@ int	send_output(int pipe, char *path, int chain)
 	return (EXIT_SUCCESS);
 }
 
-int	do_pipe(int pipe, t_command to_command)
+int	do_pipe(int pipe, t_command to_command, char **environment_array)
 {
 	char	*cmd;
 
 	cmd = check_sysfunction(to_command.command);
 	dup2(pipe, 0);
+	(void)environment_array;
 	if (execve(cmd, to_command.args, NULL) == -1)
 	{
 		perror("msh");
@@ -80,7 +81,7 @@ int	do_pipe(int pipe, t_command to_command)
 	return (EXIT_SUCCESS);
 }
 
-int	exec_sysfunction(t_command *command)
+int	exec_sysfunction(t_command *command, char **environment_array)
 {
 	int		pid;
 	int		status;
@@ -117,7 +118,7 @@ int	exec_sysfunction(t_command *command)
 			if (command[0].chain == APPENDO || command[0].chain == REDIRECTO)
 				send_output(my_pipe[0], command[1].args[0], command[0].chain);
 			else if (command[0].chain == PIPE)
-				do_pipe(my_pipe[0], command[1]);
+				do_pipe(my_pipe[0], command[1], environment_array);
 			close(my_pipe[0]);
 			ft_putstr("parent out pipe closing\n");
 		}
