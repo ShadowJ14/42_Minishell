@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/03 18:53:52 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/05 20:19:44 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,37 @@ int	send_output(int pipe, char *path, int chain)
 	return (EXIT_SUCCESS);
 }
 
-int	do_pipe(int pipe, t_command to_command)
+int	do_pipe(int *pipe, t_command to_command)
 {
 	char	*cmd;
+	int		pid;
+	int		status;
 
 	cmd = check_sysfunction(to_command.command);
-	dup2(pipe, 0);
-	if (execve(cmd, to_command.args, NULL) == -1)
+	if (cmd)
 	{
-		perror("msh");
-		exit(EXIT_FAILURE);
+		dup2(*pipe, 0);
+		pid = fork();
+		if (!pid)
+		{
+			if (execve(cmd, to_command.args, NULL) == -1)
+			{
+				perror("msh");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if (pid < 0)
+			perror("msh");
+		else
+		{
+			waitpid(pid, &status, WUNTRACED);
+			while (!WIFEXITED(status) && !WIFSIGNALED(status))
+				waitpid(pid, &status, WUNTRACED);
+		}
+		free(cmd);
 	}
+	else
+		printf("Command '%s' not found.\n", to_command.command);
 	return (EXIT_SUCCESS);
 }
 
@@ -103,7 +123,6 @@ int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_ele
 			msh_execute_two(command, builtin_funcs, environment_linked_list);
 			close(my_pipe[1]);
 			exit(0);
-
 		}
 		else if (pid < 0)
 			perror("msh");
@@ -116,7 +135,7 @@ int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_ele
 			if (command[0].chain == APPENDO || command[0].chain == REDIRECTO)
 				send_output(my_pipe[0], command[1].args[0], command[0].chain);
 			else if (command[0].chain == PIPE)
-				do_pipe(my_pipe[0], command[1]);
+				do_pipe(&my_pipe[0], command[1]);
 			close(my_pipe[0]);
 			ft_putstr("parent out pipe closing\n");
 		}

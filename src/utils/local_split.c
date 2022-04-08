@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/28 23:52:39 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/06 00:43:01 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,20 @@ int	ops(char const *s, char *delim, t_command *cmd, int idx)
 {
 	char		*from;
 	char		*ret;
+	char		quote;
 
 	from = (char *)s;
 	while (!ft_strchr(delim, *s) && *s)
-		s++;
+	{
+		if (ft_strchr("\"\'", *s))
+		{
+			quote = *s++;
+			while (*s != quote)
+				s++;
+		}
+		if (*s)
+			s++;
+	}
 	ret = (char *)malloc(s - from + 1);
 	if (!ret || !cmd)
 		return (-1);
