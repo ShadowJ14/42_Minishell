@@ -30,7 +30,7 @@ remove_program:
 
 norminette:
 	@$(eval norminette_errors=`${norminette} ${header_file} ${source_files} | grep --invert-match 'OK'`)
-#	@if [ "${norminette_errors}" != "" ]; then\
+	@if [ "${norminette_errors}" != "" ]; then\
 		echo "${norminette_errors}";\
 		exit 1;\
 	fi
