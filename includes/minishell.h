@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/10 15:25:09 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 17:05:11 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void					free_memory(void **memory_pointer);
 void					handle_signals(void);
 void					open_terminal(t_terminal *terminal);
 void					print_error_message(char *error_message);
+void					print_export(char **args);
 void					print_message(char *message);
 char					*read_input_until_new_line(t_terminal terminal);
 

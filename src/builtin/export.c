@@ -6,42 +6,30 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/09 18:59:28 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 17:04:17 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_export(t_environment_element *environment_linked_list)
+static void	get_value(char *arg, t_argument *argument, \
+	size_t index_1, size_t index_2)
 {
-	t_environment_element	*environment_element;
-
-	environment_element = environment_linked_list;
-	while (environment_element != NULL)
+	argument->value = allocate_memory(sizeof(*(argument->value)) * \
+		(calculate_string_length(arg) - index_1));
+	argument->set_value = false;
+	if (arg[index_1] == '=')
 	{
-		print_message(environment_element->name);
-		print_message("=");
-		if (environment_element->value[0] == '\0')
-			print_message("''");
-		else
-			print_message(environment_element->value);
-		print_message("\n");
-		environment_element = environment_element->next_element;
+		index_1++;
+		argument->set_value = true;
 	}
-}
-
-static void	verify_args(char **args)
-{
-	size_t	index;
-
-	index = 1;
-	while (args[index] != NULL)
+	index_2 = 0;
+	while (arg[index_1 + index_2] != '\0')
 	{
-		if (!(ft_isalpha(args[index][0]) || args[index][0] == '_'))
-			print_error_message(ft_strjoin(ft_strjoin("export: not an" \
-				" identifier: ", args[index]), "\n"));
-		index++;
+		argument->value[index_2] = arg[index_1 + index_2];
+		index_2++;
 	}
+	argument->value[index_2] = '\0';
 }
 
 static t_argument	*get_argument(char *arg)
@@ -62,22 +50,25 @@ static t_argument	*get_argument(char *arg)
 		index_2++;
 	}
 	argument->name[index_2] = '\0';
-	argument->value = allocate_memory(sizeof(*(argument->value)) * \
-		(calculate_string_length(arg) - index_1));
-	argument->set_value = false;
-	if (arg[index_1] == '=')
-	{
-		index_1++;
-		argument->set_value = true;
-	}
-	index_2 = 0;
-	while (arg[index_1 + index_2] != '\0')
-	{
-		argument->value[index_2] = arg[index_1 + index_2];
-		index_2++;
-	}
-	argument->value[index_2] = '\0';
+	get_value(arg, argument, index_1, index_2);
 	return (argument);
+}
+
+static void	replace_argument_value(t_argument *argument, \
+	t_environment_element ***environment_element)
+{
+	while (**environment_element != NULL)
+	{
+		if (!ft_strcmp((**environment_element)->name, argument->name))
+		{
+			if (argument->set_value)
+				(**environment_element)->value = argument->value;
+			break ;
+		}
+		if ((**environment_element)->next_element == NULL)
+			break ;
+		*environment_element = &(**environment_element)->next_element;
+	}
 }
 
 static void	set_args(char **args, \
@@ -93,18 +84,7 @@ static void	set_args(char **args, \
 	{
 		argument = get_argument(args[index]);
 		environment_element = environment_linked_list;
-		while (*environment_element != NULL)
-		{
-			if (!ft_strcmp((*environment_element)->name, argument->name))
-			{
-				if (argument->set_value)
-					(*environment_element)->value = argument->value;
-				break ;
-			}
-			if ((*environment_element)->next_element == NULL)
-				break ;
-			environment_element = &(*environment_element)->next_element;
-		}
+		replace_argument_value(argument, &environment_element);
 		if (ft_strcmp((*environment_element)->name, argument->name))
 		{
 			new_environment_element = \
@@ -120,11 +100,24 @@ static void	set_args(char **args, \
 // implements export builtin
 void	do_export(char **args, t_environment_element **environment_linked_list)
 {
+	t_environment_element	*environment_element;
+
 	if (args[1] == NULL)
 	{
-		print_export(*environment_linked_list);
+		environment_element = *environment_linked_list;
+		while (environment_element != NULL)
+		{
+			print_message(environment_element->name);
+			print_message("=");
+			if (environment_element->value[0] == '\0')
+				print_message("''");
+			else
+				print_message(environment_element->value);
+			print_message("\n");
+			environment_element = environment_element->next_element;
+		}
 		return ;
 	}
-	verify_args(args);
+	print_export(args);
 	set_args(args, environment_linked_list);
 }
