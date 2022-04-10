@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/05 18:40:30 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/10 20:00:27 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	test_print_commands(t_command *command, t_environment_element \
 	while (command[++i].command)
 	{
 		j = -1;
-		printf("command%i: %s args:\n", i, command[i].command);
+		printf("command%i: %s args: ", i, command[i].command);
 		while (command[i].args[++j])
 		{
 			if (ft_strchr(command[i].args[j], '$'))
@@ -50,7 +50,6 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	t_environment_element	*environment_linked_list;
 	t_terminal				terminal;
 	t_command				*command;
-	char					*builtin_funcs[BUILTIN_FUNCS_NB];
 	char					*input;
 
 	(void)amount_of_program_arguments;
@@ -58,8 +57,8 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	handle_signals();
 	environment_linked_list = format_environment(environment);
 	open_terminal(&terminal);
-	g_global.input = NULL;
-	set_builtin_funcs(builtin_funcs);
+	//g_global.input = NULL;
+	g_exit_code = 0;
 	while (true)
 	{
 		input = read_input_until_new_line(terminal);
@@ -68,7 +67,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 			printf("input: %s\n", input);
 			command = msh_split_line(input);
 			test_print_commands(command, environment_linked_list);
-			msh_execute(command, builtin_funcs, environment_linked_list);
+			msh_execute(command, environment_linked_list);
 		}
 	}
 	(void) environment_linked_list;

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/09 15:21:55 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/10 20:50:26 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	send_output(int pipe, char *path, int chain)
 	int		file;
 	int		mode;
 
-	if (chain == APPENDO)
+	if (chain == APPEND)
 		mode = O_RDWR | O_APPEND;
 	else
 		mode = O_RDWR | O_TRUNC;
@@ -132,7 +132,7 @@ int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_ele
 			while (!WIFEXITED(status) && !WIFSIGNALED(status))
 				waitpid(pid, &status, WUNTRACED);
 			close(my_pipe[1]);
-			if (command[0].chain == APPENDO || command[0].chain == REDIRECTO)
+			if (command[0].chain == APPEND || command[0].chain == REDIRECTO)
 				send_output(my_pipe[0], command[1].args[0], command[0].chain);
 			else if (command[0].chain == PIPE)
 				do_pipe(&my_pipe[0], command[1]);

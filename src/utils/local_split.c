@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/06 00:43:01 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/10 20:50:26 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ int	set_chain(char delim, char append)
 	if (delim == '>')
 	{
 		if (delim == append)
-			return (APPENDO);
+			return (APPEND);
 		else
 			return (REDIRECTO);
 	}
 	if (delim == '<')
 	{
 		if (delim == append)
-			return (APPENDI);
+			return (HEREDOC);
 		else
 			return (REDIRECTI);
 	}

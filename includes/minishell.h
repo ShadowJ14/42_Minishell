@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/09 15:20:28 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/10 20:50:58 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@
 # define PIPE 1
 # define REDIRECTI 2
 # define REDIRECTO 3
-# define APPENDI 4
-# define APPENDO 5
+# define HEREDOC 4
+# define APPEND 5
 
 typedef struct s_argument
 {
@@ -63,10 +63,10 @@ typedef struct s_argument
 	char	*value;
 }	t_argument;
 
-typedef struct s_global
+/*typedef struct s_global
 {
 	char	*input;
-}	t_global;
+}	t_global;*/
 
 // The environment variables are formatted by the program into a linked list.
 // Each element of that linked list uses this structure which stores the name
@@ -96,9 +96,12 @@ typedef struct s_command
 	char	*command;
 	char	**args;
 	int		chain;
+	int		pipe[2];
 }				t_command;
 
-t_global	g_global;
+//t_global	g_global;
+
+int g_exit_code;
 
 // Function declarations.
 void					*allocate_memory(size_t size);
@@ -119,7 +122,7 @@ char					*read_input_until_new_line(t_terminal terminal);
 void					print_export(t_environment_element *environment_linked_list);
 
 // lprates
-int						msh_execute(t_command *command, char **builtin_funcs, \
+int						msh_execute(t_command *command, \
 	t_environment_element *environment_linked_list);
 t_command				*msh_split_line(char *line);
 t_command				*realloc_n_initialize_cmd(t_command *cmd, int idx);
@@ -129,14 +132,18 @@ int						do_cd(char *path, \
 	t_environment_element *environment_linked_list);
 void					do_exit(char **args);
 void					set_builtin_funcs(char **builtin_funcs);
-int						exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list);
-int						builtin(t_command *command, char **builtin_funcs, \
+int						exec_sysfunction(t_command *command, \
+	char **builtin_funcs, t_environment_element *environment_linked_list);
+int						is_builtin(t_command *cmd, \
 	t_environment_element *environment_linked_list);
 char					**smart_split(char const *s, char *delim);
 char					*expand_env_var(t_environment_element *environment_linked_list,
 							char *env_name);
-int						exec_sysfunction_two(t_command *command);
+int						exec_sysfunction_two(t_command *command, char **str);
 int						msh_execute_two(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list);
 char					*check_sysfunction(char *func);
+int						forking(t_command *command, pid_t *pid, t_environment_element *environment_linked_list);
+int						execute_builtins(char *cmd, char **args, \
+	t_environment_element *environment_linked_list);
 
 #endif
