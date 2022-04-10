@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/10 17:28:27 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:16:42 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	do_error(int my_pipe[2], char *cmd, t_command *command)
 */
 static void	send_output(int pipe, char *path, int chain)
 {
+	char	*error_message;
 	char	reading_buf[1];
 	int		file;
 	int		mode;
@@ -43,7 +44,9 @@ static void	send_output(int pipe, char *path, int chain)
 		file = open(path, mode | O_CREAT, 0666);
 	if (file == -1)
 	{
-		perror(ft_strjoin("minishell: ", path));
+		error_message = ft_strjoin("minishell: ", path);
+		perror(error_message);
+		free_memory((void **)error_message);
 		return ;
 	}
 	while (read(pipe, reading_buf, 1) > 0)
