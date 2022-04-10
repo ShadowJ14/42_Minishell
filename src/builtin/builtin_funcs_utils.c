@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/26 17:56:15 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:55:56 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,23 @@ static int	execute_builtins(char *cmd, char **args, \
 
 	if (!ft_strcmp(cmd, "cd"))
 		do_cd(args[1]);
-	if (!ft_strcmp(cmd, "pwd"))
-		printf("current path is: %s\n", getcwd(NULL, 0));
-	if (!ft_strcmp(cmd, "echo"))
+	else if (!ft_strcmp(cmd, "pwd"))
+	{
+		print_message(getcwd(NULL, 0));
+		print_message("\n");
+	}
+	else if (!ft_strcmp(cmd, "echo"))
 		do_echo(args);
-	if (!ft_strcmp(cmd, "export"))
+	else if (!ft_strcmp(cmd, "export"))
 		do_export(args, environment_linked_list);
-	if (!ft_strcmp(cmd, "unset"))
+	else if (!ft_strcmp(cmd, "unset"))
 		do_unset(args, environment_linked_list);
-	environment_element = *environment_linked_list;
-	if (!ft_strcmp(cmd, "env"))
-		while (environment_element != NULL)
-		{
-			printf("%s=%s\n", environment_element->name, environment_element->value);
-			environment_element = environment_element->next_element;
-		}
-	if (!ft_strcmp(cmd, "exit"))
+	else if (!ft_strcmp(cmd, "env"))
+	{
+		environment_element = *environment_linked_list;
+		do_env(environment_element);
+	}
+	else if (!ft_strcmp(cmd, "exit"))
 		do_exit(args);
 	return (1);
 }
@@ -64,7 +65,8 @@ int	builtin(t_command *cmd, char **builtin_funcs, \
 	idx = -1;
 	while (++idx < BUILTIN_FUNCS_NB)
 	{
-		if (!ft_strcmp(cmd->command, builtin_funcs[idx]))
+		if (cmd->command != NULL && !ft_strcmp(cmd->command, \
+			builtin_funcs[idx]))
 		{
 			execute_builtins(cmd->command, cmd->args, environment_linked_list);
 			return (1);

@@ -6,16 +6,33 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:58 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/30 21:35:03 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:46:43 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	unset_args(char **args, t_environment_element **environment_linked_list)
+static bool	unset_argument(char **args, size_t index, \
+	t_environment_element ***environment_element)
+{
+	t_environment_element	*environment_element_freed;
+
+	if (!ft_strcmp((**environment_element)->name, args[index]))
+	{
+		environment_element_freed = **environment_element;
+		**environment_element = (**environment_element)->next_element;
+		free_memory((void **)&environment_element_freed);
+		return (true);
+	}
+	else
+		*environment_element = &(**environment_element)->next_element;
+	return (false);
+}
+
+static void	unset_args(char **args, \
+	t_environment_element **environment_linked_list)
 {
 	t_environment_element	**environment_element;
-	t_environment_element	*environment_element_freed;
 	size_t					index;
 
 	index = 1;
@@ -30,17 +47,8 @@ static void	unset_args(char **args, t_environment_element **environment_linked_l
 			continue ;
 		}
 		while (*environment_element != NULL)
-		{
-			if (!ft_strcmp((*environment_element)->name, args[index]))
-			{
-				environment_element_freed = *environment_element;
-				*environment_element = (*environment_element)->next_element;
-				free_memory((void **)&environment_element_freed);
+			if (unset_argument(args, index, &environment_element))
 				break ;
-			} else {
-				environment_element = &(*environment_element)->next_element;
-			}
-		}
 		index++;
 	}
 }

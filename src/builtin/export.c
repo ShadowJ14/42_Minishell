@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/30 21:57:30 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/09 18:59:28 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static t_argument	*get_argument(char *arg)
 	argument = allocate_memory(sizeof(*argument));
 	argument->name = allocate_memory(sizeof(*(argument->name)) * (index_1 + 1));
 	index_2 = 0;
-	while (index_2 < index_1) {
+	while (index_2 < index_1)
+	{
 		argument->name[index_2] = arg[index_2];
 		index_2++;
 	}
@@ -70,7 +71,8 @@ static t_argument	*get_argument(char *arg)
 		argument->set_value = true;
 	}
 	index_2 = 0;
-	while (arg[index_1 + index_2] != '\0') {
+	while (arg[index_1 + index_2] != '\0')
+	{
 		argument->value[index_2] = arg[index_1 + index_2];
 		index_2++;
 	}
@@ -105,7 +107,8 @@ static void	set_args(char **args, \
 		}
 		if (ft_strcmp((*environment_element)->name, argument->name))
 		{
-			new_environment_element = allocate_memory(sizeof(*new_environment_element));
+			new_environment_element = \
+				allocate_memory(sizeof(*new_environment_element));
 			new_environment_element->name = argument->name;
 			new_environment_element->value = argument->value;
 			(*environment_element)->next_element = new_environment_element;

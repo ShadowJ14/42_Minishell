@@ -6,14 +6,15 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/04 18:43:53 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:52:58 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //? should be return code
-int	msh_execute(t_command *command, char **builtin_funcs, t_environment_element **environment_linked_list)
+int	msh_execute(t_command *command, char **builtin_funcs, \
+	t_environment_element **environment_linked_list)
 {
 	int	return_code;
 

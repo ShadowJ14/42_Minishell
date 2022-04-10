@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/04 19:07:58 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:16:52 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	exec_sysfunction(t_command *command, char **environment_array)
 			else if (command[0].chain == PIPE)
 				do_pipe(my_pipe[0], command[1], environment_array);
 			close(my_pipe[0]);
-			ft_putstr("parent out pipe closing\n");
+			ft_putstr("(debug) parent out pipe closing\n");
 		}
 		free(cmd);
 	}

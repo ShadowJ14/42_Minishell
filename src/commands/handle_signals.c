@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 00:38:33 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 16:51:10 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/09 18:17:20 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,14 @@
 "Control + C" generates the signal SIGINT.
 "Control + \" generates the signal SIGQUIT.
 "Control + D" generates the signal SIGTERM.
-		print_message("\n");
 */
 
 static void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
-		printf("minishell> \n");
+		print_message("minishell> \n");
 	if (rl_on_new_line() == -1)
-		exit(1);
+		exit(EXIT_FAILURE);
 	rl_replace_line("", 1);
 	rl_redisplay();
 }

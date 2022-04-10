@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/13 20:46:36 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/10 16:00:45 by rramos           ###   ########.fr       */
+/*   Created: 2022/04/10 15:23:26 by rramos            #+#    #+#             */
+/*   Updated: 2022/04/10 15:25:26 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	do_exit(char **args)
+void	do_env(t_environment_element *environment_element)
 {
-	print_message("exit\n");
-	if (args[1])
-		exit(ft_atoi(args[1]));
-	else
-		exit(EXIT_SUCCESS);
+	while (environment_element != NULL)
+	{
+		print_message(environment_element->name);
+		print_message("=");
+		print_message(environment_element->value);
+		print_message("\n");
+		environment_element = environment_element->next_element;
+	}
 }

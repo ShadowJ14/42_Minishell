@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/26 17:41:27 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:52:23 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,20 @@ void	test_print_commands(t_command *command)
 	while (command[++i].command)
 	{
 		j = -1;
-		printf("command%i: %s args:\n", i, command[i].command);
+		print_message("(debug) command ");
+		print_message(ft_itoa(i));
+		print_message(": ");
+		print_message(command[i].command);
+		print_message(" args:\n");
+		print_message("(debug) ");
 		while (command[i].args[++j])
-			printf("%s ", command[i].args[j]);
-		printf("link: %i\n", command[i].chain);
+		{
+			print_message(command[i].args[j]);
+			print_message(" ");
+		}
+		print_message("link: ");
+		print_message(ft_itoa(command[i].chain));
+		print_message("\n");
 	}
 }
 
@@ -46,22 +56,24 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	t_terminal				terminal;
 	t_command				*command;
 	char					*builtin_funcs[BUILTIN_FUNCS_NB];
+	char					*input;
 
 	(void)amount_of_program_arguments;
 	(void)program_arguments;
 	handle_signals();
 	environment_linked_list = format_environment(environment);
 	open_terminal(&terminal);
-	g_global.input = NULL;
 	set_builtin_funcs(builtin_funcs);
 	while (true)
 	{
-		read_input_until_new_line(terminal);
-		printf("input: %s\n", g_global.input);
-		command = msh_split_line(g_global.input);
+		input = read_input_until_new_line(terminal);
+		print_message("(debug) input: ");
+		print_message(input);
+		print_message("\n");
+		command = msh_split_line(input);
 		test_print_commands(command);
 		msh_execute(command, builtin_funcs, &environment_linked_list);
 	}
-	(void) environment_linked_list;
+	(void)environment_linked_list;
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/04 19:00:11 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:25:09 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@
 # include <unistd.h>
 
 # include "../libs/libft/libft.h"
+
+// Include the "rl_on_new_line", "rl_redisplay", and "rl_replace_line" functions.
 # include <readline/readline.h>
+
 # include <readline/history.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -62,11 +65,6 @@ typedef struct s_argument
 	bool	set_value;
 	char	*value;
 }	t_argument;
-
-typedef struct s_global
-{
-	char	*input;
-}	t_global;
 
 // The environment variables are formatted by the program into a linked list.
 // Each element of that linked list uses this structure which stores the name
@@ -98,13 +96,12 @@ typedef struct s_command
 	int		chain;
 }				t_command;
 
-t_global	g_global;
-
 // Function declarations.
 void					*allocate_memory(size_t size);
 size_t					calculate_string_length(char *string);
 char 					**convert_linked_list_to_array(\
 	t_environment_element *environment_element);
+void					do_env(t_environment_element *environment_element);
 void					do_export(char **args, \
 	t_environment_element **environment_linked_list);
 void					do_unset(char **args, \
@@ -115,7 +112,7 @@ void					handle_signals(void);
 void					open_terminal(t_terminal *terminal);
 void					print_error_message(char *error_message);
 void					print_message(char *message);
-void					read_input_until_new_line(t_terminal terminal);
+char					*read_input_until_new_line(t_terminal terminal);
 
 // lprates
 int						msh_execute(t_command *command, char **builtin_funcs, \
