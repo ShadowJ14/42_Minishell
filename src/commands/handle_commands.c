@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/10 22:40:58 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/13 00:50:27 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int	init_pipe(int **nfd, int i, t_command *cur, t_command *command)
 {
 	(void) command;
 	nfd[i] = malloc(sizeof(int) * (2));
+	printf("i value: %i\n", i);
 	if (nfd[i] == NULL)
 		return (50);
 	if (pipe(nfd[i]) == -1)
@@ -149,7 +150,7 @@ int	open_pipe(t_command **command)
 	int			**nfd;
 	int			ret;
 
-	i = -1;
+	i = 0;
 	cur = *command;
 	nfd = malloc(sizeof(int *) * (command_len(cur) + 1));
 	if (nfd == NULL)
@@ -157,17 +158,18 @@ int	open_pipe(t_command **command)
 	nfd[command_len(cur)] = NULL;
 	while (cur->command)
 	{
-		if ((*command)->chain == APPEND || (*command)->chain == REDIRECTO \
-			|| (*command)->chain == REDIRECTI || (*command)->chain == HEREDOC)
+		if (i != 0 && ((cur - 1)->chain == APPEND || (cur - 1)->chain == REDIRECTO \
+			|| (cur - 1)->chain == REDIRECTI || (cur - 1)->chain == HEREDOC))
 			;
 		else
 		{	
-			ret = init_pipe(nfd, ++i, cur, *command);
+			ret = init_pipe(nfd, i, cur, *command);
 			if (ret != 0)
 			{
 				//free_nfd(nfd);
 				return (ret);
 			}
+			i++;
 		}
 		cur++;
 	}
@@ -280,8 +282,8 @@ int	multi_fork(pid_t *pid, int i, t_command **command, t_command **cur, t_enviro
 	}
 	if ((*cur)->pipe[0] != 0)
 		close((*cur)->pipe[0]);
-	//if ((*cur)->pipe[1] != 1)
-	//	close((*cur)->pipe[1]);
+	if ((*cur)->pipe[1] != 1)
+		close((*cur)->pipe[1]);
 	return (0);
 }
 
