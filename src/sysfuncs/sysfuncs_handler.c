@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/10 20:50:26 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/24 23:27:24 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,20 @@ int	send_output(int pipe, char *path, int chain)
 	return (EXIT_SUCCESS);
 }
 
-int	do_pipe(int *pipe, t_command to_command)
+int	do_pipe(int *pipe, t_cmd to_cmd)
 {
 	char	*cmd;
 	int		pid;
 	int		status;
 
-	cmd = check_sysfunction(to_command.command);
+	cmd = check_sysfunction(to_cmd.exec);
 	if (cmd)
 	{
 		dup2(*pipe, 0);
 		pid = fork();
 		if (!pid)
 		{
-			if (execve(cmd, to_command.args, NULL) == -1)
+			if (execve(cmd, to_cmd.args, NULL) == -1)
 			{
 				perror("msh");
 				exit(EXIT_FAILURE);
@@ -97,11 +97,11 @@ int	do_pipe(int *pipe, t_command to_command)
 		free(cmd);
 	}
 	else
-		printf("Command '%s' not found.\n", to_command.command);
+		printf("cmd '%s' not found.\n", to_cmd.exec);
 	return (EXIT_SUCCESS);
 }
 
-int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list)
+int	exec_sysfunction(t_cmd *cmd, char **builtin_funcs, t_env_elem *env_linklist)
 {
 	int		pid;
 	int		status;
@@ -111,8 +111,8 @@ int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_ele
 	{
 		perror("Error creating pipe");
 	}
-	if (command[0].chain == 0)
-		msh_execute_two(command, builtin_funcs, environment_linked_list);
+	if (cmd[0].chain == 0)
+		msh_execute_two(cmd, builtin_funcs, env_linklist);
 	else
 	{
 		pid = fork();
@@ -120,7 +120,7 @@ int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_ele
 		{
 			close(my_pipe[0]);
 			dup2(my_pipe[1], 1);
-			msh_execute_two(command, builtin_funcs, environment_linked_list);
+			msh_execute_two(cmd, builtin_funcs, env_linklist);
 			close(my_pipe[1]);
 			exit(0);
 		}
@@ -132,10 +132,10 @@ int	exec_sysfunction(t_command *command, char **builtin_funcs, t_environment_ele
 			while (!WIFEXITED(status) && !WIFSIGNALED(status))
 				waitpid(pid, &status, WUNTRACED);
 			close(my_pipe[1]);
-			if (command[0].chain == APPEND || command[0].chain == REDIRECTO)
-				send_output(my_pipe[0], command[1].args[0], command[0].chain);
-			else if (command[0].chain == PIPE)
-				do_pipe(&my_pipe[0], command[1]);
+			if (cmd[0].chain == APPEND || cmd[0].chain == REDIRECTO)
+				send_output(my_pipe[0], cmd[1].args[0], cmd[0].chain);
+			else if (cmd[0].chain == PIPE)
+				do_pipe(&my_pipe[0], cmd[1]);
 			close(my_pipe[0]);
 			ft_putstr("parent out pipe closing\n");
 		}

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/10 20:00:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/25 05:11:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,44 @@ Installed the "C/C++" extension ("C/C++ IntelliSense, debugging, and code
 browsing.") and setted up the "launch.json" the "tasks.json" files in the folder.
 */
 
-static void	test_print_commands(t_command *command, t_environment_element \
-		*environment_linked_list)
+static void	test_print_cmds(t_cmd *cmd, t_env_elem \
+		*env_linklist)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = -1;
 	j = -1;
-	while (command[++i].command)
+	tmp = NULL;
+	(void)env_linklist;
+	while (cmd[++i].exec)
 	{
 		j = -1;
-		printf("command%i: %s args: ", i, command[i].command);
-		while (command[i].args[++j])
+		printf("cmd%i: %s args: ", i, cmd[i].exec);
+		while (cmd[i].args[++j])
 		{
-			if (ft_strchr(command[i].args[j], '$'))
-				command[i].args[j] = expand_env_var(environment_linked_list, ft_strchr(command[i].args[j], '$') + 1);
-			printf("%s ", command[i].args[j]);
+			//tmp = ft_strchr(cmd[i].args[j], '$');
+			//if (tmp)
+				cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE, env_linklist);
+			printf("%s ", cmd[i].args[j]);
 		}
-		printf("link: %i\n", command[i].chain);
+		printf("link: %i\n", cmd[i].chain);
 	}
 }
 
 int	main(int amount_of_program_arguments, char **program_arguments, \
 	char **environment)
 {
-	t_environment_element	*environment_linked_list;
-	t_terminal				terminal;
-	t_command				*command;
-	char					*input;
+	t_env_elem	*env_linklist;
+	t_terminal	terminal;
+	t_cmd		*cmd;
+	char		*input;
 
 	(void)amount_of_program_arguments;
 	(void)program_arguments;
 	handle_signals();
-	environment_linked_list = format_environment(environment);
+	env_linklist = format_environment(environment);
 	open_terminal(&terminal);
 	//g_global.input = NULL;
 	g_exit_code = 0;
@@ -65,11 +69,11 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		if (input)
 		{
 			printf("input: %s\n", input);
-			command = msh_split_line(input);
-			test_print_commands(command, environment_linked_list);
-			msh_execute(command, environment_linked_list);
+			cmd = msh_split_line(input);
+			test_print_cmds(cmd, env_linklist);
+			msh_execute(cmd, env_linklist);
 		}
 	}
-	(void) environment_linked_list;
+	(void) env_linklist;
 	return (EXIT_SUCCESS);
 }

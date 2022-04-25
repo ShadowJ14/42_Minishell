@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   allocate_memory.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 18:03:09 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/04 13:58:45 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/24 23:14:34 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*realloc_n_initialize_cmd(t_command *cmd, int idx)
+t_cmd	*realloc_n_initialize_cmd(t_cmd *cmd, int idx)
 {
 	int	cmd_size;
 
-	cmd_size = sizeof(t_command);
+	cmd_size = sizeof(t_cmd);
 	if (idx == 0)
 		cmd = malloc(cmd_size * 2);
 	else
@@ -26,7 +26,7 @@ t_command	*realloc_n_initialize_cmd(t_command *cmd, int idx)
 	ft_memset(&cmd[idx], 0, cmd_size * 2);
 	return (cmd);
 }
-	//ft_memset(&cmd[idx + 1], 0, sizeof(t_command));
+	//ft_memset(&cmd[idx + 1], 0, sizeof(t_cmd));
 
 void	*allocate_memory(size_t size)
 {

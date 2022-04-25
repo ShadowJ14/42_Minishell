@@ -6,39 +6,39 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:58 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/02 00:51:40 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	unset_args(char **args, t_environment_element **environment_linked_list)
+static void	unset_args(char **args, t_env_elem **env_linklist)
 {
-	t_environment_element	**environment_element;
-	t_environment_element	*environment_element_freed;
+	t_env_elem	**env_elem;
+	t_env_elem	*env_elem_freed;
 	size_t					index;
 
 	index = 1;
 	while (args[index] != NULL)
 	{
-		environment_element = environment_linked_list;
-		if (!ft_strcmp((*environment_element)->name, args[index]))
+		env_elem = env_linklist;
+		if (!ft_strcmp((*env_elem)->name, args[index]))
 		{
-			*environment_linked_list = (*environment_linked_list)->next_element;
-			free_memory((void **)environment_element);
+			*env_linklist = (*env_linklist)->next_element;
+			free_memory((void **)env_elem);
 			index++;
 			continue ;
 		}
-		while (*environment_element != NULL)
+		while (*env_elem != NULL)
 		{
-			if (!ft_strcmp((*environment_element)->name, args[index]))
+			if (!ft_strcmp((*env_elem)->name, args[index]))
 			{
-				environment_element_freed = *environment_element;
-				*environment_element = (*environment_element)->next_element;
-				free_memory((void **)&environment_element_freed);
+				env_elem_freed = *env_elem;
+				*env_elem = (*env_elem)->next_element;
+				free_memory((void **)&env_elem_freed);
 				break ;
 			} else {
-				environment_element = &(*environment_element)->next_element;
+				env_elem = &(*env_elem)->next_element;
 			}
 		}
 		index++;
@@ -46,12 +46,12 @@ static void	unset_args(char **args, t_environment_element **environment_linked_l
 }
 
 // implements unset builtin
-void	do_unset(char **args, t_environment_element **environment_linked_list)
+void	do_unset(char **args, t_env_elem **env_linklist)
 {
 	if (args[1] == NULL)
 	{
 		print_error_message("unset: not enough arguments\n");
 		return ;
 	}
-	unset_args(args, environment_linked_list);
+	unset_args(args, env_linklist);
 }

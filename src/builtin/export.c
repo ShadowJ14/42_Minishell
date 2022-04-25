@@ -6,27 +6,27 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/03 16:06:14 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_export(t_environment_element *environment_linked_list)
+void	print_export(t_env_elem *env_linklist)
 {
-	t_environment_element	*environment_element;
+	t_env_elem	*env_elem;
 
-	environment_element = environment_linked_list;
-	while (environment_element != NULL)
+	env_elem = env_linklist;
+	while (env_elem != NULL)
 	{
-		print_message(environment_element->name);
+		print_message(env_elem->name);
 		print_message("=");
-		if (environment_element->value[0] == '\0')
+		if (env_elem->value[0] == '\0')
 			print_message("''");
 		else
-			print_message(environment_element->value);
+			print_message(env_elem->value);
 		print_message("\n");
-		environment_element = environment_element->next_element;
+		env_elem = env_elem->next_element;
 	}
 }
 
@@ -79,52 +79,52 @@ static t_argument	*get_argument(char *arg)
 }
 
 static void	set_args(char **args, \
-	t_environment_element **environment_linked_list)
+	t_env_elem **env_linklist)
 {
 	t_argument				*argument;
-	t_environment_element	**environment_element;
+	t_env_elem	**env_elem;
 	size_t					index;
-	t_environment_element	*new_environment_element;
+	t_env_elem	*new_env_elem;
 
 	index = 1;
 	while (args[index] != NULL)
 	{
 		argument = get_argument(args[index]);
-		environment_element = environment_linked_list;
-		while (*environment_element != NULL)
+		env_elem = env_linklist;
+		while (*env_elem != NULL)
 		{
-			if (!ft_strcmp((*environment_element)->name, argument->name))
+			if (!ft_strcmp((*env_elem)->name, argument->name))
 			{
 				if (argument->set_value)
-					(*environment_element)->value = argument->value;
+					(*env_elem)->value = argument->value;
 				break ;
 			}
-			if ((*environment_element)->next_element == NULL)
+			if ((*env_elem)->next_element == NULL)
 				break ;
-			environment_element = &(*environment_element)->next_element;
+			env_elem = &(*env_elem)->next_element;
 		}
-		if (ft_strcmp((*environment_element)->name, argument->name))
+		if (ft_strcmp((*env_elem)->name, argument->name))
 		{
-			new_environment_element = allocate_memory(sizeof(*new_environment_element));
-			new_environment_element->name = argument->name;
+			new_env_elem = allocate_memory(sizeof(*new_env_elem));
+			new_env_elem->name = argument->name;
 			if (argument->value)
-				new_environment_element->value = argument->value;
+				new_env_elem->value = argument->value;
 			else
-				new_environment_element->value = 0;
-			(*environment_element)->next_element = new_environment_element;
+				new_env_elem->value = 0;
+			(*env_elem)->next_element = new_env_elem;
 		}
 		index++;
 	}
 }
 
 // implements export builtin
-void	do_export(char **args, t_environment_element **environment_linked_list)
+void	do_export(char **args, t_env_elem **env_linklist)
 {
 	if (args[1] == NULL)
 	{
-		print_export(*environment_linked_list);
+		print_export(*env_linklist);
 		return ;
 	}
 	verify_args(args);
-	set_args(args, environment_linked_list);
+	set_args(args, env_linklist);
 }

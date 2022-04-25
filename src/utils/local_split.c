@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/10 20:50:26 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/25 04:51:11 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 	*dst = 0;
 }
 
-t_command	handle_cmd(char *ret, char delim, char append)
+t_cmd	handle_cmd(char *ret, char delim, char append)
 {
-	char		*from;
-	char		*tmp;
-	t_command	cmd;
+	char	*from;
+	char	*tmp;
+	t_cmd	cmd;
 
 	from = ret;
 	while (!ft_strchr(" ", *ret) && *ret)
 		ret++;
-	cmd.command = (char *)malloc(ret - from + 1);
-	loc_strcpy(cmd.command, from, (char *)ret);
+	cmd.exec = (char *)malloc(ret - from + 1);
+	loc_strcpy(cmd.exec, from, (char *)ret);
 	while (ft_isblank(*ret))
 		ret++;
 	while (*ret)
@@ -60,12 +60,12 @@ t_command	handle_cmd(char *ret, char delim, char append)
 	tmp = (char *)malloc(ret - from + 1);
 	loc_strcpy(tmp, from, (char *)ret);
 	cmd.args = malloc(sizeof(char *) + 1);
-	cmd.args = smart_split(tmp, " \"\'");
+	cmd.args = smart_split(tmp, " ");
 	cmd.chain = set_chain(delim, append);
 	return (cmd);
 }
 
-int	ops(char const *s, char *delim, t_command *cmd, int idx)
+int	ops(char const *s, char *delim, t_cmd *cmd, int idx)
 {
 	char		*from;
 	char		*ret;
@@ -96,10 +96,10 @@ int	ops(char const *s, char *delim, t_command *cmd, int idx)
 	return (s - from);
 }
 
-t_command	*local_split(char const *s, char *delim)
+t_cmd	*local_split(char const *s, char *delim)
 {
-	t_command	*cmd;
-	int			idx;
+	t_cmd	*cmd;
+	int		idx;
 
 	idx = 0;
 	cmd = NULL;

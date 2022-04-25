@@ -1,100 +1,102 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_commands.c                                  :+:      :+:    :+:   */
+/*   handle_cmds.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 22:05:21 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/13 00:50:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/24 23:14:34 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	command_len(t_command *cur)
+int	cmd_len(t_cmd *cur)
 {
-	int	count;
+	int			count;
+	t_cmd	*tmp;
 
 	count = 0;
-	while (cur->command)
+	tmp = cur;
+	while (tmp->exec)
 	{
 		count++;
-		cur++;
+		tmp++;
 	}
 	return (count);
 }
 
-int	redirect_file_in(t_command **command, t_command *cur, int chain)
+int	redirect_file_in(t_cmd **cmd, t_cmd *cur, int chain)
 {
 	if (chain == REDIRECTI)
 	{
-		if ((*command)->pipe[0] != 0)
-			close((*command)->pipe[0]);
-		(*command)->pipe[0] = open(cur->command, O_RDONLY);
-		if ((*command)->pipe[0] == -1)
+		if ((*cmd)->pipe[0] != 0)
+			close((*cmd)->pipe[0]);
+		(*cmd)->pipe[0] = open(cur->exec, O_RDONLY);
+		if ((*cmd)->pipe[0] == -1)
 		{
 			write(1, "minishell: ", 11);
-			perror(cur->command);
+			perror(cur->exec);
 			return (-1);
 		}
 	}
 	/*else if (chain == HEREDOC)
 	{
-		if ((*command)->pipe[0] != 0)
-			close((*command)->pipe[0]);
-		(*command)->pipe[0] = create_heredoc_fd(command, &cur);
-		if ((*command)->pipe[0] == -1)
+		if ((*cmd)->pipe[0] != 0)
+			close((*cmd)->pipe[0]);
+		(*cmd)->pipe[0] = create_heredoc_fd(cmd, &cur);
+		if ((*cmd)->pipe[0] == -1)
 			return (-1);
 	}*/
 	return (0);
 }
 
-int	redirect_file_out(t_command **command, t_command *cur, int chain)
+int	redirect_file_out(t_cmd **cmd, t_cmd *cur, int chain)
 {
 	if (chain == REDIRECTO)
 	{
-		if ((*command)->pipe[1] != 1)
-			close((*command)->pipe[1]);
-		(*command)->pipe[1] = open(cur->command, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if ((*command)->pipe[1] == -1)
+		if ((*cmd)->pipe[1] != 1)
+			close((*cmd)->pipe[1]);
+		(*cmd)->pipe[1] = open(cur->exec, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if ((*cmd)->pipe[1] == -1)
 			return (-1);
 	}
 	else if (chain == APPEND)
 	{
-		if ((*command)->pipe[1] != 1)
-			close((*command)->pipe[1]);
-		(*command)->pipe[1] = open(cur->command, O_CREAT | O_RDWR | O_APPEND, 0644);
-		if ((*command)->pipe[1] == -1)
+		if ((*cmd)->pipe[1] != 1)
+			close((*cmd)->pipe[1]);
+		(*cmd)->pipe[1] = open(cur->exec, O_CREAT | O_RDWR | O_APPEND, 0644);
+		if ((*cmd)->pipe[1] == -1)
 			return (-1);
 	}
 	return (0);
 }
 
-int	open_fd(t_command **command)
+int	open_fd(t_cmd **cmd)
 {
-	t_command	*cur;
+	t_cmd	*cur;
 
-	cur = *command;
+	cur = *cmd;
 	if (cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		if (redirect_file_in(command, cur + 1, cur->chain) == -1)
+		if (redirect_file_in(cmd, cur + 1, cur->chain) == -1)
 			return (-1);
 	if (cur->chain == REDIRECTO || cur->chain == APPEND)
-		if (redirect_file_out(command, cur + 1, cur->chain) == -1)
+		if (redirect_file_out(cmd, cur + 1, cur->chain) == -1)
 			return (-1);
 	return (0);
 }
 
-int	wait_pid(t_command **command, pid_t *pid)
+int	wait_pid(t_cmd **cmd, pid_t *pid)
 {
-	t_command	*cur;
+	t_cmd	*cur;
 	int			len;
 	int			i;
 
 	i = 0;
-	cur = *command;
-	len = command_len(cur);
-	if (len == 1 && is_builtin(*command, NULL))
+	cur = *cmd;
+	len = cmd_len(cur);
+	if (len == 1 && is_builtin(*cmd, NULL))
 	{
 		return (0);
 	}
@@ -117,9 +119,9 @@ int	wait_pid(t_command **command, pid_t *pid)
 	return (0);
 }
 
-int	init_pipe(int **nfd, int i, t_command *cur, t_command *command)
+int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)
 {
-	(void) command;
+	(void) cmd;
 	nfd[i] = malloc(sizeof(int) * (2));
 	printf("i value: %i\n", i);
 	if (nfd[i] == NULL)
@@ -131,7 +133,7 @@ int	init_pipe(int **nfd, int i, t_command *cur, t_command *command)
 		cur->pipe[0] = 0;
 	else
 		cur->pipe[0] = nfd[i - 1][0];
-	if ((cur + 1)->command == NULL)
+	if ((cur + 1)->exec == NULL)
 	{
 		close(nfd[i][0]);
 		close(nfd[i][1]);
@@ -143,27 +145,27 @@ int	init_pipe(int **nfd, int i, t_command *cur, t_command *command)
 	return (0);
 }
 
-int	open_pipe(t_command **command)
+int	open_pipe(t_cmd **cmd)
 {
-	t_command	*cur;
+	t_cmd	*cur;
 	int			i;
 	int			**nfd;
 	int			ret;
 
 	i = 0;
-	cur = *command;
-	nfd = malloc(sizeof(int *) * (command_len(cur) + 1));
+	cur = *cmd;
+	nfd = malloc(sizeof(int *) * (cmd_len(cur) + 1));
 	if (nfd == NULL)
 		return (50);
-	nfd[command_len(cur)] = NULL;
-	while (cur->command)
+	nfd[cmd_len(cur)] = NULL;
+	while (cur->exec)
 	{
 		if (i != 0 && ((cur - 1)->chain == APPEND || (cur - 1)->chain == REDIRECTO \
 			|| (cur - 1)->chain == REDIRECTI || (cur - 1)->chain == HEREDOC))
 			;
 		else
 		{	
-			ret = init_pipe(nfd, i, cur, *command);
+			ret = init_pipe(nfd, i, cur, *cmd);
 			if (ret != 0)
 			{
 				//free_nfd(nfd);
@@ -178,66 +180,66 @@ int	open_pipe(t_command **command)
 }
 
 //? should be return code
-int	msh_execute(t_command *command, t_environment_element *environment_linked_list)
+int	msh_execute(t_cmd *cmd, t_env_elem *env_linklist)
 {
 	pid_t	*pid;
 	int		ret;
 
-	pid = malloc(sizeof(pid_t) * command_len(command));
+	pid = malloc(sizeof(pid_t) * cmd_len(cmd));
 	if (pid == NULL)
 		return (50);
-	ret = open_pipe(&command);
+	ret = open_pipe(&cmd);
 	if (ret != 0)
 		return (ret);
 	if (pid == NULL)
 		return (50);
 	//int	return_code;
 
-	//return_code = builtin(command, builtin_funcs, environment_linked_list);
+	//return_code = builtin(cmd, builtin_funcs, env_linklist);
 	//if (!return_code)
-	//exec_sysfunction(command, builtin_funcs, environment_linked_list);
-	forking(command, pid, environment_linked_list);
-	wait_pid(&command, pid);
+	//exec_sysfunction(cmd, builtin_funcs, env_linklist);
+	forking(cmd, pid, env_linklist);
+	wait_pid(&cmd, pid);
 	free(pid);
 	return (0);
 }
 
-int	msh_execute_two(t_command *command, char **builtin_funcs, t_environment_element *environment_linked_list)
+int	msh_execute_two(t_cmd *cmd, char **builtin_funcs, t_env_elem *env_linklist)
 {
 	int	return_code;
 
 	(void) builtin_funcs;
-	return_code = is_builtin(command, environment_linked_list);
+	return_code = is_builtin(cmd, env_linklist);
 	if (!return_code)
-		return_code = exec_sysfunction_two(command, NULL);
+		return_code = exec_sysfunction_two(cmd, NULL);
 	return (1);
 }
 
-int	exec_sysfunction_two(t_command *command, char **str)
+int	exec_sysfunction_two(t_cmd *cmd, char **str)
 {
-	char	*cmd;
+	char	*exec;
 
-	cmd = check_sysfunction(command->command);
-	if (cmd)
+	exec = check_sysfunction(cmd->exec);
+	if (exec)
 	{
-		if (execve(cmd, command->args, str) == -1)
+		if (execve(exec, cmd->args, str) == -1)
 		{
 			perror("msh");
 			exit(EXIT_FAILURE);
 		}
-		free(cmd);
+		free(exec);
 	}
 	else
-		printf("Command '%s' not found.\n", command->command);
+		printf("cmd '%s' not found.\n", cmd->exec);
 	return (0);
 }
 
-void	close_fd_all(t_command **command)
+void	close_fd_all(t_cmd **cmd)
 {
-	t_command	*cur;
+	t_cmd	*cur;
 
-	cur = *command;
-	while (cur->command)
+	cur = *cmd;
+	while (cur->exec)
 	{
 		if (cur->pipe[0] != 0)
 			close(cur->pipe[0]);
@@ -247,26 +249,26 @@ void	close_fd_all(t_command **command)
 	}
 }
 
-int	ft_execve_fct(t_command **command, t_command **first, pid_t *pid, t_environment_element *environment_linked_list)
+int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid, t_env_elem *env_linklist)
 {
 	char		**str;
 
 	(void) pid;
-	dup2((*command)->pipe[0], STDIN_FILENO);
-	dup2((*command)->pipe[1], STDOUT_FILENO);
+	dup2((*cmd)->pipe[0], STDIN_FILENO);
+	dup2((*cmd)->pipe[1], STDOUT_FILENO);
 	close_fd_all(first);
-	str = convert_linked_list_to_array(environment_linked_list);
+	str = convert_linked_list_to_array(env_linklist);
 	if (str == NULL)
 		exit(42);
-	if (is_builtin(*command, environment_linked_list))
-		execute_builtins((*command)->command, (*command)->args, environment_linked_list);
+	if (is_builtin(*cmd, env_linklist))
+		execute_builtins((*cmd)->exec, (*cmd)->args, env_linklist);
 	else
-		exec_sysfunction_two(*command, str);
-		//ft_exec_cmd(command, first, str, pid);
+		exec_sysfunction_two(*cmd, str);
+		//ft_exec_cmd(cmd, first, str, pid);
 	return (0);
 }
 
-int	multi_fork(pid_t *pid, int i, t_command **command, t_command **cur, t_environment_element *environment_linked_list)
+int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur, t_env_elem *env_linklist)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
@@ -277,7 +279,7 @@ int	multi_fork(pid_t *pid, int i, t_command **command, t_command **cur, t_enviro
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		ft_execve_fct(cur, command, pid, environment_linked_list);
+		ft_execve_fct(cur, cmd, pid, env_linklist);
 		exit (0);
 	}
 	if ((*cur)->pipe[0] != 0)
@@ -287,17 +289,17 @@ int	multi_fork(pid_t *pid, int i, t_command **command, t_command **cur, t_enviro
 	return (0);
 }
 
-int	forking(t_command *command, pid_t *pid, t_environment_element *environment_linked_list)
+int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 {
-	int				len;
-	int				i;
-	t_command		*cur;
+	int		len;
+	int		i;
+	t_cmd	*cur;
 
 	i = -1;
-	cur = command;
-	len = command_len(cur);
-	printf("command_count: %i\n", len);
-	while (cur->command)
+	cur = cmd;
+	len = cmd_len(cur);
+	printf("cmd_count: %i\n", len);
+	while (cur->exec)
 	{
 		open_fd(&cur);
 		if (cur->chain == APPEND || cur->chain == REDIRECTO \
@@ -305,15 +307,15 @@ int	forking(t_command *command, pid_t *pid, t_environment_element *environment_l
 			cur++;
 		cur++;
 	}
-	cur = command;
-	if (len == 1 && is_builtin(cur, environment_linked_list))
+	cur = cmd;
+	if (len == 1 && is_builtin(cur, env_linklist))
 	{
-		execute_builtins(command->command, command->args, environment_linked_list);
+		execute_builtins(cmd->exec, cmd->args, env_linklist);
 		return (1);
 	}
 	while (++i < len)
 	{
-		multi_fork(pid, i, &command, &cur, environment_linked_list);
+		multi_fork(pid, i, &cmd, &cur, env_linklist);
 		if (cur->chain == APPEND || cur->chain == REDIRECTO \
 			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
 		{

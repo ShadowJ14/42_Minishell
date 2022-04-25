@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/28 23:49:21 by lprates          ###   ########.fr       */
+/*   Updated: 2022/04/25 05:31:07 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 static char	*move_to_delim(char *s, char delim, char *from)
 {
-	from = (char *)++s;
-	from++;
+	from = (char *)s;
+	s++;
 	while (*s && *s != delim)
 		++s;
 	if (*s == 0 && delim != ' ')
 		return (NULL);
+	if (*s == '\"' || *s == '\'')
+		s++;
 	return (s);
 }
 
@@ -59,6 +61,7 @@ char	**smart_split(char const *s, char *delim)
 	long long	idx;
 	char		*from;
 
+	(void)delim;
 	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s) + 1);
 	if (!s || !ret)
 		return (NULL);
@@ -68,8 +71,10 @@ char	**smart_split(char const *s, char *delim)
 		if (*s != ' ')
 		{
 			from = (char *)s;
-			if (ft_strchr(delim, *s))
-				s = move_to_delim((char *)s, *s, ++from);
+			if (*s == '"')
+				s = move_to_delim((char *)s, '"', from);
+			else if (*s == '\'')
+				s = move_to_delim((char *)s, '\'', from);
 			else
 				s = move_to_delim((char *)s, ' ', from);
 			ret[idx] = (char *)malloc(s - from + 1);

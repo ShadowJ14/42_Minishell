@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_environment.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 17:17:37 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/30 21:25:49 by rramos           ###   ########.fr       */
+/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	calculate_environment_value_length(char *environment_variable)
 }
 
 static void	format_environment_variable(char *environment_variable, \
-	t_environment_element *environment_element)
+	t_env_elem *env_elem)
 {
 	size_t	name_index;
 	size_t	value_index;
@@ -50,60 +50,60 @@ static void	format_environment_variable(char *environment_variable, \
 	while (environment_variable[name_index] != '=' && \
 		environment_variable[name_index] != '\0')
 	{
-		environment_element->name[name_index] = \
+		env_elem->name[name_index] = \
 			environment_variable[name_index];
 		name_index++;
 	}
-	environment_element->name[name_index] = '\0';
+	env_elem->name[name_index] = '\0';
 	if (environment_variable[name_index] == '\0')
 		return ;
 	name_index++;
 	value_index = 0;
 	while (environment_variable[name_index + value_index] != '\0')
 	{
-		environment_element->value[value_index] = \
+		env_elem->value[value_index] = \
 			environment_variable[name_index + value_index];
 		value_index++;
 	}
-	environment_element->value[value_index] = '\0';
+	env_elem->value[value_index] = '\0';
 }
 
-static void	add_element_to_environment_linked_list(t_environment_element \
-	*environment_linked_list, t_environment_element *environment_new_element)
+static void	add_element_to_env_linklist(t_env_elem \
+	*env_linklist, t_env_elem *environment_new_element)
 {
-	t_environment_element	*environment_element;
+	t_env_elem	*env_elem;
 
-	environment_element = environment_linked_list;
-	while (environment_element->next_element != NULL)
-		environment_element = environment_element->next_element;
-	environment_element->next_element = environment_new_element;
+	env_elem = env_linklist;
+	while (env_elem->next_element != NULL)
+		env_elem = env_elem->next_element;
+	env_elem->next_element = environment_new_element;
 }
 
-t_environment_element	*format_environment(char **environment)
+t_env_elem	*format_environment(char **environment)
 {
-	t_environment_element	*environment_linked_list;
-	t_environment_element	*environment_element;
+	t_env_elem	*env_linklist;
+	t_env_elem	*env_elem;
 	size_t					index;
 
 	index = 0;
-	environment_linked_list = NULL;
+	env_linklist = NULL;
 	while (environment[index] != NULL)
 	{
-		environment_element = allocate_memory(sizeof(*environment_element));
-		environment_element->name = allocate_memory(\
-			sizeof(*environment_element->name) \
+		env_elem = allocate_memory(sizeof(*env_elem));
+		env_elem->name = allocate_memory(\
+			sizeof(*env_elem->name) \
 				* (calculate_environment_name_length(environment[index]) + 1));
-		environment_element->value = allocate_memory(\
-			sizeof(*environment_element->value) \
+		env_elem->value = allocate_memory(\
+			sizeof(*env_elem->value) \
 				* (calculate_environment_value_length(environment[index] + 1)));
-		environment_element->next_element = NULL;
-		format_environment_variable(environment[index], environment_element);
-		if (environment_linked_list == NULL)
-			environment_linked_list = environment_element;
+		env_elem->next_element = NULL;
+		format_environment_variable(environment[index], env_elem);
+		if (env_linklist == NULL)
+			env_linklist = env_elem;
 		else
-			add_element_to_environment_linked_list(environment_linked_list, \
-				environment_element);
+			add_element_to_env_linklist(env_linklist, \
+				env_elem);
 		index++;
 	}
-	return (environment_linked_list);
+	return (env_linklist);
 }
