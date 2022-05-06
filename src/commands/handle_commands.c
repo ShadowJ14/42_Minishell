@@ -102,12 +102,12 @@ int	wait_pid(t_cmd **cmd, pid_t *pid)
 	}
 	while (i < len)
 	{
-		if (cur->chain == APPEND || cur->chain == REDIRECTO \
+		/*if (cur->chain == APPEND || cur->chain == REDIRECTO \
 			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
 		{
 			cur++;
 			i++;
-		}
+		}*/
 		waitpid(pid[i], &g_exit_code, 0);
 		if (WIFEXITED(g_exit_code))
 			g_exit_code = WEXITSTATUS(g_exit_code);
@@ -160,10 +160,10 @@ int	open_pipe(t_cmd **cmd)
 	nfd[cmd_len(cur)] = NULL;
 	while (cur->exec)
 	{
-		if (i != 0 && ((cur - 1)->chain == APPEND || (cur - 1)->chain == REDIRECTO \
+		/*if (i != 0 && ((cur - 1)->chain == APPEND || (cur - 1)->chain == REDIRECTO \
 			|| (cur - 1)->chain == REDIRECTI || (cur - 1)->chain == HEREDOC))
 			;
-		else
+		else*/
 		{	
 			ret = init_pipe(nfd, i, cur, *cmd);
 			if (ret != 0)
@@ -302,9 +302,9 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	while (cur->exec)
 	{
 		open_fd(&cur);
-		if (cur->chain == APPEND || cur->chain == REDIRECTO \
+		/*if (cur->chain == APPEND || cur->chain == REDIRECTO \
 			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
-			cur++;
+			cur++;*/
 		cur++;
 	}
 	cur = cmd;
@@ -316,12 +316,12 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	while (++i < len)
 	{
 		multi_fork(pid, i, &cmd, &cur, env_linklist);
-		if (cur->chain == APPEND || cur->chain == REDIRECTO \
+		/*if (cur->chain == APPEND || cur->chain == REDIRECTO \
 			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
 		{
 			cur++;
 			i++;
-		}
+		}*/
 		cur++;
 	}
 	return (0);
