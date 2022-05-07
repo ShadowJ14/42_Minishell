@@ -14,7 +14,7 @@
 
 int	cmd_len(t_cmd *cur)
 {
-	int			count;
+	int		count;
 	t_cmd	*tmp;
 
 	count = 0;
@@ -27,17 +27,17 @@ int	cmd_len(t_cmd *cur)
 	return (count);
 }
 
-int	redirect_file_in(t_cmd **cmd, t_cmd *cur, int chain)
+int	redirect_file_in(t_cmd **cmd, int chain)
 {
 	if (chain == REDIRECTI)
 	{
 		if ((*cmd)->pipe[0] != 0)
 			close((*cmd)->pipe[0]);
-		(*cmd)->pipe[0] = open(cur->exec, O_RDONLY);
+		(*cmd)->pipe[0] = open((*cmd)->file, O_RDONLY);
 		if ((*cmd)->pipe[0] == -1)
 		{
 			write(1, "minishell: ", 11);
-			perror(cur->exec);
+			perror((*cmd)->args[1]);
 			return (-1);
 		}
 	}
@@ -52,13 +52,13 @@ int	redirect_file_in(t_cmd **cmd, t_cmd *cur, int chain)
 	return (0);
 }
 
-int	redirect_file_out(t_cmd **cmd, t_cmd *cur, int chain)
+int	redirect_file_out(t_cmd **cmd, int chain)
 {
 	if (chain == REDIRECTO)
 	{
 		if ((*cmd)->pipe[1] != 1)
 			close((*cmd)->pipe[1]);
-		(*cmd)->pipe[1] = open(cur->exec, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		(*cmd)->pipe[1] = open((*cmd)->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if ((*cmd)->pipe[1] == -1)
 			return (-1);
 	}
@@ -66,7 +66,7 @@ int	redirect_file_out(t_cmd **cmd, t_cmd *cur, int chain)
 	{
 		if ((*cmd)->pipe[1] != 1)
 			close((*cmd)->pipe[1]);
-		(*cmd)->pipe[1] = open(cur->exec, O_CREAT | O_RDWR | O_APPEND, 0644);
+		(*cmd)->pipe[1] = open((*cmd)->file, O_CREAT | O_RDWR | O_APPEND, 0644);
 		if ((*cmd)->pipe[1] == -1)
 			return (-1);
 	}
@@ -79,10 +79,10 @@ int	open_fd(t_cmd **cmd)
 
 	cur = *cmd;
 	if (cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		if (redirect_file_in(cmd, cur + 1, cur->chain) == -1)
+		if (redirect_file_in(cmd, cur->chain) == -1)
 			return (-1);
 	if (cur->chain == REDIRECTO || cur->chain == APPEND)
-		if (redirect_file_out(cmd, cur + 1, cur->chain) == -1)
+		if (redirect_file_out(cmd, cur->chain) == -1)
 			return (-1);
 	return (0);
 }
@@ -96,18 +96,12 @@ int	wait_pid(t_cmd **cmd, pid_t *pid)
 	i = 0;
 	cur = *cmd;
 	len = cmd_len(cur);
-	if (len == 1 && is_builtin(*cmd, NULL))
+	if (len == 1 && is_builtin(*cmd))
 	{
 		return (0);
 	}
 	while (i < len)
 	{
-		/*if (cur->chain == APPEND || cur->chain == REDIRECTO \
-			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		{
-			cur++;
-			i++;
-		}*/
 		waitpid(pid[i], &g_exit_code, 0);
 		if (WIFEXITED(g_exit_code))
 			g_exit_code = WEXITSTATUS(g_exit_code);
@@ -123,7 +117,6 @@ int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)
 {
 	(void) cmd;
 	nfd[i] = malloc(sizeof(int) * (2));
-	printf("i value: %i\n", i);
 	if (nfd[i] == NULL)
 		return (50);
 	if (pipe(nfd[i]) == -1)
@@ -160,19 +153,13 @@ int	open_pipe(t_cmd **cmd)
 	nfd[cmd_len(cur)] = NULL;
 	while (cur->exec)
 	{
-		/*if (i != 0 && ((cur - 1)->chain == APPEND || (cur - 1)->chain == REDIRECTO \
-			|| (cur - 1)->chain == REDIRECTI || (cur - 1)->chain == HEREDOC))
-			;
-		else*/
-		{	
-			ret = init_pipe(nfd, i, cur, *cmd);
-			if (ret != 0)
-			{
-				//free_nfd(nfd);
-				return (ret);
-			}
-			i++;
+		ret = init_pipe(nfd, i, cur, *cmd);
+		if (ret != 0)
+		{
+			//free_nfd(nfd);
+			return (ret);
 		}
+		i++;
 		cur++;
 	}
 	//free_nfd(nfd);
@@ -209,11 +196,39 @@ int	msh_execute_two(t_cmd *cmd, char **builtin_funcs, t_env_elem *env_linklist)
 	int	return_code;
 
 	(void) builtin_funcs;
-	return_code = is_builtin(cmd, env_linklist);
+	(void) env_linklist;
+	return_code = is_builtin(cmd);
 	if (!return_code)
 		return_code = exec_sysfunction_two(cmd, NULL);
 	return (1);
 }
+
+/*static void	test_print_cmds(t_cmd *cmd, char **test)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+
+	i = -1;
+	j = -1;
+	tmp = NULL;
+	while (cmd[++i].exec)
+	{
+		j = -1;
+		printf("cmd%i: %s args: ", i, cmd[i].exec);
+		while (cmd[i].args[++j])
+		{
+			printf("%s ", cmd[i].args[j]);
+		}
+		printf("link: %i\n", cmd[i].chain);
+	}
+	i = 0;
+	while (test[i])
+	{
+		printf("test: %s\n", test[i]);
+		i++;
+	}
+}*/
 
 int	exec_sysfunction_two(t_cmd *cmd, char **str)
 {
@@ -222,6 +237,15 @@ int	exec_sysfunction_two(t_cmd *cmd, char **str)
 	exec = check_sysfunction(cmd->exec);
 	if (exec)
 	{
+		/*if (cmd->chain)
+		{
+		ft_putstr("Aqui1\n");
+			if (execve(exec, test, str) == -1)
+			{
+				perror("msh");
+				exit(EXIT_FAILURE);
+			}
+		}*/
 		if (execve(exec, cmd->args, str) == -1)
 		{
 			perror("msh");
@@ -260,7 +284,7 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid, t_env_elem *env_linkli
 	str = convert_linked_list_to_array(env_linklist);
 	if (str == NULL)
 		exit(42);
-	if (is_builtin(*cmd, env_linklist))
+	if (is_builtin(*cmd))
 		execute_builtins((*cmd)->exec, (*cmd)->args, env_linklist);
 	else
 		exec_sysfunction_two(*cmd, str);
@@ -298,17 +322,13 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	i = -1;
 	cur = cmd;
 	len = cmd_len(cur);
-	printf("cmd_count: %i\n", len);
 	while (cur->exec)
 	{
 		open_fd(&cur);
-		/*if (cur->chain == APPEND || cur->chain == REDIRECTO \
-			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
-			cur++;*/
 		cur++;
 	}
 	cur = cmd;
-	if (len == 1 && is_builtin(cur, env_linklist))
+	if (len == 1 && is_builtin(cur))
 	{
 		execute_builtins(cmd->exec, cmd->args, env_linklist);
 		return (1);
@@ -316,12 +336,6 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	while (++i < len)
 	{
 		multi_fork(pid, i, &cmd, &cur, env_linklist);
-		/*if (cur->chain == APPEND || cur->chain == REDIRECTO \
-			|| cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		{
-			cur++;
-			i++;
-		}*/
 		cur++;
 	}
 	return (0);

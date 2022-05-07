@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/25 05:11:25 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/07 20:01:57 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void	test_print_cmds(t_cmd *cmd, t_env_elem \
 			printf("%s ", cmd[i].args[j]);
 		}
 		printf("link: %i\n", cmd[i].chain);
+		//if (cmd[i].file)
+		//	printf("file: %s\n", cmd[i].file);
 	}
 }
 

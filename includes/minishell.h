@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/25 04:35:03 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/07 19:48:39 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct s_cmd
 	char	**args;
 	int		chain;
 	int		pipe[2];
+	char	*file;
 }				t_cmd;
 
 // testing
@@ -132,15 +133,15 @@ void		print_export(t_env_elem *env_linklist);
 int			msh_execute(t_cmd *cmd, t_env_elem *env_linklist);
 t_cmd		*msh_split_line(char *line);
 t_cmd		*realloc_n_initialize_cmd(t_cmd *cmd, int idx);
-t_cmd		*local_split(char const *s, char *delim);
+t_cmd		*local_split(char const *s);
 void		do_echo(char **args);
 int			do_cd(char *path, t_env_elem *env_linklist);
 void		do_exit(char **args);
 void		set_builtin_funcs(char **builtin_funcs);
 int			exec_sysfunction(t_cmd *cmd, \
 	char **builtin_funcs, t_env_elem *env_linklist);
-int			is_builtin(t_cmd *cmd, t_env_elem *env_linklist);
-char		**smart_split(char const *s, char *delim);
+int			is_builtin(t_cmd *cmd);
+char		**smart_split(char const *s, char *delim, t_cmd *cmd);
 char		*expand_env_var(t_env_elem *env_linklist, char *env_name);
 int			exec_sysfunction_two(t_cmd *cmd, char **str);
 int			msh_execute_two(t_cmd *cmd, char **builtin_funcs, \

@@ -6,30 +6,22 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/06 19:32:59 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/07 19:49:11 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	set_chain(char delim, char append)
+int	set_chain(char *tmp)
 {
-	if (delim == '>')
-	{
-		if (delim == append)
-			return (APPEND);
-		else
-			return (REDIRECTO);
-	}
-	if (delim == '<')
-	{
-		if (delim == append)
-			return (HEREDOC);
-		else
-			return (REDIRECTI);
-	}
-	if (delim == '|')
-		return (PIPE);
+	if (ft_strstr(tmp, ">>"))
+		return (APPEND);
+	if (ft_strstr(tmp, ">"))
+		return (REDIRECTO);
+	if (ft_strstr(tmp, "<<"))
+		return (HEREDOC);
+	if (ft_strstr(tmp, "<"))
+		return (REDIRECTI);
 	return (0);
 }
 
@@ -40,7 +32,7 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 	*dst = 0;
 }
 
-t_cmd	handle_cmd(char *ret, char delim, char append)
+t_cmd	handle_cmd(char *ret)
 {
 	char	*from;
 	char	*tmp;
@@ -60,19 +52,20 @@ t_cmd	handle_cmd(char *ret, char delim, char append)
 	tmp = (char *)malloc(ret - from + 1);
 	loc_strcpy(tmp, from, (char *)ret);
 	cmd.args = malloc(sizeof(char *) + 1);
-	cmd.args = smart_split(tmp, " ");
-	cmd.chain = set_chain(delim, append);
+	cmd.args = smart_split(tmp, " ", &cmd);
+	cmd.chain = set_chain(tmp);
+	free (tmp);
 	return (cmd);
 }
 
-int	ops(char const *s, char *delim, t_cmd *cmd, int idx)
+int	ops(char const *s, t_cmd *cmd, int idx)
 {
 	char		*from;
 	char		*ret;
 	char		quote;
 
 	from = (char *)s;
-	while (!ft_strchr(delim, *s) && *s)
+	while ('|' != *s && *s)
 	{
 		if (ft_strchr("\"\'", *s))
 		{
@@ -87,16 +80,14 @@ int	ops(char const *s, char *delim, t_cmd *cmd, int idx)
 	if (!ret || !cmd)
 		return (-1);
 	loc_strcpy(ret, from, (char *)s);
-	if (ft_strchr(delim, *s) && *s)
-		cmd[idx++] = handle_cmd(ret, *s, *(s + 1));
-	else
-		cmd[idx++] = handle_cmd(ret, 0, 0);
-	while (ft_strchr(delim, *s) && *s)
+	cmd[idx++] = handle_cmd(ret);
+	free (ret);
+	while ('|' != *s && *s)
 		s++;
 	return (s - from);
 }
 
-t_cmd	*local_split(char const *s, char *delim)
+t_cmd	*local_split(char const *s)
 {
 	t_cmd	*cmd;
 	int		idx;
@@ -110,9 +101,9 @@ t_cmd	*local_split(char const *s, char *delim)
 	{
 		while (ft_isblank(*s))
 			s++;
-		if (!ft_strchr(delim, *s))
+		if ('|' != *s)
 		{
-			s += ops(s, delim, cmd, idx++);
+			s += ops(s, cmd, idx++);
 			if (*s)
 				cmd = realloc_n_initialize_cmd(cmd, idx);
 		}

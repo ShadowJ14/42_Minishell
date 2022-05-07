@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/25 05:31:07 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/07 19:51:49 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,19 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 	*dst = 0;
 }
 
-char	**smart_split(char const *s, char *delim)
+char	**smart_split(char const *s, char *delim, t_cmd *cmd)
 {
 	char		**ret;
 	long long	idx;
 	char		*from;
+	int			file_chk;
 
 	(void)delim;
 	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s) + 1);
 	if (!s || !ret)
 		return (NULL);
 	idx = 0;
+	file_chk = 0;
 	while (*s)
 	{
 		if (*s != ' ')
@@ -77,8 +79,22 @@ char	**smart_split(char const *s, char *delim)
 				s = move_to_delim((char *)s, '\'', from);
 			else
 				s = move_to_delim((char *)s, ' ', from);
-			ret[idx] = (char *)malloc(s - from + 1);
-			loc_strcpy(ret[idx++], from, (char *)s);
+			if (*from == '<' || *from == '>')
+			{
+				file_chk = 1;
+				continue ;
+			}
+			if (file_chk)
+			{
+				cmd->file = (char *)malloc(s - from + 1);
+				loc_strcpy(cmd->file, from, (char *)s);
+				file_chk = 0;
+			}
+			else
+			{
+				ret[idx] = (char *)malloc(s - from + 1);
+				loc_strcpy(ret[idx++], from, (char *)s);
+			}
 		}
 		if (*s != 0)
 			++s;
