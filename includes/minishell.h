@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/07 19:48:39 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/21 00:14:19 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,21 +134,14 @@ int			msh_execute(t_cmd *cmd, t_env_elem *env_linklist);
 t_cmd		*msh_split_line(char *line);
 t_cmd		*realloc_n_initialize_cmd(t_cmd *cmd, int idx);
 t_cmd		*local_split(char const *s);
-void		do_echo(char **args);
-int			do_cd(char *path, t_env_elem *env_linklist);
-void		do_exit(char **args);
 void		set_builtin_funcs(char **builtin_funcs);
-int			exec_sysfunction(t_cmd *cmd, \
-	char **builtin_funcs, t_env_elem *env_linklist);
 int			is_builtin(t_cmd *cmd);
 char		**smart_split(char const *s, char *delim, t_cmd *cmd);
 char		*expand_env_var(t_env_elem *env_linklist, char *env_name);
-int			exec_sysfunction_two(t_cmd *cmd, char **str);
 int			msh_execute_two(t_cmd *cmd, char **builtin_funcs, \
 	t_env_elem *env_linklist);
 char		*check_sysfunction(char *func);
 int			forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist);
-int			execute_builtins(char *cmd, char **args, t_env_elem *env_linklist);
 char		*expand_env_var_string(t_env_elem *env_linklist, \
 	char *str, char *first);
 
@@ -156,7 +149,26 @@ char		*expand_env_var_string(t_env_elem *env_linklist, \
 
 t_quote		update_quote_status(char c, t_quote quote);
 t_quote		update_quote_succes(int *i, t_quote quote, char **s1);
-char		*word_modif_two(char *duplica, t_quote quote, t_quote prec, t_env_elem *env_linklist);
-char	*string_env(char *str, char *tmp, int *cur, t_env_elem *env_linklist);
+char		*word_modif_two(char *duplica, t_quote quote, t_quote prec, \
+	t_env_elem *env_linklist);
+char		*string_env(char *str, char *tmp, int *cur, \
+	t_env_elem *env_linklist);
+
+// builtins
+
+int			execute_builtins(t_cmd *cmd, t_env_elem *env_linklist, \
+	int *pid, int fd);
+int			ft_built_in_pwd_fd(int fd);
+void		do_echo(char **args, int pid);
+int			do_exit(char **args, pid_t *pid);
+int			do_cd(char *path, t_env_elem *env_linklist);
+
+// sysfuncs
+
+
+
+// cleanup
+
+int			free_all(t_cmd **cmd);
 
 #endif

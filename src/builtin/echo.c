@@ -6,25 +6,26 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 20:44:27 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/07 19:42:54 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/20 23:27:10 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // implements echo with -n option builtin
-void	do_echo(char **args)
+void	do_echo(char **args, int fd)
 {
 	int	idx;
 
+	//(void) fd;
 	if (args[1] && !ft_strcmp(args[1], "-n"))
 	{
 		idx = 1;
 		while (args[++idx])
 		{
 			if (idx != 2)
-				write(1, " ", 1);
-			write(1, args[idx], ft_strlen(args[idx]));
+				ft_putchar_fd(' ', fd);
+			ft_putstr_fd(args[idx], fd);
 		}
 	}
 	else
@@ -33,9 +34,9 @@ void	do_echo(char **args)
 		while (args[++idx])
 		{
 			if (idx != 1)
-				write(1, " ", 1);
-			write(1, args[idx], ft_strlen(args[idx]));
+				ft_putchar_fd(' ', fd);
+			ft_putstr_fd(args[idx], fd);
 		}
-		write(1, "\n", 1);
+		ft_putchar_fd('\n', fd);
 	}
 }

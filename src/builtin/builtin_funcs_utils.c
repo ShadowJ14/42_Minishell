@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/07 20:29:33 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/21 00:11:14 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@ void	set_builtin_funcs(char **builtin_funcs)
 ** needs error handling
 ** export and unset missing
 */
-int	execute_builtins(char *cmd, char **args, \
-	t_env_elem *env_linklist, int *pid)
+int	execute_builtins(t_cmd *cmd, \
+	t_env_elem *env_linklist, pid_t *pid, int fd)
 {
-	if (!ft_strcmp(cmd, "cd"))
-		do_cd(args[1], env_linklist);
-	if (!ft_strcmp(cmd, "pwd"))
-		printf("current path is: %s\n", getcwd(NULL, 0));
-	if (!ft_strcmp(cmd, "echo"))
-		do_echo(args);
-	if (!ft_strcmp(cmd, "export"))
-		do_export(args, &env_linklist);
-	if (!ft_strcmp(cmd, "unset"))
-		do_unset(args, &env_linklist);
-	if (!ft_strcmp(cmd, "env"))
+	if (!ft_strcmp(cmd->exec, "cd"))
+		do_cd(cmd->args[0], env_linklist);
+	if (!ft_strcmp(cmd->exec, "pwd"))
+		ft_built_in_pwd_fd(fd);
+	if (!ft_strcmp(cmd->exec, "echo"))
+		do_echo(cmd->args, fd);
+	if (!ft_strcmp(cmd->exec, "export"))
+		do_export(cmd->args, &env_linklist);
+	if (!ft_strcmp(cmd->exec, "unset"))
+		do_unset(cmd->args, &env_linklist);
+	if (!ft_strcmp(cmd->exec, "env"))
 		print_export(env_linklist);
-	if (!ft_strcmp(cmd, "exit"))
-		do_exit(args);
+	if (!ft_strcmp(cmd->exec, "exit"))
+		do_exit(cmd->args, pid);
 	return (1);
 }
 

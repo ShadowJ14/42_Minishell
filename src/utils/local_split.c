@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/07 19:49:11 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/20 23:12:40 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ t_cmd	handle_cmd(char *ret)
 	from = ret;
 	while (!ft_strchr(" ", *ret) && *ret)
 		ret++;
-	cmd.exec = (char *)malloc(ret - from + 1);
-	loc_strcpy(cmd.exec, from, (char *)ret);
+	//cmd.exec = (char *)malloc(ret - from + 1);
+	//loc_strcpy(cmd.exec, from, (char *)ret);
 	while (ft_isblank(*ret))
 		ret++;
 	while (*ret)
@@ -107,6 +107,8 @@ t_cmd	*local_split(char const *s)
 			if (*s)
 				cmd = realloc_n_initialize_cmd(cmd, idx);
 		}
+		else
+			s++;
 	}
 	return (cmd);
 }

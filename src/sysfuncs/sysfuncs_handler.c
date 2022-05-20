@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:07:00 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/24 23:27:24 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/20 23:31:36 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,46 +99,4 @@ int	do_pipe(int *pipe, t_cmd to_cmd)
 	else
 		printf("cmd '%s' not found.\n", to_cmd.exec);
 	return (EXIT_SUCCESS);
-}
-
-int	exec_sysfunction(t_cmd *cmd, char **builtin_funcs, t_env_elem *env_linklist)
-{
-	int		pid;
-	int		status;
-	int		my_pipe[2];
-
-	if (pipe(my_pipe) == -1)
-	{
-		perror("Error creating pipe");
-	}
-	if (cmd[0].chain == 0)
-		msh_execute_two(cmd, builtin_funcs, env_linklist);
-	else
-	{
-		pid = fork();
-		if (!pid)
-		{
-			close(my_pipe[0]);
-			dup2(my_pipe[1], 1);
-			msh_execute_two(cmd, builtin_funcs, env_linklist);
-			close(my_pipe[1]);
-			exit(0);
-		}
-		else if (pid < 0)
-			perror("msh");
-		else
-		{
-			waitpid(pid, &status, WUNTRACED);
-			while (!WIFEXITED(status) && !WIFSIGNALED(status))
-				waitpid(pid, &status, WUNTRACED);
-			close(my_pipe[1]);
-			if (cmd[0].chain == APPEND || cmd[0].chain == REDIRECTO)
-				send_output(my_pipe[0], cmd[1].args[0], cmd[0].chain);
-			else if (cmd[0].chain == PIPE)
-				do_pipe(&my_pipe[0], cmd[1]);
-			close(my_pipe[0]);
-			ft_putstr("parent out pipe closing\n");
-		}
-	}
-	return (0);
 }

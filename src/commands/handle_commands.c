@@ -27,17 +27,17 @@ int	cmd_len(t_cmd *cur)
 	return (count);
 }
 
-int	redirect_file_in(t_cmd **cmd, int chain)
+int	redirect_file_in(t_cmd *cmd, int chain)
 {
 	if (chain == REDIRECTI)
 	{
-		if ((*cmd)->pipe[0] != 0)
-			close((*cmd)->pipe[0]);
-		(*cmd)->pipe[0] = open((*cmd)->file, O_RDONLY);
-		if ((*cmd)->pipe[0] == -1)
+		if (cmd->pipe[0] != 0)
+			close(cmd->pipe[0]);
+		cmd->pipe[0] = open(cmd->file, O_RDONLY);
+		if (cmd->pipe[0] == -1)
 		{
 			write(1, "minishell: ", 11);
-			perror((*cmd)->args[1]);
+			perror(cmd->args[1]);
 			return (-1);
 		}
 	}
@@ -52,37 +52,39 @@ int	redirect_file_in(t_cmd **cmd, int chain)
 	return (0);
 }
 
-int	redirect_file_out(t_cmd **cmd, int chain)
+int	redirect_file_out(t_cmd *cmd, int chain)
 {
 	if (chain == REDIRECTO)
 	{
-		if ((*cmd)->pipe[1] != 1)
-			close((*cmd)->pipe[1]);
-		(*cmd)->pipe[1] = open((*cmd)->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if ((*cmd)->pipe[1] == -1)
+		if (cmd->pipe[1] != 1)
+			close(cmd->pipe[1]);
+		cmd->pipe[1] = open(cmd->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (cmd->pipe[1] == -1)
 			return (-1);
 	}
 	else if (chain == APPEND)
 	{
-		if ((*cmd)->pipe[1] != 1)
-			close((*cmd)->pipe[1]);
-		(*cmd)->pipe[1] = open((*cmd)->file, O_CREAT | O_RDWR | O_APPEND, 0644);
-		if ((*cmd)->pipe[1] == -1)
+		if (cmd->pipe[1] != 1)
+		{
+			close(cmd->pipe[1]);
+		}
+		cmd->pipe[1] = open(cmd->file, O_CREAT | O_RDWR | O_APPEND, 0644);
+		if (cmd->pipe[1] == -1)
 			return (-1);
 	}
 	return (0);
 }
 
-int	open_fd(t_cmd **cmd)
+int	open_fd(t_cmd *cmd)
 {
 	t_cmd	*cur;
 
-	cur = *cmd;
+	cur = cmd;
 	if (cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		if (redirect_file_in(cmd, cur->chain) == -1)
+		if (redirect_file_in(cur, cur->chain) == -1)
 			return (-1);
 	if (cur->chain == REDIRECTO || cur->chain == APPEND)
-		if (redirect_file_out(cmd, cur->chain) == -1)
+		if (redirect_file_out(cur, cur->chain) == -1)
 			return (-1);
 	return (0);
 }
@@ -90,8 +92,8 @@ int	open_fd(t_cmd **cmd)
 int	wait_pid(t_cmd **cmd, pid_t *pid)
 {
 	t_cmd	*cur;
-	int			len;
-	int			i;
+	int		len;
+	int		i;
 
 	i = 0;
 	cur = *cmd;
@@ -122,7 +124,6 @@ int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)
 	if (pipe(nfd[i]) == -1)
 		return (40);
 	if (i == 0)
-		//dup2(cur->pipe[0], 0);
 		cur->pipe[0] = 0;
 	else
 		cur->pipe[0] = nfd[i - 1][0];
@@ -131,7 +132,6 @@ int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)
 		close(nfd[i][0]);
 		close(nfd[i][1]);
 		cur->pipe[1] = 1;
-		//dup2(cur->pipe[1], 1);
 	}
 	else
 		cur->pipe[1] = nfd[i][1];
@@ -141,9 +141,9 @@ int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)
 int	open_pipe(t_cmd **cmd)
 {
 	t_cmd	*cur;
-	int			i;
-	int			**nfd;
-	int			ret;
+	int		i;
+	int		**nfd;
+	int		ret;
 
 	i = 0;
 	cur = *cmd;
@@ -180,27 +180,10 @@ int	msh_execute(t_cmd *cmd, t_env_elem *env_linklist)
 		return (ret);
 	if (pid == NULL)
 		return (50);
-	//int	return_code;
-
-	//return_code = builtin(cmd, builtin_funcs, env_linklist);
-	//if (!return_code)
-	//exec_sysfunction(cmd, builtin_funcs, env_linklist);
 	forking(cmd, pid, env_linklist);
 	wait_pid(&cmd, pid);
 	free(pid);
 	return (0);
-}
-
-int	msh_execute_two(t_cmd *cmd, char **builtin_funcs, t_env_elem *env_linklist)
-{
-	int	return_code;
-
-	(void) builtin_funcs;
-	(void) env_linklist;
-	return_code = is_builtin(cmd);
-	if (!return_code)
-		return_code = exec_sysfunction_two(cmd, NULL);
-	return (1);
 }
 
 /*static void	test_print_cmds(t_cmd *cmd, char **test)
@@ -230,28 +213,22 @@ int	msh_execute_two(t_cmd *cmd, char **builtin_funcs, t_env_elem *env_linklist)
 	}
 }*/
 
-int	exec_sysfunction_two(t_cmd *cmd, char **str)
+int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 {
 	char	*exec;
 
 	exec = check_sysfunction(cmd->exec);
 	if (exec)
 	{
-		/*if (cmd->chain)
-		{
-		ft_putstr("Aqui1\n");
-			if (execve(exec, test, str) == -1)
-			{
-				perror("msh");
-				exit(EXIT_FAILURE);
-			}
-		}*/
 		if (execve(exec, cmd->args, str) == -1)
 		{
 			perror("msh");
 			exit(EXIT_FAILURE);
 		}
 		free(exec);
+		free_all(first);
+		free(str);
+		free(pid);
 	}
 	else
 		printf("cmd '%s' not found.\n", cmd->exec);
@@ -277,7 +254,6 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid, t_env_elem *env_linkli
 {
 	char		**str;
 
-	(void) pid;
 	dup2((*cmd)->pipe[0], STDIN_FILENO);
 	dup2((*cmd)->pipe[1], STDOUT_FILENO);
 	close_fd_all(first);
@@ -285,10 +261,9 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid, t_env_elem *env_linkli
 	if (str == NULL)
 		exit(42);
 	if (is_builtin(*cmd))
-		execute_builtins((*cmd)->exec, (*cmd)->args, env_linklist);
+		execute_builtins(*cmd, env_linklist, pid, 1);
 	else
-		exec_sysfunction_two(*cmd, str);
-		//ft_exec_cmd(cmd, first, str, pid);
+		exec_sysfunction_two(*cmd, first, str, pid);
 	return (0);
 }
 
@@ -324,13 +299,13 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	len = cmd_len(cur);
 	while (cur->exec)
 	{
-		open_fd(&cur);
+		open_fd(cur);
 		cur++;
 	}
 	cur = cmd;
 	if (len == 1 && is_builtin(cur))
 	{
-		execute_builtins(cmd->exec, cmd->args, env_linklist);
+		execute_builtins(cmd, env_linklist, pid, cmd->pipe[1]);
 		return (1);
 	}
 	while (++i < len)
