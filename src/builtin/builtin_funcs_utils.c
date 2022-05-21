@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 16:25:31 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/21 00:11:14 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/21 01:20:40 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	execute_builtins(t_cmd *cmd, \
 	t_env_elem *env_linklist, pid_t *pid, int fd)
 {
 	if (!ft_strcmp(cmd->exec, "cd"))
-		do_cd(cmd->args[0], env_linklist);
+		do_cd(cmd->args[1], env_linklist);
 	if (!ft_strcmp(cmd->exec, "pwd"))
 		ft_built_in_pwd_fd(fd);
 	if (!ft_strcmp(cmd->exec, "echo"))

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/21 00:14:19 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/21 01:14:45 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +163,11 @@ void		do_echo(char **args, int pid);
 int			do_exit(char **args, pid_t *pid);
 int			do_cd(char *path, t_env_elem *env_linklist);
 
-// sysfuncs
-
-
-
 // cleanup
 
 int			free_all(t_cmd **cmd);
+
+// utils
+int			cmd_len(t_cmd *cur);
 
 #endif

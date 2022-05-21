@@ -12,21 +12,6 @@
 
 #include "minishell.h"
 
-int	cmd_len(t_cmd *cur)
-{
-	int		count;
-	t_cmd	*tmp;
-
-	count = 0;
-	tmp = cur;
-	while (tmp->exec)
-	{
-		count++;
-		tmp++;
-	}
-	return (count);
-}
-
 int	redirect_file_in(t_cmd *cmd, int chain)
 {
 	if (chain == REDIRECTI)
@@ -155,14 +140,10 @@ int	open_pipe(t_cmd **cmd)
 	{
 		ret = init_pipe(nfd, i, cur, *cmd);
 		if (ret != 0)
-		{
-			//free_nfd(nfd);
 			return (ret);
-		}
 		i++;
 		cur++;
 	}
-	//free_nfd(nfd);
 	return (0);
 }
 
