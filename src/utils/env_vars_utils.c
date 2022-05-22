@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:48:49 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/25 05:42:09 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 19:01:31 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static char	*if_no_env_two(char *str, int *i, char *s1)
 	return (new);
 }
 
-char	*word_will_unquote(char *str, int *cur, char *s1, t_env_elem *env_linklist)
+char	*word_will_unquote(char *str, int *cur, char *s1,
+	t_env_elem *env_linklist)
 {
 	while (str[*cur] && str[*cur] != '\'' && str[*cur] != '"')
 	{
@@ -312,7 +313,8 @@ static char	*if_env(char *str, char *s1, int *cur, t_env_elem *env_linklist)
 	return (join);
 }
 
-char	*word_will_double(char *str, int *cur, char *s1, t_env_elem *env_linklist)
+char	*word_will_double(char *str, int *cur, char *s1,
+	t_env_elem *env_linklist)
 {
 	while (str && str[*cur] && str[*cur] != '"')
 	{
@@ -367,7 +369,8 @@ char	*init_str(char **str, char *duplica, int *cur, char **s1)
 	return (*str);
 }
 
-char	*word_modif_two(char *duplica, t_quote quote, t_quote prec, t_env_elem *env_linklist)
+char	*word_modif_two(char *duplica, t_quote quote, t_quote prec,
+	t_env_elem *env_linklist)
 {
 	char	*s1;
 	int		cur;

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 21:11:20 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 21:50:05 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
 // the "termios" structure.
 # include <termios.h>
 
-// Include the "read" and "write" functions, and the "STDIN_FILENO" and
-// "STDOUT_FILENO" macros.
+// Include the "read" and "write" functions, and the "STDERR_FILENO",
+// "STDIN_FILENO", and "STDOUT_FILENO" macros.
 # include <unistd.h>
 
 # include "../libs/libft/libft.h"
@@ -112,8 +112,6 @@ typedef enum quote
 	END
 }	t_quote;
 
-//t_global	g_global;
-
 int g_exit_code;
 
 // Function declarations.
@@ -127,9 +125,14 @@ void		free_memory(void **memory_pointer);
 void		handle_signals(void);
 void		open_terminal(t_terminal *terminal);
 void		print_error_message(char *error_message);
+void		print_all_tracked_memory(char **memory_management);
 void		print_message(char *message);
 char		*read_input_until_new_line(t_terminal terminal);
 void		print_export(t_env_elem *env_linklist);
+char		***singleton(bool initialize);
+void		track_memory(char ***memory_management, char *memory_to_track);
+void		untrack_all_memory(char **memory_management);
+void		untrack_memory(char ***memory_management, char *memory_to_free);
 
 // lprates
 int			msh_execute(t_cmd *cmd, t_env_elem *env_linklist);

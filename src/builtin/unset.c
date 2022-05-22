@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:58 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:50:31 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	unset_args(char **args, t_env_elem **env_linklist)
 {
 	t_env_elem	**env_elem;
 	t_env_elem	*env_elem_freed;
-	size_t					index;
+	size_t		index;
 
 	index = 1;
 	while (args[index] != NULL)
@@ -37,7 +37,9 @@ static void	unset_args(char **args, t_env_elem **env_linklist)
 				*env_elem = (*env_elem)->next_element;
 				free_memory((void **)&env_elem_freed);
 				break ;
-			} else {
+			}
+			else
+			{
 				env_elem = &(*env_elem)->next_element;
 			}
 		}

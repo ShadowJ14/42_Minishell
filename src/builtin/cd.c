@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 20:46:12 by lprates           #+#    #+#             */
-/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:21:34 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	do_cd(char *path, t_env_elem *env_linklist)
 	}
 	if (!chdir(path))
 		return (1);
-	write(1, "cd: no such file or directory: ", 32);
-	write(1, path, ft_strlen(path));
-	write(1, "\n", 2);
+	print_message("cd: no such file or directory: ");
+	print_message(path);
+	print_message("\n");
 	return (0);
 }

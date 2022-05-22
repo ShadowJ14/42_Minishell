@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_environment.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 17:17:37 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:53:05 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_env_elem	*format_environment(char **environment)
 {
 	t_env_elem	*env_linklist;
 	t_env_elem	*env_elem;
-	size_t					index;
+	size_t		index;
 
 	index = 0;
 	env_linklist = NULL;

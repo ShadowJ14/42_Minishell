@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_linked_list_to_array.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 18:35:56 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:55:04 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static size_t	calculate_linked_list_length(t_env_elem *env_elem)
 	return (length);
 }
 
-char **convert_linked_list_to_array(t_env_elem *env_elem)
+char	**convert_linked_list_to_array(t_env_elem *env_elem)
 {
 	char	**environment_array;
 	size_t	index;
@@ -41,7 +41,8 @@ char **convert_linked_list_to_array(t_env_elem *env_elem)
 	index = 0;
 	while (index < length)
 	{
-		environment_array[index] = ft_strjoin(ft_strjoin(env_elem->name, "="), env_elem->value);
+		environment_array[index] = ft_strjoin(ft_strjoin(env_elem->name, "="), \
+			env_elem->value);
 		index++;
 		env_elem = env_elem->next_element;
 	}

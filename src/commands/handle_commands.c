@@ -21,7 +21,7 @@ int	redirect_file_in(t_cmd *cmd, int chain, t_env_elem *env_linklist)
 		cmd->pipe[0] = open(cmd->file, O_RDONLY);
 		if (cmd->pipe[0] == -1)
 		{
-			write(1, "minishell: ", 11);
+			print_message("minishell: ");
 			perror(cmd->args[1]);
 			return (-1);
 		}
@@ -231,7 +231,8 @@ void	close_fd_all(t_cmd **cmd)
 	}
 }
 
-int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid, t_env_elem *env_linklist)
+int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid,
+	t_env_elem *env_linklist)
 {
 	char		**str;
 
@@ -248,7 +249,8 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid, t_env_elem *env_linkli
 	return (0);
 }
 
-int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur, t_env_elem *env_linklist)
+int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur,
+	t_env_elem *env_linklist)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
