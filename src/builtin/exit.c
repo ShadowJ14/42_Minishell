@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 20:46:36 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/22 18:22:20 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 18:48:15 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ int	do_exit(char **args, pid_t *pid)
 		}
 		//free_in_builin(first, pid, ret);
 		exit(ret);
-	} else {
+	}
+	else
+	{
 		exit(EXIT_SUCCESS);
 	}
 	return (0);

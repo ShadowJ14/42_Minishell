@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 18:27:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/24 23:22:27 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:49:48 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static t_argument	*get_argument(char *arg)
 	argument = allocate_memory(sizeof(*argument));
 	argument->name = allocate_memory(sizeof(*(argument->name)) * (index_1 + 1));
 	index_2 = 0;
-	while (index_2 < index_1) {
+	while (index_2 < index_1)
+	{
 		argument->name[index_2] = arg[index_2];
 		index_2++;
 	}
@@ -70,7 +71,8 @@ static t_argument	*get_argument(char *arg)
 		argument->set_value = true;
 	}
 	index_2 = 0;
-	while (arg[index_1 + index_2] != '\0') {
+	while (arg[index_1 + index_2] != '\0')
+	{
 		argument->value[index_2] = arg[index_1 + index_2];
 		index_2++;
 	}
@@ -81,9 +83,9 @@ static t_argument	*get_argument(char *arg)
 static void	set_args(char **args, \
 	t_env_elem **env_linklist)
 {
-	t_argument				*argument;
+	t_argument	*argument;
 	t_env_elem	**env_elem;
-	size_t					index;
+	size_t		index;
 	t_env_elem	*new_env_elem;
 
 	index = 1;

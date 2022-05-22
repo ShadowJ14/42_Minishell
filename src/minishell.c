@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 18:27:33 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 18:54:03 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static void	test_print_cmds(t_cmd *cmd, t_env_elem \
 		{
 			//tmp = ft_strchr(cmd[i].args[j], '$');
 			//if (tmp)
-				cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE, env_linklist);
+				cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE,
+					env_linklist);
 			printf("%s ", cmd[i].args[j]);
 		}
 		printf("link: %i\n", cmd[i].chain);
