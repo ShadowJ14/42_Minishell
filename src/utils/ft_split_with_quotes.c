@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/20 23:13:42 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 19:04:12 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,20 @@ static char	*move_to_delim(char *s, char delim, char *from)
 {
 	from = (char *)s;
 	s++;
-	while (*s && *s != delim)
+	while (*s && *s != delim && !ft_strchr("><", *s))
 		++s;
 	if (*s == 0 && delim != ' ')
 		return (NULL);
 	if (*s == '\"' || *s == '\'')
 		s++;
+	return (s);
+}
+
+static char	*move_to_end_redirect(char *s, char delim, char *from)
+{
+	from = (char *)s;
+	while (*s && *s == delim)
+		++s;
 	return (s);
 }
 
@@ -77,6 +85,8 @@ char	**smart_split(char const *s, char *delim, t_cmd *cmd)
 				s = move_to_delim((char *)s, '"', from);
 			else if (*s == '\'')
 				s = move_to_delim((char *)s, '\'', from);
+			else if (*s == '<' || *s == '>')
+				s = move_to_end_redirect((char *)s, *s, from);
 			else
 				s = move_to_delim((char *)s, ' ', from);
 			if (*from == '<' || *from == '>')
@@ -102,7 +112,7 @@ char	**smart_split(char const *s, char *delim, t_cmd *cmd)
 				idx++;
 			}
 		}
-		if (*s != 0)
+		if (*s != 0 && !ft_strchr("><", *s))
 			++s;
 	}
 	ret[idx] = 0;

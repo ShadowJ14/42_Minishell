@@ -28,10 +28,10 @@ int	redirect_file_in(t_cmd *cmd, int chain)
 	}
 	/*else if (chain == HEREDOC)
 	{
-		if ((*cmd)->pipe[0] != 0)
-			close((*cmd)->pipe[0]);
-		(*cmd)->pipe[0] = create_heredoc_fd(cmd, &cur);
-		if ((*cmd)->pipe[0] == -1)
+		if (cmd->pipe[0] != 0)
+			close(cmd->pipe[0]);
+		cmd->pipe[0] = create_heredoc_fd(cmd, &cur);
+		if (cmd->pipe[0] == -1)
 			return (-1);
 	}*/
 	return (0);
