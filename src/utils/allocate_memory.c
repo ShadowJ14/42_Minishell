@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 18:03:09 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 21:20:18 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 23:33:00 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,3 +40,4 @@ void	*allocate_memory(size_t size)
 		print_error_message("Failed to allocate memory.\n");
 	return (memory_pointer);
 }
+

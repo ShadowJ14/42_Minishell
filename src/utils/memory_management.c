@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   memory_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:19:14 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 22:13:40 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 22:46:26 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env_elem	**singleton(t_env_elem *set_env_linklist)
+t_env_elem	*singleton(t_env_elem *set_env_linklist)
 {
 	static t_env_elem *env_linklist;
 
 	if (set_env_linklist != NULL)
 		env_linklist = set_env_linklist;
-	return (&env_linklist);
+	return (env_linklist);
 }
 
 /*

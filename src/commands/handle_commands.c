@@ -164,6 +164,7 @@ int	msh_execute(t_cmd *cmd, t_env_elem *env_linklist)
 	forking(cmd, pid, env_linklist);
 	wait_pid(&cmd, pid);
 	free(pid);
+	handle_signals();
 	return (0);
 }
 

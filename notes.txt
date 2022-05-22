@@ -33,3 +33,15 @@ cd:
 agile, html, python, uipath, c++, c#
 
 > test1.txt > test2.txt echo asdjadsjadjshbnj > test3.txt | cat < test3.txt
+
+adicionar ^C quando se fizer Ctrl+C em comandos tipo cat
+
+echo "cat lol.c | cat > lol.c"
+
+echo "test $USER" | cat < test.txt
+
+echo "test $USER" >> test.txt | cat < test.txt
+
+adicionar suporte para single quotes no set_chain
+
+~ expandir para Home para directorios cd

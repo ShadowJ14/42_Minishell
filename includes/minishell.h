@@ -6,11 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/05/22 22:14:14 by rramos           ###   ########.fr       */
-=======
-/*   Updated: 2022/05/22 21:50:05 by lprates          ###   ########.fr       */
->>>>>>> 2b823895c21af95b4764751089710250337ac373
+/*   Updated: 2022/05/22 22:47:55 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +129,7 @@ void		print_error_message(char *error_message);
 void		print_message(char *message);
 char		*read_input_until_new_line(t_terminal terminal);
 void		print_export(t_env_elem *env_linklist);
-t_env_elem	**singleton(t_env_elem *set_env_linklist);
+t_env_elem	*singleton(t_env_elem *set_env_linklist);
 // void		track_memory(char ***memory_management, char *memory_to_track);
 // void		untrack_all_memory(char **memory_management);
 // void		untrack_memory(char ***memory_management, char *memory_to_free);
@@ -187,5 +183,6 @@ char		*free_str_ret_null(char *s1);
 
 // utils
 int			cmd_len(t_cmd *cur);
+void		update_shlvl(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 21:51:07 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 23:46:25 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	char **environment)
 {
 	t_env_elem	*env_linklist;
+	t_env_elem	*env_linklist_new;
 	t_terminal	terminal;
 	t_cmd		*cmd;
 	char		*input;
@@ -57,6 +58,8 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	(void)program_arguments;
 	handle_signals();
 	env_linklist = format_environment(environment);
+	env_linklist_new = singleton(env_linklist);
+	update_shlvl();
 	open_terminal(&terminal);
 	g_exit_code = 0;
 	while (true)
@@ -66,8 +69,8 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		{
 			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
-			expand_env_in_args(cmd, env_linklist);
-			msh_execute(cmd, env_linklist);
+			expand_env_in_args(cmd, env_linklist_new);
+			msh_execute(cmd, env_linklist_new);
 		}
 	}
 	(void)env_linklist;

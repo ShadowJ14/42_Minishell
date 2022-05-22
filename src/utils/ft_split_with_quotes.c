@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/22 21:42:22 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 23:18:16 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ static char	*move_to_delim(char *s, char delim, char *from)
 {
 	from = (char *)s;
 	s++;
-	while (*s && *s != delim && !ft_strchr("><", *s))
-		++s;
+	if (delim == ' ' || delim == '\"' || delim == '\'')
+		while (*s && *s != delim)
+			++s;
+	else
+		while (*s && *s != delim && !ft_strchr("><", *s))
+			++s;
 	if (*s == 0 && delim != ' ')
 		return (NULL);
 	if (*s == '\"' || *s == '\'')
