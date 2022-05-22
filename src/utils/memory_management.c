@@ -6,12 +6,22 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:19:14 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 21:33:14 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 22:13:40 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_env_elem	**singleton(t_env_elem *set_env_linklist)
+{
+	static t_env_elem *env_linklist;
+
+	if (set_env_linklist != NULL)
+		env_linklist = set_env_linklist;
+	return (&env_linklist);
+}
+
+/*
 // Memory management tracks memory pointers to easily free them to prevent memory leaks.
 char	***singleton(bool initialize)
 {
@@ -113,3 +123,4 @@ void	print_all_tracked_memory(char **memory_management)
 	}
 	print_message("].\n");
 }
+*/

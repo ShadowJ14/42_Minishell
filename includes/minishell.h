@@ -6,7 +6,7 @@
 /*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 21:23:10 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 22:14:14 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,14 +123,14 @@ void		free_memory(void **memory_pointer);
 void		handle_signals(void);
 void		open_terminal(t_terminal *terminal);
 void		print_error_message(char *error_message);
-void		print_all_tracked_memory(char **memory_management);
+// void		print_all_tracked_memory(char **memory_management);
 void		print_message(char *message);
 char		*read_input_until_new_line(t_terminal terminal);
 void		print_export(t_env_elem *env_linklist);
-char		***singleton(bool initialize);
-void		track_memory(char ***memory_management, char *memory_to_track);
-void		untrack_all_memory(char **memory_management);
-void		untrack_memory(char ***memory_management, char *memory_to_free);
+t_env_elem	**singleton(t_env_elem *set_env_linklist);
+// void		track_memory(char ***memory_management, char *memory_to_track);
+// void		untrack_all_memory(char **memory_management);
+// void		untrack_memory(char ***memory_management, char *memory_to_free);
 
 // lprates
 int			msh_execute(t_cmd *cmd, t_env_elem *env_linklist);
