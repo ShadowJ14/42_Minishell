@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/22 21:37:59 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 21:51:07 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Installed the "C/C++" extension ("C/C++ IntelliSense, debugging, and code
 browsing.") and setted up the "launch.json" the "tasks.json" files in the folder.
 */
 
-static void	test_print_cmds(t_cmd *cmd, t_env_elem \
+static void	expand_env_in_args(t_cmd *cmd, t_env_elem \
 		*env_linklist)
 {
 	int		i;
@@ -32,22 +32,16 @@ static void	test_print_cmds(t_cmd *cmd, t_env_elem \
 	i = -1;
 	j = -1;
 	tmp = NULL;
-	(void)env_linklist;
 	while (cmd[++i].exec)
 	{
 		j = -1;
 		printf("cmd%i: %s args: ", i, cmd[i].exec);
 		while (cmd[i].args[++j])
 		{
-			//tmp = ft_strchr(cmd[i].args[j], '$');
-			//if (tmp)
-				cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE,
-					env_linklist);
+			cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE, env_linklist);
 			printf("%s ", cmd[i].args[j]);
 		}
-		printf("link: %i\n", cmd[i].chain);
-		//if (cmd[i].file)
-		//	printf("file: %s\n", cmd[i].file);
+		printf("link: %i \n", cmd[i].chain);
 	}
 }
 
@@ -72,7 +66,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		{
 			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
-			test_print_cmds(cmd, env_linklist);
+			expand_env_in_args(cmd, env_linklist);
 			msh_execute(cmd, env_linklist);
 		}
 	}

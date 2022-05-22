@@ -6,47 +6,77 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 18:09:20 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/22 18:12:48 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 21:48:06 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-/*int	random_char(void)
+static char	*if_no_env(char *str, char *s1, int *cur)
 {
-	char	buff[4];
-	int		nbr;
-	int		fd;
+	char	*new;
+	char	*join;
+	int		start;
 
-	fd = open("/dev/random", O_RDONLY);
-	if (fd < -1)
-		return (-1);
-	read(fd, buff, 4);
-	nbr = *(int *)buff;
-	if (nbr < 0)
-		nbr++;
-	if (nbr < 0)
-		nbr = nbr * (-1);
-	return ('a' + nbr % 26);
+	start = *cur;
+	while (str[*cur] && str[*cur] != '$')
+		(*cur)++;
+	new = malloc(sizeof(char) * ((*cur) - start));
+	if (new == NULL)
+		return (free_str_ret_null(s1));
+	ft_strlcpy(new, str + start, ((*cur) - start + 1));
+	if (s1)
+		join = ft_strjoin(s1, new);
+	else
+		join = ft_strjoin("", new);
+	free_both(s1, new);
+	return (join);
 }
 
-char	*create_random_name(void)
+static char	*if_env(char *str, char *s1, int *cur, t_env_elem *env_linklist)
 {
-	char	*name_file;
+	char	*env;
+	char	*join;
+
+	env = string_env(str, s1, cur, env_linklist);
+	if (env == NULL)
+		return (free_str_ret_null(s1));
+	if (s1)
+		join = ft_strjoin(s1, env);
+	else
+		join = ft_strjoin("", env);
+	free_both(s1, env);
+	return (join);
+}
+
+static char	*expanded_str(char *str, t_env_elem *env_linklist)
+{
+	char	*new;
 	int		i;
 
 	i = 0;
-	name_file = malloc(sizeof(char) * 11);
-	name_file[10] = '\0';
-	while (i < 10)
+	new = NULL;
+	while (str[i])
 	{
-		name_file[i] = (char)random_char();
-		i++;
+		if (str[i] == '$')
+		{
+			new = if_env(str, new, &i, env_linklist);
+			if (new == NULL)
+				return (NULL);
+		}
+		else
+		{
+			new = if_no_env(str, new, &i);
+			if (new == NULL)
+				return (NULL);
+		}
 	}
-	return (name_file);
+	free(str);
+	return (new);
 }
 
-int	write_in_fd(int fd, char *limitor, bool expanded)
+int	write_in_fd(int fd, char *limitor, int not_expanded, \
+	t_env_elem *env_linklist)
 {
 	char	*str;
 
@@ -55,13 +85,13 @@ int	write_in_fd(int fd, char *limitor, bool expanded)
 		str = readline(">");
 		if (str == NULL)
 			return (45);
-		if (ft_strcmp(limitor, str) == 1)
+		if (ft_strcmp(limitor, str) == 0)
 			break ;
 		if (str[0] != '\0')
 		{
-			if (expanded == 0)
+			if (!not_expanded)
 			{
-				str = expanded_str(str);
+				str = expanded_str(str, env_linklist);
 				if (str == NULL)
 					return (50);
 			}
@@ -74,7 +104,7 @@ int	write_in_fd(int fd, char *limitor, bool expanded)
 	return (0);
 }
 
-int	create_heredoc_fd(t_cmd **cmdl, t_token **cur)
+int	create_heredoc_fd(t_cmd *cmd, t_env_elem *env_linklist)
 {
 	int		fd;
 	char	*name_file;
@@ -85,18 +115,18 @@ int	create_heredoc_fd(t_cmd **cmdl, t_token **cur)
 	{
 		if (name_file)
 			free(name_file);
-		name_file = creat_aleatori_name();
+		name_file = create_random_name();
 		fd = open(name_file, O_CREAT | O_EXCL | O_RDWR, 0644);
 	}
-	write_in_fd(fd, (*cur)->str, (*cur)->expanded);
+	write_in_fd(fd, cmd->file, cmd->no_expand, env_linklist);
 	fd = open(name_file, O_RDONLY);
-	(*cmdl)->fd_in = fd;
-	if ((*cmdl)->name_file != NULL)
+	cmd->pipe[0] = fd;
+	if (cmd->file_name != NULL)
 	{
-		unlink((*cmdl)->name_file);
-		free((*cmdl)->name_file);
+		unlink(cmd->file_name);
+		//free(cmd->file_name);
 	}
-	(*cmdl)->name_file = name_file;
+	cmd->file_name = name_file;
 	return (fd);
 }
-*/
+

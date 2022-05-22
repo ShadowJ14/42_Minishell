@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/05/22 22:14:14 by rramos           ###   ########.fr       */
+=======
+/*   Updated: 2022/05/22 21:50:05 by lprates          ###   ########.fr       */
+>>>>>>> 2b823895c21af95b4764751089710250337ac373
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +102,8 @@ typedef struct s_cmd
 	int		chain;
 	int		pipe[2];
 	char	*file;
+	char	*file_name;
+	int		no_expand;
 }				t_cmd;
 
 // testing
@@ -166,9 +172,18 @@ void		do_echo(char **args, int pid);
 int			do_exit(char **args, pid_t *pid);
 int			do_cd(char *path, t_env_elem *env_linklist);
 
+// redirections
+
+//		heredoc
+int			create_heredoc_fd(t_cmd *cmd, t_env_elem *env_linklist);
+int			random_char(void);
+char		*create_random_name(void);
+
 // cleanup
 
 int			free_all(t_cmd **cmd);
+void		free_both(char *s1, char *s2);
+char		*free_str_ret_null(char *s1);
 
 // utils
 int			cmd_len(t_cmd *cur);

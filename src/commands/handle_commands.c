@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	redirect_file_in(t_cmd *cmd, int chain)
+int	redirect_file_in(t_cmd *cmd, int chain, t_env_elem *env_linklist)
 {
 	if (chain == REDIRECTI)
 	{
@@ -26,14 +26,14 @@ int	redirect_file_in(t_cmd *cmd, int chain)
 			return (-1);
 		}
 	}
-	/*else if (chain == HEREDOC)
+	else if (chain == HEREDOC)
 	{
 		if (cmd->pipe[0] != 0)
 			close(cmd->pipe[0]);
-		cmd->pipe[0] = create_heredoc_fd(cmd, &cur);
+		cmd->pipe[0] = create_heredoc_fd(cmd, env_linklist);
 		if (cmd->pipe[0] == -1)
 			return (-1);
-	}*/
+	}
 	return (0);
 }
 
@@ -60,13 +60,13 @@ int	redirect_file_out(t_cmd *cmd, int chain)
 	return (0);
 }
 
-int	open_fd(t_cmd *cmd)
+int	open_fd(t_cmd *cmd, t_env_elem *env_linklist)
 {
 	t_cmd	*cur;
 
 	cur = cmd;
 	if (cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		if (redirect_file_in(cur, cur->chain) == -1)
+		if (redirect_file_in(cur, cur->chain, env_linklist) == -1)
 			return (-1);
 	if (cur->chain == REDIRECTO || cur->chain == APPEND)
 		if (redirect_file_out(cur, cur->chain) == -1)
@@ -282,7 +282,7 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	len = cmd_len(cur);
 	while (cur->exec)
 	{
-		open_fd(cur);
+		open_fd(cur, env_linklist);
 		cur++;
 	}
 	cur = cmd;

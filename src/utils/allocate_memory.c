@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 18:03:09 by rramos            #+#    #+#             */
-/*   Updated: 2022/04/24 23:14:34 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 21:20:18 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ t_cmd	*realloc_n_initialize_cmd(t_cmd *cmd, int idx)
 	if (!cmd)
 		return (NULL);
 	ft_memset(&cmd[idx], 0, cmd_size * 2);
+	cmd[idx].file_name = NULL;
+	cmd[idx].no_expand = 0;
+	cmd[idx].file = NULL;
 	return (cmd);
 }
 	//ft_memset(&cmd[idx + 1], 0, sizeof(t_cmd));

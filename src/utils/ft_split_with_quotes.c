@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 08:41:47 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/22 19:04:12 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 21:42:22 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,18 @@ char	**smart_split(char const *s, char *delim, t_cmd *cmd)
 			}
 			if (file_chk)
 			{
-				cmd->file = (char *)malloc(s - from + 1);
-				loc_strcpy(cmd->file, from, (char *)s);
+				if (ft_strstr(from, "\"\""))
+				{
+					cmd->file = (char *)malloc(s - 2 - from + 1);
+					loc_strcpy(cmd->file, from, (char *)s - 2);
+					cmd->no_expand = 1;
+				}
+				else
+				{
+					cmd->file = (char *)malloc(s - from + 1);
+					loc_strcpy(cmd->file, from, (char *)s);
+					cmd->no_expand = 0;
+				}
 				file_chk = 0;
 			}
 			else

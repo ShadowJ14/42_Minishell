@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_memory.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 18:03:09 by rramos            #+#    #+#             */
-/*   Updated: 2022/03/30 20:37:11 by rramos           ###   ########.fr       */
+/*   Updated: 2022/05/22 20:22:38 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,20 @@ void	free_memory(void **memory_pointer)
 		free(*memory_pointer);
 		*memory_pointer = NULL;
 	}
+}
+
+void	free_both(char *s1, char *s2)
+{
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
+	return ;
+}
+
+char	*free_str_ret_null(char *s1)
+{
+	if (s1)
+		free(s1);
+	return (NULL);
 }
