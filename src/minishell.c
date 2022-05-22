@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:06:29 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/07 20:01:57 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:27:33 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,11 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	handle_signals();
 	env_linklist = format_environment(environment);
 	open_terminal(&terminal);
-	//g_global.input = NULL;
 	g_exit_code = 0;
 	while (true)
 	{
 		input = read_input_until_new_line(terminal);
-		if (input)
+		if (input != NULL)
 		{
 			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
@@ -76,6 +75,6 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 			msh_execute(cmd, env_linklist);
 		}
 	}
-	(void) env_linklist;
+	(void)env_linklist;
 	return (EXIT_SUCCESS);
 }

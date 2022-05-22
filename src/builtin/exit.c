@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 20:46:36 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/21 00:15:11 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:22:20 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	ft_non_int(char *str)
 	{
 		if (str[i] < '0' || str[i] > '9')
 		{
-			write(2, "minishell: exit: ", 17);
-			write(2, str, ft_strlen(str));
-			write(2, ": numeric argument required\n", 28);
+			write(STDERR_FILENO, "minishell: exit: ", 17);
+			write(STDERR_FILENO, str, ft_strlen(str));
+			write(STDERR_FILENO, ": numeric argument required\n", 28);
 			return (2);
 		}
 		i++;
@@ -65,7 +65,7 @@ int	do_exit(char **args, pid_t *pid)
 	int	ret;
 
 	ret = 0;
-	printf("exit\n");
+	print_message("exit\n");
 	if (args[1] != NULL)
 	{
 		if (ft_non_int(args[1]))
@@ -78,11 +78,14 @@ int	do_exit(char **args, pid_t *pid)
 		ret = ft_atoi(args[1]);
 		if (args[2] != NULL)
 		{
-			write(2, "minishell: exit: too many arguments\n", 36);
+			write(STDERR_FILENO, "minishell: exit: too many arguments\n", 36);
 			//g_exit_status = 1;
 			return (2);
 		}
 		//free_in_builin(first, pid, ret);
+		exit(ret);
+	} else {
+		exit(EXIT_SUCCESS);
 	}
 	return (0);
 	//return (free_in_builin(first, pid, 0));

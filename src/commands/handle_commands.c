@@ -21,7 +21,7 @@ int	redirect_file_in(t_cmd *cmd, int chain)
 		cmd->pipe[0] = open(cmd->file, O_RDONLY);
 		if (cmd->pipe[0] == -1)
 		{
-			write(1, "minishell: ", 11);
+			print_message("minishell: ");
 			perror(cmd->args[1]);
 			return (-1);
 		}

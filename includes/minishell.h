@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 13:09:03 by rramos            #+#    #+#             */
-/*   Updated: 2022/05/21 01:14:45 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/22 18:16:37 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
 // the "termios" structure.
 # include <termios.h>
 
-// Include the "read" and "write" functions, and the "STDIN_FILENO" and
-// "STDOUT_FILENO" macros.
+// Include the "read" and "write" functions, and the "STDERR_FILENO",
+// "STDIN_FILENO", and "STDOUT_FILENO" macros.
 # include <unistd.h>
 
 # include "../libs/libft/libft.h"
@@ -109,8 +109,6 @@ typedef enum quote
 	BACKSLASH,
 	END
 }	t_quote;
-
-//t_global	g_global;
 
 int g_exit_code;
 
