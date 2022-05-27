@@ -129,7 +129,7 @@ void		print_error_message(char *error_message);
 void		print_message(char *message);
 char		*read_input_until_new_line(t_terminal terminal);
 void		print_export(t_env_elem *env_linklist);
-t_env_elem	*singleton(t_env_elem *set_env_linklist);
+t_env_elem	*env_singleton(t_env_elem *set_env_linklist);
 // void		track_memory(char ***memory_management, char *memory_to_track);
 // void		untrack_all_memory(char **memory_management);
 // void		untrack_memory(char ***memory_management, char *memory_to_free);
@@ -180,6 +180,7 @@ char		*create_random_name(void);
 int			free_all(t_cmd **cmd);
 void		free_both(char *s1, char *s2);
 char		*free_str_ret_null(char *s1);
+int			free_array(void **str);
 
 // utils
 int			cmd_len(t_cmd *cur);

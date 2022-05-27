@@ -18,7 +18,7 @@ void	update_shlvl(void)
 	t_env_elem	*new_env_llist;
 	int			old_value;
 
-	new_env_llist = singleton(NULL);
+	new_env_llist = env_singleton(NULL);
 	while (new_env_llist->next_element != NULL)
 	{
 		if (!ft_strcmp(new_env_llist->name, "SHLVL"))

@@ -65,7 +65,7 @@ static void	format_environment_variable(char *environment_variable, \
 			environment_variable[name_index + value_index];
 		value_index++;
 	}
-	env_elem->value[value_index] = '\0';
+	env_elem->value[value_index] = 0;
 }
 
 static void	add_element_to_env_linklist(t_env_elem \
@@ -91,11 +91,11 @@ t_env_elem	*format_environment(char **environment)
 	{
 		env_elem = allocate_memory(sizeof(*env_elem));
 		env_elem->name = allocate_memory(\
-			sizeof(*env_elem->name) \
+			sizeof(char) \
 				* (calculate_environment_name_length(environment[index]) + 1));
 		env_elem->value = allocate_memory(\
-			sizeof(*env_elem->value) \
-				* (calculate_environment_value_length(environment[index] + 1)));
+			sizeof(char) \
+				* (calculate_environment_value_length(environment[index]) + 1));
 		env_elem->next_element = NULL;
 		format_environment_variable(environment[index], env_elem);
 		if (env_linklist == NULL)

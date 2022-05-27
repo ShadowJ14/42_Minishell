@@ -140,10 +140,15 @@ int	open_pipe(t_cmd **cmd)
 	{
 		ret = init_pipe(nfd, i, cur, *cmd);
 		if (ret != 0)
+		{
+			free(nfd);
 			return (ret);
+		}
 		i++;
 		cur++;
 	}
+	free_array((void**)nfd);
+	free(nfd);
 	return (0);
 }
 
@@ -247,6 +252,8 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid,
 		execute_builtins(*cmd, env_linklist, pid, 1);
 	else
 		exec_sysfunction_two(*cmd, first, str, pid);
+	free_array((void**)str);
+	free(str);
 	return (0);
 }
 

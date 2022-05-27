@@ -15,6 +15,7 @@
 static char	*move_to_delim(char *s, char delim, char *from)
 {
 	from = (char *)s;
+	(void) from;
 	s++;
 	if (delim == ' ' || delim == '\"' || delim == '\'')
 		while (*s && *s != delim)
@@ -32,6 +33,7 @@ static char	*move_to_delim(char *s, char delim, char *from)
 static char	*move_to_end_redirect(char *s, char delim, char *from)
 {
 	from = (char *)s;
+	(void) from;
 	while (*s && *s == delim)
 		++s;
 	return (s);
@@ -51,6 +53,8 @@ static long long	w_cnt(char *s)
 				s = move_to_delim((char *)s, '"', s);
 			else if (*s == '\'')
 				s = move_to_delim((char *)s, '\'', s);
+			else if (*s == '<' || *s == '>')
+				s = move_to_end_redirect((char *)s, *s, NULL);
 			else
 				s = move_to_delim((char *)s, ' ', s);
 		}
@@ -75,7 +79,7 @@ char	**smart_split(char const *s, char *delim, t_cmd *cmd)
 	int			file_chk;
 
 	(void)delim;
-	ret = (char **)malloc(sizeof(char *) * w_cnt((char *)s) + 1);
+	ret = (char **)malloc(sizeof(char *) * (w_cnt((char *)s) + 1));
 	if (!s || !ret)
 		return (NULL);
 	idx = 0;
@@ -129,6 +133,6 @@ char	**smart_split(char const *s, char *delim, t_cmd *cmd)
 		if (*s != 0 && !ft_strchr("><", *s))
 			++s;
 	}
-	ret[idx] = 0;
+	ret[idx] = NULL;
 	return (ret);
 }

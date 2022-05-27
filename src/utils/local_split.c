@@ -25,7 +25,7 @@ int	set_chain(char *tmp)
 		while (*s && *s != '\"')
 			s++;
 		if (*s == 0)
-			break;
+			break ;
 		s2 = s;
 		s = ft_strchr(s, '\"');
 	}
@@ -56,8 +56,6 @@ t_cmd	handle_cmd(char *ret)
 	from = ret;
 	while (!ft_strchr(" ", *ret) && *ret)
 		ret++;
-	//cmd.exec = (char *)malloc(ret - from + 1);
-	//loc_strcpy(cmd.exec, from, (char *)ret);
 	while (ft_isblank(*ret))
 		ret++;
 	while (*ret)
@@ -66,7 +64,7 @@ t_cmd	handle_cmd(char *ret)
 		ret--;
 	tmp = (char *)malloc(ret - from + 1);
 	loc_strcpy(tmp, from, (char *)ret);
-	cmd.args = malloc(sizeof(char *) + 1);
+	cmd.args = malloc(sizeof(char *) + 2);
 	cmd.args = smart_split(tmp, " ", &cmd);
 	cmd.chain = set_chain(tmp);
 	free (tmp);

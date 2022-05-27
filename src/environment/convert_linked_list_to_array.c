@@ -29,6 +29,15 @@ static size_t	calculate_linked_list_length(t_env_elem *env_elem)
 	return (length);
 }
 
+char	*free_join(char *join, char *new)
+{
+	char	*ret;
+
+	ret = ft_strjoin(join, new);
+	free(join);
+	return (ret);
+}
+
 char	**convert_linked_list_to_array(t_env_elem *env_elem)
 {
 	char	**environment_array;
@@ -41,7 +50,7 @@ char	**convert_linked_list_to_array(t_env_elem *env_elem)
 	index = 0;
 	while (index < length)
 	{
-		environment_array[index] = ft_strjoin(ft_strjoin(env_elem->name, "="), \
+		environment_array[index] = free_join(ft_strjoin(env_elem->name, "="), \
 			env_elem->value);
 		index++;
 		env_elem = env_elem->next_element;

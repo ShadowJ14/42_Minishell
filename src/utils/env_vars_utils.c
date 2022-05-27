@@ -187,7 +187,7 @@ char	*expand_env_var(t_env_elem *env_linklist, \
 		if (!ft_strcmp(env_linklist->name, env_name))
 		{
 			expanded_size = ft_strlen(env_linklist->value);
-			expanded_name = malloc(sizeof(char) * expanded_size);
+			expanded_name = malloc(sizeof(char) * expanded_size + 1);
 			ft_strlcpy(expanded_name, env_linklist->value, \
 				expanded_size + 1);
 			return (expanded_name);
@@ -279,7 +279,7 @@ static char	*if_no_env(char *str, char *s1, int *cur)
 	start = *cur;
 	while (str[*cur] && str[*cur] != '"' && str[*cur] != '$')
 		(*cur)++;
-	new = malloc(sizeof(char) * ((*cur) - start));
+	new = malloc(sizeof(char) * ((*cur) - start + 1));
 	if (new == NULL)
 		return (NULL);
 	ft_strlcpy(new, str + start, ((*cur) - start) + 1);
@@ -395,5 +395,7 @@ char	*word_modif_two(char *duplica, t_quote quote, t_quote prec,
 		if (s1 == NULL)
 			return (NULL);
 	}
+	if (str)
+		free(str);
 	return (s1);
 }

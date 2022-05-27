@@ -32,3 +32,13 @@ int	free_all(t_cmd **cmd)
 	}
 	return (1);
 }
+
+int	free_array(void **str)
+{
+	while (*str)
+	{
+		free(*str);
+		str++;
+	}
+	return (1);
+}

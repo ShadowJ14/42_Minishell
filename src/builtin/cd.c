@@ -12,6 +12,25 @@
 
 #include "minishell.h"
 
+static char	*cd_home(char *path, t_env_elem *env_linklist)
+{
+	char	*homestring;
+	char	*home;
+
+	homestring = NULL;
+	home = expand_env_var(env_linklist, "HOME");
+	if (!home)
+		return (NULL);
+	if (!path)
+		return (home);
+	if (ft_strlen(path) > 1)
+		homestring = ft_strjoin(home, &(*(path + 1)));
+	else
+		homestring = home;
+	free(path);
+	return (homestring);
+}
+
 /* implements cd builtin
 ** returns 1 on success
 ** returns 0 on failure
@@ -19,19 +38,15 @@
 ** old pwd implemented but needs cleaning
 ** cd with no arguments is implemented but needs cleaning
 ** added OLDPWD and PWD update
-** needs to implement "~" to expand variable
+** needs to implement "~" to expand variable - done
 */
 int	do_cd(char *path, t_env_elem *env_linklist)
 {
 	t_env_elem	*env_elem;
 
-	env_elem = env_linklist;
-	if (!path)
-	{
-		path = expand_env_var(env_linklist, "HOME");
-		if (!path)
-			return (0);
-	}
+	env_elem = env_singleton(NULL);
+	if (!path || ft_strchr(path, '~'))
+		path = cd_home(path, env_elem);
 	if (!ft_strcmp(path, "-"))
 		path = expand_env_var(env_linklist, "OLDPWD");
 	while (env_elem != NULL)

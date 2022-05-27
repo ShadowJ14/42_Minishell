@@ -20,13 +20,10 @@ t_cmd	*realloc_n_initialize_cmd(t_cmd *cmd, int idx)
 	if (idx == 0)
 		cmd = malloc(cmd_size * 2);
 	else
-		cmd = ft_realloc(cmd, cmd_size * (idx + 2), cmd_size * (idx + 3));
+		cmd = ft_realloc(cmd, cmd_size * (idx + 1), cmd_size * (idx + 2));
 	if (!cmd)
 		return (NULL);
 	ft_memset(&cmd[idx], 0, cmd_size * 2);
-	cmd[idx].file_name = NULL;
-	cmd[idx].no_expand = 0;
-	cmd[idx].file = NULL;
 	return (cmd);
 }
 	//ft_memset(&cmd[idx + 1], 0, sizeof(t_cmd));

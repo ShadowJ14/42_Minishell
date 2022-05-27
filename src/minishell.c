@@ -27,15 +27,12 @@ static void	expand_env_in_args(t_cmd *cmd, t_env_elem \
 {
 	int		i;
 	int		j;
-	char	*tmp;
 
 	i = -1;
 	j = -1;
-	tmp = NULL;
 	while (cmd[++i].exec)
 	{
 		j = -1;
-		printf("cmd%i: %s args: ", i, cmd[i].exec);
 		while (cmd[i].args[++j])
 		{
 			cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE, env_linklist);
@@ -58,7 +55,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	(void)program_arguments;
 	handle_signals();
 	env_linklist = format_environment(environment);
-	env_linklist_new = singleton(env_linklist);
+	env_linklist_new = env_singleton(env_linklist);
 	update_shlvl();
 	open_terminal(&terminal);
 	g_exit_code = 0;
@@ -73,6 +70,6 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 			msh_execute(cmd, env_linklist_new);
 		}
 	}
-	(void)env_linklist;
+	free_all(cmd);
 	return (EXIT_SUCCESS);
 }
