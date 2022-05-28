@@ -65,7 +65,7 @@ t_cmd	handle_cmd(char *ret)
 	tmp = (char *)malloc(ret - from + 1);
 	loc_strcpy(tmp, from, (char *)ret);
 	cmd.args = malloc(sizeof(char *) + 2);
-	cmd.args = smart_split(tmp, " ", &cmd);
+	cmd.args = smart_split(tmp, &cmd);
 	cmd.chain = set_chain(tmp);
 	free (tmp);
 	return (cmd);

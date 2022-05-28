@@ -1,7 +1,7 @@
 clear_terminal := clear
 compile := gcc
 compile_option := -c
-enable_warnings := -Wall -Wextra -Werror -g -fsanitize=address
+enable_warnings := -Wall -Wextra -Werror -g #-fsanitize=address
 #header_file := ./minishell.h
 library_option := -l
 new_curses_library := ncurses # https://en.wikipedia.org/wiki/Ncurses

@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   strncpy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: laclide <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/12 22:23:34 by lprates           #+#    #+#             */
-/*   Updated: 2022/05/28 14:39:39 by lprates          ###   ########.fr       */
+/*   Created: 2021/09/17 22:27:26 by laclide           #+#    #+#             */
+/*   Updated: 2021/09/20 22:52:43 by laclide          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+char	*ft_strncpy(char *dst, char *src, int n)
 {
-	t_list	*first;
+	int	i;
 
-	while (*lst)
+	i = 0;
+	while (src[i] && i < n)
 	{
-		del((*lst)->content);
-		first = *lst;
-		*lst = first->next;
-		free(first);
+		dst[i] = src[i];
+		i++;
 	}
-	*lst = NULL;
-	return ;
+	dst[i] = '\0';
+	return (dst);
 }

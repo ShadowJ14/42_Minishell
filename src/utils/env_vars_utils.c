@@ -17,31 +17,44 @@ extern int	g_exit_code;
 static char	*if_env_two(char *str, char *s1, int *i, t_env_elem *env_linklist)
 {
 	char	*env;
+	char	*join;
 
 	env = string_env(str, s1, i, env_linklist);
 	if (env == NULL)
 		return (NULL);
+	if (s1 == NULL && env == NULL)
+	{
+		join = malloc(sizeof(char));
+		join[0] = '\0';
+	}
+	join = ft_strjoin(s1, env);
+	if (s1 == NULL && env == NULL)
+	{
+		join = malloc(sizeof(char));
+		join[0] = '\0';
+	}
 	free(s1);
-	return (env);
+	free(env);
+	return (join);
 }
 
 static char	*if_no_env_two(char *str, int *i, char *s1)
 {
 	char	*new;
+	char	*join;
 	int		start;
 
 	start = *i;
-	(void)s1;
 	while (str[(*i)] && str[(*i)] != '\'' && str[(*i)] != '"'
 		&& str[(*i)] != '$')
 		(*i)++;
 	new = malloc(sizeof(char) * ((*i) - start + 1));
 	if (new == NULL)
-		return (NULL);
-	ft_strlcpy(new, str + start, ((*i) - start) + 1);
-	//join = ft_strjoin(s1, new);
-	//free_both(s1, new);
-	return (new);
+		return (free_str_ret_null(s1));
+	new = ft_strncpy(new, str + start, ((*i) - start));
+	join = ft_strjoin(s1, new);
+	free_both(s1, new);
+	return (join);
 }
 
 char	*word_will_unquote(char *str, int *cur, char *s1,

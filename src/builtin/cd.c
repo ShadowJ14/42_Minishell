@@ -43,8 +43,11 @@ static char	*cd_home(char *path, t_env_elem *env_linklist)
 int	do_cd(char *path, t_env_elem *env_linklist)
 {
 	t_env_elem	*env_elem;
+	int			change_success;
+	char		*old;
 
 	env_elem = env_singleton(NULL);
+	old = getcwd(NULL, 0);
 	if (!path || ft_strchr(path, '~'))
 		path = cd_home(path, env_elem);
 	if (!ft_strcmp(path, "-"))
@@ -52,12 +55,15 @@ int	do_cd(char *path, t_env_elem *env_linklist)
 	while (env_elem != NULL)
 	{
 		if (!ft_strcmp(env_elem->name, "OLDPWD"))
-			env_elem->value = getcwd(NULL, 0);
+			env_elem->value = old;
 		if (!ft_strcmp(env_elem->name, "PWD"))
-			env_elem->value = path;
+		{
+			change_success = chdir(path);
+			env_elem->value = getcwd(NULL, 0);
+		}
 		env_elem = env_elem->next_element;
 	}
-	if (!chdir(path))
+	if (!change_success)
 		return (1);
 	print_message("cd: no such file or directory: ");
 	print_message(path);

@@ -17,18 +17,15 @@ char	*check_sysfunction(char *func)
 	char	*envs;
 	char	**ret;
 	char	*cmd;
-	int		ret_access;
 
 	envs = getenv("PATH");
 	ret = ft_split(envs, ':');
 	while (*ret)
 	{
 		cmd = ft_strjoin(*ret, ft_strjoin("/", func));
-		ret_access = access(cmd, X_OK);
-		if (ret_access == 0)
+		if (access(cmd, X_OK) == 0)
 			return (cmd);
-		ret_access = access(func, X_OK);
-		if (ret_access == 0)
+		if (access(func, X_OK) == 0)
 			return (func);
 		free(cmd);
 		if (*ret)

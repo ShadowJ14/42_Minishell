@@ -12,7 +12,6 @@
 
 #include <minishell.h>
 
-
 void	update_shlvl(void)
 {
 	t_env_elem	*new_env_llist;

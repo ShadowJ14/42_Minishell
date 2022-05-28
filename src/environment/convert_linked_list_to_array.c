@@ -29,7 +29,7 @@ static size_t	calculate_linked_list_length(t_env_elem *env_elem)
 	return (length);
 }
 
-char	*free_join(char *join, char *new)
+static char	*free_join(char *join, char *new)
 {
 	char	*ret;
 

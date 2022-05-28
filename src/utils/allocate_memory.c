@@ -32,9 +32,10 @@ void	*allocate_memory(size_t size)
 {
 	void	*memory_pointer;
 
+	if (size == 0)
+		return (NULL);
 	memory_pointer = malloc(size);
 	if (memory_pointer == NULL)
 		print_error_message("Failed to allocate memory.\n");
 	return (memory_pointer);
 }
-

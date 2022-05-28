@@ -42,3 +42,17 @@ int	free_array(void **str)
 	}
 	return (1);
 }
+
+void	free_env_llist(t_env_elem *env_llist)
+{
+	t_env_elem	*tmp;
+
+	while (env_llist)
+	{
+		free(env_llist->name);
+		free(env_llist->value);
+		tmp = env_llist;
+		env_llist = env_llist->next_element;
+		free(tmp);
+	}
+}

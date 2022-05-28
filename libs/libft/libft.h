@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 00:07:59 by lprates           #+#    #+#             */
-/*   Updated: 2022/03/13 20:29:03 by lprates          ###   ########.fr       */
+/*   Updated: 2022/05/28 20:56:29 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int				ft_str_is_numeric(char *str);
 int				ft_str_is_printable(char *str);
 char			*ft_strcat(char *dest, char *src);
 char			*ft_strdup(char *src);
+char			*ft_strncpy(char *dst, char *src, int n);
 unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size);
 char			*ft_strlowcase(char *str);
 int				ft_strncmp(char *s1, char *s2, unsigned int n);

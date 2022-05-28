@@ -36,9 +36,8 @@ static void	expand_env_in_args(t_cmd *cmd, t_env_elem \
 		while (cmd[i].args[++j])
 		{
 			cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE, env_linklist);
-			printf("%s ", cmd[i].args[j]);
+			printf("arg%i:%s\n", j, cmd[i].args[j]);
 		}
-		printf("link: %i \n", cmd[i].chain);
 	}
 }
 
@@ -70,6 +69,8 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 			msh_execute(cmd, env_linklist_new);
 		}
 	}
-	free_all(cmd);
+	free_all(&cmd);
+	free_env_llist(env_linklist);
+	free_env_llist(env_linklist_new);
 	return (EXIT_SUCCESS);
 }

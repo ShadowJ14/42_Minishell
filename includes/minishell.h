@@ -141,7 +141,7 @@ t_cmd		*realloc_n_initialize_cmd(t_cmd *cmd, int idx);
 t_cmd		*local_split(char const *s);
 void		set_builtin_funcs(char **builtin_funcs);
 int			is_builtin(t_cmd *cmd);
-char		**smart_split(char const *s, char *delim, t_cmd *cmd);
+char		**smart_split(char const *s, t_cmd *cmd);
 char		*expand_env_var(t_env_elem *env_linklist, char *env_name);
 int			msh_execute_two(t_cmd *cmd, char **builtin_funcs, \
 	t_env_elem *env_linklist);
@@ -181,6 +181,7 @@ int			free_all(t_cmd **cmd);
 void		free_both(char *s1, char *s2);
 char		*free_str_ret_null(char *s1);
 int			free_array(void **str);
+void		free_env_llist(t_env_elem *env_llist);
 
 // utils
 int			cmd_len(t_cmd *cur);
