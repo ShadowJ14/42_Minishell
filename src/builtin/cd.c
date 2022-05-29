@@ -12,22 +12,30 @@
 
 #include "minishell.h"
 
-static char	*cd_home(char *path, t_env_elem *env_linklist)
+static char	*cd_home(char *path)
 {
 	char	*homestring;
 	char	*home;
 
 	homestring = NULL;
-	home = expand_env_var(env_linklist, "HOME");
+	home = expand_env_var("HOME");
 	if (!home)
+	{
+		if (path)
+			free(path);
 		return (NULL);
+	}
 	if (!path)
 		return (home);
 	if (ft_strlen(path) > 1)
 		homestring = ft_strjoin(home, &(*(path + 1)));
 	else
-		homestring = home;
-	free(path);
+	{
+		if (path)
+			free(path);
+		return (home);
+	}
+	free_both(home, path);
 	return (homestring);
 }
 
@@ -40,7 +48,7 @@ static char	*cd_home(char *path, t_env_elem *env_linklist)
 ** added OLDPWD and PWD update
 ** needs to implement "~" to expand variable - done
 */
-int	do_cd(char *path, t_env_elem *env_linklist)
+int	do_cd(char *path)
 {
 	t_env_elem	*env_elem;
 	int			change_success;
@@ -49,9 +57,9 @@ int	do_cd(char *path, t_env_elem *env_linklist)
 	env_elem = env_singleton(NULL);
 	old = getcwd(NULL, 0);
 	if (!path || ft_strchr(path, '~'))
-		path = cd_home(path, env_elem);
+		path = cd_home(path);
 	if (!ft_strcmp(path, "-"))
-		path = expand_env_var(env_linklist, "OLDPWD");
+		path = expand_env_var("OLDPWD");
 	while (env_elem != NULL)
 	{
 		if (!ft_strcmp(env_elem->name, "OLDPWD"))
@@ -65,8 +73,6 @@ int	do_cd(char *path, t_env_elem *env_linklist)
 	}
 	if (!change_success)
 		return (1);
-	print_message("cd: no such file or directory: ");
-	print_message(path);
-	print_message("\n");
+	perror("minishell");
 	return (0);
 }

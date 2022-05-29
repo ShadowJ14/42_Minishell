@@ -14,46 +14,43 @@
 
 static void	unset_args(char **args, t_env_elem **env_linklist)
 {
-	t_env_elem	**env_elem;
 	t_env_elem	*env_elem_freed;
-	size_t		index;
 
-	index = 1;
-	while (args[index] != NULL)
+	while (*args != NULL)
 	{
-		env_elem = env_linklist;
-		if (!ft_strcmp((*env_elem)->name, args[index]))
+		if (!ft_strcmp((*env_linklist)->name, *args))
 		{
 			*env_linklist = (*env_linklist)->next_element;
-			free_memory((void **)env_elem);
-			index++;
+			free_memory((void **)env_linklist);
+			args++;
 			continue ;
 		}
-		while (*env_elem != NULL)
+		while (*env_linklist != NULL)
 		{
-			if (!ft_strcmp((*env_elem)->name, args[index]))
+			if (!ft_strcmp((*env_linklist)->name, *args))
 			{
-				env_elem_freed = *env_elem;
-				*env_elem = (*env_elem)->next_element;
+				env_elem_freed = *env_linklist;
+				*env_linklist = (*env_linklist)->next_element;
 				free_memory((void **)&env_elem_freed);
 				break ;
 			}
 			else
-			{
-				env_elem = &(*env_elem)->next_element;
-			}
+				env_linklist = &(*env_linklist)->next_element;
 		}
-		index++;
+		args++;
 	}
 }
 
 // implements unset builtin
-void	do_unset(char **args, t_env_elem **env_linklist)
+void	do_unset(char **args)
 {
+	t_env_elem	*env_linklist;
+
+	env_linklist = env_singleton(NULL);
 	if (args[1] == NULL)
 	{
 		print_error_message("unset: not enough arguments\n");
 		return ;
 	}
-	unset_args(args, env_linklist);
+	unset_args(args, &env_linklist);
 }

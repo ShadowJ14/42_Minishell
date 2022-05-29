@@ -16,11 +16,10 @@ int	ft_built_in_pwd_fd(int fd)
 {
 	char	*pwd;
 
-	(void) fd;
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
 		return (50);
-	//g_exit_status = 0;
+	g_exit_code = 0;
 	ft_putstr_fd(pwd, fd);
 	ft_putchar_fd('\n', fd);
 	free(pwd);

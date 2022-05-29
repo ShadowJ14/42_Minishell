@@ -45,7 +45,7 @@ char	**convert_linked_list_to_array(t_env_elem *env_elem)
 	size_t	length;
 
 	length = calculate_linked_list_length(env_elem);
-	environment_array = allocate_memory(sizeof(*environment_array) * \
+	environment_array = alloc_mem(sizeof(*environment_array) * \
 		(length + 1));
 	index = 0;
 	while (index < length)

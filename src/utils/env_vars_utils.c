@@ -14,12 +14,12 @@
 
 extern int	g_exit_code;
 
-static char	*if_env_two(char *str, char *s1, int *i, t_env_elem *env_linklist)
+static char	*if_env_two(char *str, char *s1, int *i)
 {
 	char	*env;
 	char	*join;
 
-	env = string_env(str, s1, i, env_linklist);
+	env = string_env(str, s1, i);
 	if (env == NULL)
 		return (NULL);
 	if (s1 == NULL && env == NULL)
@@ -33,8 +33,7 @@ static char	*if_env_two(char *str, char *s1, int *i, t_env_elem *env_linklist)
 		join = malloc(sizeof(char));
 		join[0] = '\0';
 	}
-	free(s1);
-	free(env);
+	free_both(s1, env);
 	return (join);
 }
 
@@ -57,8 +56,7 @@ static char	*if_no_env_two(char *str, int *i, char *s1)
 	return (join);
 }
 
-char	*word_will_unquote(char *str, int *cur, char *s1,
-	t_env_elem *env_linklist)
+char	*word_will_unquote(char *str, int *cur, char *s1)
 {
 	while (str[*cur] && str[*cur] != '\'' && str[*cur] != '"')
 	{
@@ -70,7 +68,7 @@ char	*word_will_unquote(char *str, int *cur, char *s1,
 		}
 		else if (str[*cur] && str[*cur] == '$')
 		{
-			s1 = if_env_two(str, s1, cur, env_linklist);
+			s1 = if_env_two(str, s1, cur);
 			if (s1 == NULL)
 			{
 				return (NULL);
@@ -148,7 +146,7 @@ char	*fake_env(int *j, int len_str)
 	return (new);
 }
 
-char	*get_envp(char *str, int *cur, t_env_elem *env_linklist)
+char	*get_envp(char *str, int *cur)
 {
 	int		len_str;
 	char	*cpy;
@@ -167,7 +165,7 @@ char	*get_envp(char *str, int *cur, t_env_elem *env_linklist)
 	if (cpy == NULL)
 		return (NULL);
 	ft_strlcpy(cpy, str + 1, len_str + 1);
-	env = expand_env_var(env_linklist, cpy);
+	env = expand_env_var(cpy);
 	free(cpy);
 	if (env == NULL)
 		return (fake_env(cur, len_str));
@@ -176,23 +174,24 @@ char	*get_envp(char *str, int *cur, t_env_elem *env_linklist)
 	return (cpy);
 }
 
-char	*get_env(int *cur, char *str, t_env_elem *env_linklist)
+char	*get_env(int *cur, char *str)
 {
 	char	*s3;
 
-	s3 = get_envp(str + *cur, cur, env_linklist);
+	s3 = get_envp(str + *cur, cur);
 	return (s3);
 }
 
 /*
 ** Expands env variables allocating memory for the return value
 */
-char	*expand_env_var(t_env_elem *env_linklist, \
-						char *env_name)
+char	*expand_env_var(char *env_name)
 {
-	char	*expanded_name;
-	int		expanded_size;
+	char		*expanded_name;
+	int			expanded_size;
+	t_env_elem	*env_linklist;
 
+	env_linklist = env_singleton(NULL);
 	if (!env_name || !ft_strcmp(env_name, "$"))
 		return ("$");
 	while (env_linklist != NULL)
@@ -210,8 +209,7 @@ char	*expand_env_var(t_env_elem *env_linklist, \
 	return ("");
 }
 
-char	*expand_env_var_string(t_env_elem *env_linklist, \
-			char *str, char *first)
+char	*expand_env_var_string(char *str, char *first)
 {
 	int		idx;
 	char	*from;
@@ -240,7 +238,7 @@ char	*expand_env_var_string(t_env_elem *env_linklist, \
 			if (!tmp)
 				return (NULL);
 			ft_strlcpy(tmp, from, to + 2 - from);
-			tmp = ft_strjoin(tmp, expand_env_var(env_linklist, to + 2));
+			tmp = ft_strjoin(tmp, expand_env_var(to + 2));
 			s1 = malloc(ft_strlen(tmp) + to + 2 - from);
 			if (!s1)
 				return (NULL);
@@ -301,39 +299,37 @@ static char	*if_no_env(char *str, char *s1, int *cur)
 	return (join);
 }
 
-char	*string_env(char *str, char *tmp, int *cur, t_env_elem *env_linklist)
+char	*string_env(char *str, char *tmp, int *cur)
 {
 	char	*tmp2;
 
-	(void)tmp;
 	tmp2 = NULL;
-	tmp2 = get_env(cur, str, env_linklist);
+	tmp2 = get_env(cur, str);
 	if (tmp2 == NULL)
-		return (NULL);
+		return (free_str_ret_null(tmp));
 	return (tmp2);
 }
 
-static char	*if_env(char *str, char *s1, int *cur, t_env_elem *env_linklist)
+static char	*if_env(char *str, char *s1, int *cur)
 {
 	char	*env;
 	char	*join;
 
-	env = string_env(str, s1, cur, env_linklist);
+	env = string_env(str, s1, cur);
 	if (env == NULL)
 		return (NULL);
 	join = ft_strjoin(s1, env);
-	//free_both(s1, env);
+	free_both(s1, env);
 	return (join);
 }
 
-char	*word_will_double(char *str, int *cur, char *s1,
-	t_env_elem *env_linklist)
+char	*word_will_double(char *str, int *cur, char *s1)
 {
 	while (str && str[*cur] && str[*cur] != '"')
 	{
 		if (str[*cur] == '$')
 		{
-			s1 = if_env(str, s1, cur, env_linklist);
+			s1 = if_env(str, s1, cur);
 			if (s1 == NULL)
 				return (NULL);
 		}
@@ -382,8 +378,7 @@ char	*init_str(char **str, char *duplica, int *cur, char **s1)
 	return (*str);
 }
 
-char	*word_modif_two(char *duplica, t_quote quote, t_quote prec,
-	t_env_elem *env_linklist)
+char	*word_modif_two(char *duplica, t_quote quote, t_quote prec)
 {
 	char	*s1;
 	int		cur;
@@ -401,9 +396,9 @@ char	*word_modif_two(char *duplica, t_quote quote, t_quote prec,
 			if (quote == SINGLE)
 				s1 = word_will_single(str, &cur, s1);
 			else if (quote == DOUBLE)
-				s1 = word_will_double(str, &cur, s1, env_linklist);
+				s1 = word_will_double(str, &cur, s1);
 			else
-				s1 = word_will_unquote(str, &cur, s1, env_linklist);
+				s1 = word_will_unquote(str, &cur, s1);
 		}
 		if (s1 == NULL)
 			return (NULL);

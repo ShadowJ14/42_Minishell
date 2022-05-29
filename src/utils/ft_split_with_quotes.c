@@ -19,61 +19,6 @@ static void	loc_strcpy(char *dst, char *from, char *until)
 	*dst = 0;
 }
 
-static int	set_filename(t_cmd *cmd, char *from, char const *s)
-{
-	if (ft_strstr(from, "\"\""))
-	{
-		cmd->file = (char *)malloc(s - 2 - from + 1);
-		loc_strcpy(cmd->file, from, (char *)s - 2);
-		cmd->no_expand = 1;
-	}
-	else
-	{
-		cmd->file = (char *)malloc(s - from + 1);
-		loc_strcpy(cmd->file, from, (char *)s);
-		cmd->no_expand = 0;
-	}
-	return (0);
-}
-
-/*static int	set_file_chk(char from, int *file_chk)
-{
-	if (from == '<' || from == '>')
-	{
-		*file_chk = 1;
-		return (1);
-	}
-	*file_chk = 0
-	return (0);
-}*/
-
-static char	*move_to_delim(char *s, char delim, char *from)
-{
-	from = (char *)s;
-	(void) from;
-	s++;
-	if (delim == ' ' || delim == '\"' || delim == '\'')
-		while (*s && *s != delim)
-			++s;
-	else
-		while (*s && *s != delim && !ft_strchr("><", *s))
-			++s;
-	if (*s == 0 && delim != ' ')
-		return (NULL);
-	if (*s == '\"' || *s == '\'')
-		s++;
-	return (s);
-}
-
-static char	*move_to_end_redirect(char *s, char delim, char *from)
-{
-	from = (char *)s;
-	(void) from;
-	while (*s && *s == delim)
-		++s;
-	return (s);
-}
-
 static long long	w_cnt(char *s)
 {
 	long long	cnt;
@@ -112,16 +57,26 @@ static char	*move_it(char *s, char *from)
 	return (s);
 }
 
-static void	set_args_and_cmd(char **ret, char const *s, char *from, int idx, \
-	t_cmd *cmd)
+static char	*set_filename(t_cmd *cmd, char *from, char *s)
 {
-	ret[idx] = (char *)malloc(s - from + 1);
-	loc_strcpy(ret[idx], from, (char *)s);
-	if (idx == 0)
+	while (*s && ft_isblank(*s))
+		if (*s != 0 && !ft_strchr("><", *s))
+			s++;
+	from = s;
+	s = move_it((char *)s, from);
+	if (ft_strstr(from, "\"\""))
 	{
-		cmd->exec = (char *)malloc(s - from + 1);
-		loc_strcpy(cmd->exec, from, (char *)s);
+		cmd->file = (char *)malloc(s - 2 - from + 1);
+		loc_strcpy(cmd->file, from, (char *)s - 2);
+		cmd->no_expand = 1;
 	}
+	else
+	{
+		cmd->file = (char *)malloc(s - from + 1);
+		loc_strcpy(cmd->file, from, (char *)s);
+		cmd->no_expand = 0;
+	}
+	return (s);
 }
 
 char	**smart_split(char const *s, t_cmd *cmd)
@@ -129,28 +84,21 @@ char	**smart_split(char const *s, t_cmd *cmd)
 	char		**ret;
 	long long	idx;
 	char		*from;
-	int			file_chk;
 
 	ret = (char **)malloc(sizeof(char *) * (w_cnt((char *)s) + 1));
 	if (!s || !ret)
 		return (NULL);
 	idx = 0;
-	file_chk = 0;
 	while (*s)
 	{
-		if (*s != ' ')
+		if (!ft_isblank(*s))
 		{
 			from = (char *)s;
 			s = move_it((char *)s, from);
 			if (*from == '<' || *from == '>')
-			{
-				file_chk = 1;
-				continue ;
-			}
-			if (file_chk)
-				file_chk = set_filename(cmd, from, s);
+				s = set_filename(cmd, from, (char *)s);
 			else
-				set_args_and_cmd(ret, s, from, idx++, cmd);
+				set_args(ret, s, from, idx++);
 		}
 		if (*s != 0 && !ft_strchr("><", *s))
 			++s;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   allocate_memory.c                                  :+:      :+:    :+:   */
+/*   alloc_mem.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -24,11 +24,12 @@ t_cmd	*realloc_n_initialize_cmd(t_cmd *cmd, int idx)
 	if (!cmd)
 		return (NULL);
 	ft_memset(&cmd[idx], 0, cmd_size * 2);
+	cmd[idx].exec = 0;
 	return (cmd);
 }
 	//ft_memset(&cmd[idx + 1], 0, sizeof(t_cmd));
 
-void	*allocate_memory(size_t size)
+void	*alloc_mem(size_t size)
 {
 	void	*memory_pointer;
 

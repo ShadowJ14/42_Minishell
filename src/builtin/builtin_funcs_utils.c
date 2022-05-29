@@ -29,22 +29,21 @@ void	set_builtin_funcs(char **builtin_funcs)
 ** needs error handling
 ** export and unset missing
 */
-int	execute_builtins(t_cmd *cmd, \
-	t_env_elem *env_linklist, pid_t *pid, int fd)
+int	execute_builtins(t_cmd *cmd, pid_t *pid, int fd)
 {
-	if (!ft_strcmp(cmd->exec, "cd"))
-		do_cd(cmd->args[1], env_linklist);
-	if (!ft_strcmp(cmd->exec, "pwd"))
+	if (!ft_strcmp(cmd->args[0], "cd"))
+		do_cd(cmd->args[1]);
+	if (!ft_strcmp(cmd->args[0], "pwd"))
 		ft_built_in_pwd_fd(fd);
-	if (!ft_strcmp(cmd->exec, "echo"))
+	if (!ft_strcmp(cmd->args[0], "echo"))
 		do_echo(cmd->args, fd);
-	if (!ft_strcmp(cmd->exec, "export"))
-		do_export(cmd->args, &env_linklist);
-	if (!ft_strcmp(cmd->exec, "unset"))
-		do_unset(cmd->args, &env_linklist);
-	if (!ft_strcmp(cmd->exec, "env"))
-		print_export(env_linklist);
-	if (!ft_strcmp(cmd->exec, "exit"))
+	if (!ft_strcmp(cmd->args[0], "export"))
+		do_export(cmd->args);
+	if (!ft_strcmp(cmd->args[0], "unset"))
+		do_unset(cmd->args);
+	if (!ft_strcmp(cmd->args[0], "env"))
+		print_export();
+	if (!ft_strcmp(cmd->args[0], "exit"))
 		do_exit(cmd->args, pid);
 	return (1);
 }
@@ -58,7 +57,7 @@ int	is_builtin(t_cmd *cmd)
 	idx = -1;
 	while (++idx < BUILTIN_FUNCS_NB)
 	{
-		if (!ft_strcmp(cmd->exec, builtin_funcs[idx]))
+		if (!ft_strcmp(cmd->args[0], builtin_funcs[idx]))
 			return (1);
 	}
 	return (0);

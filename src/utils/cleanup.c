@@ -21,8 +21,6 @@ int	free_all(t_cmd **cmd)
 	{
 		while (cmd[++i]->exec)
 		{
-			if (cmd[i]->exec)
-				free((*cmd)->exec);
 			if (cmd[i]->args)
 				free(cmd[i]->args);
 			if (cmd[i]->file)
@@ -30,6 +28,7 @@ int	free_all(t_cmd **cmd)
 			free(cmd[i]);
 		}
 	}
+	free_env_llist(env_singleton(NULL));
 	return (1);
 }
 

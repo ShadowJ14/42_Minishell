@@ -22,22 +22,22 @@ Installed the "C/C++" extension ("C/C++ IntelliSense, debugging, and code
 browsing.") and setted up the "launch.json" the "tasks.json" files in the folder.
 */
 
-static void	expand_env_in_args(t_cmd *cmd, t_env_elem \
-		*env_linklist)
+static void	expand_env_in_args(t_cmd *cmd)
 {
-	int		i;
-	int		j;
+	int			i;
+	int			j;
 
 	i = -1;
 	j = -1;
-	while (cmd[++i].exec)
+	while (cmd->exec)
 	{
 		j = -1;
-		while (cmd[i].args[++j])
+		while (cmd->args[++j])
 		{
-			cmd[i].args[j] = word_modif_two(cmd[i].args[j], NONE, NONE, env_linklist);
-			printf("arg%i:%s\n", j, cmd[i].args[j]);
+			cmd->args[j] = word_modif_two(cmd->args[j], NONE, NONE);
+			printf("arg%i:%s\n", j, cmd->args[j]);
 		}
+		cmd++;
 	}
 }
 
@@ -45,7 +45,6 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	char **environment)
 {
 	t_env_elem	*env_linklist;
-	t_env_elem	*env_linklist_new;
 	t_terminal	terminal;
 	t_cmd		*cmd;
 	char		*input;
@@ -54,7 +53,7 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 	(void)program_arguments;
 	handle_signals();
 	env_linklist = format_environment(environment);
-	env_linklist_new = env_singleton(env_linklist);
+	env_singleton(env_linklist);
 	update_shlvl();
 	open_terminal(&terminal);
 	g_exit_code = 0;
@@ -65,12 +64,10 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		{
 			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
-			expand_env_in_args(cmd, env_linklist_new);
-			msh_execute(cmd, env_linklist_new);
+			expand_env_in_args(cmd);
+			msh_execute(cmd);
 		}
 	}
 	free_all(&cmd);
-	free_env_llist(env_linklist);
-	free_env_llist(env_linklist_new);
 	return (EXIT_SUCCESS);
 }

@@ -33,23 +33,20 @@ static char	*if_no_env(char *str, char *s1, int *cur)
 	return (join);
 }
 
-static char	*if_env(char *str, char *s1, int *cur, t_env_elem *env_linklist)
+static char	*if_env(char *str, char *s1, int *cur)
 {
 	char	*env;
 	char	*join;
 
-	env = string_env(str, s1, cur, env_linklist);
+	env = string_env(str, s1, cur);
 	if (env == NULL)
 		return (free_str_ret_null(s1));
-	if (s1)
-		join = ft_strjoin(s1, env);
-	else
-		join = ft_strjoin("", env);
+	join = ft_strjoin(s1, env);
 	free_both(s1, env);
 	return (join);
 }
 
-static char	*expanded_str(char *str, t_env_elem *env_linklist)
+static char	*expanded_str(char *str)
 {
 	char	*new;
 	int		i;
@@ -60,7 +57,7 @@ static char	*expanded_str(char *str, t_env_elem *env_linklist)
 	{
 		if (str[i] == '$')
 		{
-			new = if_env(str, new, &i, env_linklist);
+			new = if_env(str, new, &i);
 			if (new == NULL)
 				return (NULL);
 		}
@@ -75,8 +72,7 @@ static char	*expanded_str(char *str, t_env_elem *env_linklist)
 	return (new);
 }
 
-int	write_in_fd(int fd, char *limitor, int not_expanded, \
-	t_env_elem *env_linklist)
+int	write_in_fd(int fd, char *limitor, int not_expanded)
 {
 	char	*str;
 
@@ -91,7 +87,7 @@ int	write_in_fd(int fd, char *limitor, int not_expanded, \
 		{
 			if (!not_expanded)
 			{
-				str = expanded_str(str, env_linklist);
+				str = expanded_str(str);
 				if (str == NULL)
 					return (50);
 			}
@@ -104,7 +100,7 @@ int	write_in_fd(int fd, char *limitor, int not_expanded, \
 	return (0);
 }
 
-int	create_heredoc_fd(t_cmd *cmd, t_env_elem *env_linklist)
+int	create_heredoc_fd(t_cmd *cmd)
 {
 	int		fd;
 	char	*name_file;
@@ -118,15 +114,14 @@ int	create_heredoc_fd(t_cmd *cmd, t_env_elem *env_linklist)
 		name_file = create_random_name();
 		fd = open(name_file, O_CREAT | O_EXCL | O_RDWR, 0644);
 	}
-	write_in_fd(fd, cmd->file, cmd->no_expand, env_linklist);
+	write_in_fd(fd, cmd->file, cmd->no_expand);
 	fd = open(name_file, O_RDONLY);
 	cmd->pipe[0] = fd;
 	if (cmd->file_name != NULL)
 	{
 		unlink(cmd->file_name);
-		//free(cmd->file_name);
+		free(cmd->file_name);
 	}
 	cmd->file_name = name_file;
 	return (fd);
 }
-

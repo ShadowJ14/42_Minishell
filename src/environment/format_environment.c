@@ -89,11 +89,11 @@ t_env_elem	*format_environment(char **environment)
 	env_linklist = NULL;
 	while (environment[index] != NULL)
 	{
-		env_elem = allocate_memory(sizeof(*env_elem));
-		env_elem->name = allocate_memory(\
+		env_elem = alloc_mem(sizeof(*env_elem));
+		env_elem->name = alloc_mem(\
 			sizeof(char) \
 				* (calculate_environment_name_length(environment[index]) + 1));
-		env_elem->value = allocate_memory(\
+		env_elem->value = alloc_mem(\
 			sizeof(char) \
 				* (calculate_environment_value_length(environment[index]) + 1));
 		env_elem->next_element = NULL;

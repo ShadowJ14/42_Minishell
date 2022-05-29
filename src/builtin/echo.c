@@ -17,7 +17,6 @@ void	do_echo(char **args, int fd)
 {
 	int	idx;
 
-	//(void) fd;
 	if (args[1] && !ft_strcmp(args[1], "-n"))
 	{
 		idx = 1;

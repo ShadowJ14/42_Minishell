@@ -93,7 +93,7 @@ typedef struct s_terminal
 // from the user input, as well as the type of redirection/pipe.
 typedef struct s_cmd
 {
-	char	*exec;
+	int		exec;
 	char	**args;
 	int		chain;
 	int		pipe[2];
@@ -112,14 +112,12 @@ typedef enum quote
 	END
 }	t_quote;
 
-int g_exit_code;
+int	g_exit_code;
 
 // Function declarations.
-void		*allocate_memory(size_t size);
+void		*alloc_mem(size_t size);
 size_t		calculate_string_length(char *string);
 char		**convert_linked_list_to_array(t_env_elem *env_elem);
-void		do_export(char **args, t_env_elem **env_linklist);
-void		do_unset(char **args, t_env_elem **env_linklist);
 t_env_elem	*format_environment(char **environment);
 void		free_memory(void **memory_pointer);
 void		handle_signals(void);
@@ -128,50 +126,48 @@ void		print_error_message(char *error_message);
 // void		print_all_tracked_memory(char **memory_management);
 void		print_message(char *message);
 char		*read_input_until_new_line(t_terminal terminal);
-void		print_export(t_env_elem *env_linklist);
 t_env_elem	*env_singleton(t_env_elem *set_env_linklist);
 // void		track_memory(char ***memory_management, char *memory_to_track);
 // void		untrack_all_memory(char **memory_management);
 // void		untrack_memory(char ***memory_management, char *memory_to_free);
 
 // lprates
-int			msh_execute(t_cmd *cmd, t_env_elem *env_linklist);
+int			msh_execute(t_cmd *cmd);
 t_cmd		*msh_split_line(char *line);
 t_cmd		*realloc_n_initialize_cmd(t_cmd *cmd, int idx);
 t_cmd		*local_split(char const *s);
 void		set_builtin_funcs(char **builtin_funcs);
 int			is_builtin(t_cmd *cmd);
 char		**smart_split(char const *s, t_cmd *cmd);
-char		*expand_env_var(t_env_elem *env_linklist, char *env_name);
+char		*expand_env_var(char *env_name);
 int			msh_execute_two(t_cmd *cmd, char **builtin_funcs, \
 	t_env_elem *env_linklist);
 char		*check_sysfunction(char *func);
-int			forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist);
-char		*expand_env_var_string(t_env_elem *env_linklist, \
-	char *str, char *first);
+int			forking(t_cmd *cmd, pid_t *pid);
+char		*expand_env_var_string(char *str, char *first);
 
 //testing
 
 t_quote		update_quote_status(char c, t_quote quote);
 t_quote		update_quote_succes(int *i, t_quote quote, char **s1);
-char		*word_modif_two(char *duplica, t_quote quote, t_quote prec, \
-	t_env_elem *env_linklist);
-char		*string_env(char *str, char *tmp, int *cur, \
-	t_env_elem *env_linklist);
+char		*word_modif_two(char *duplica, t_quote quote, t_quote prec);
+char		*string_env(char *str, char *tmp, int *cur);
 
 // builtins
 
-int			execute_builtins(t_cmd *cmd, t_env_elem *env_linklist, \
-	int *pid, int fd);
+int			execute_builtins(t_cmd *cmd, int *pid, int fd);
 int			ft_built_in_pwd_fd(int fd);
 void		do_echo(char **args, int pid);
 int			do_exit(char **args, pid_t *pid);
-int			do_cd(char *path, t_env_elem *env_linklist);
+int			do_cd(char *path);
+void		do_unset(char **args);
+void		do_export(char **args);
+void		print_export(void);
 
 // redirections
 
 //		heredoc
-int			create_heredoc_fd(t_cmd *cmd, t_env_elem *env_linklist);
+int			create_heredoc_fd(t_cmd *cmd);
 int			random_char(void);
 char		*create_random_name(void);
 
@@ -186,5 +182,8 @@ void		free_env_llist(t_env_elem *env_llist);
 // utils
 int			cmd_len(t_cmd *cur);
 void		update_shlvl(void);
+char		*move_to_end_redirect(char *s, char delim, char *from);
+char		*move_to_delim(char *s, char delim, char *from);
+void		set_args(char **ret, char const *s, char *from, int idx);
 
 #endif

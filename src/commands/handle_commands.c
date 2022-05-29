@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	redirect_file_in(t_cmd *cmd, int chain, t_env_elem *env_linklist)
+int	redirect_file_in(t_cmd *cmd, int chain)
 {
 	if (chain == REDIRECTI)
 	{
@@ -21,8 +21,7 @@ int	redirect_file_in(t_cmd *cmd, int chain, t_env_elem *env_linklist)
 		cmd->pipe[0] = open(cmd->file, O_RDONLY);
 		if (cmd->pipe[0] == -1)
 		{
-			print_message("minishell: ");
-			perror(cmd->args[1]);
+			perror("minishell");
 			return (-1);
 		}
 	}
@@ -30,7 +29,7 @@ int	redirect_file_in(t_cmd *cmd, int chain, t_env_elem *env_linklist)
 	{
 		if (cmd->pipe[0] != 0)
 			close(cmd->pipe[0]);
-		cmd->pipe[0] = create_heredoc_fd(cmd, env_linklist);
+		cmd->pipe[0] = create_heredoc_fd(cmd);
 		if (cmd->pipe[0] == -1)
 			return (-1);
 	}
@@ -60,13 +59,13 @@ int	redirect_file_out(t_cmd *cmd, int chain)
 	return (0);
 }
 
-int	open_fd(t_cmd *cmd, t_env_elem *env_linklist)
+int	open_fd(t_cmd *cmd)
 {
 	t_cmd	*cur;
 
 	cur = cmd;
 	if (cur->chain == REDIRECTI || cur->chain == HEREDOC)
-		if (redirect_file_in(cur, cur->chain, env_linklist) == -1)
+		if (redirect_file_in(cur, cur->chain) == -1)
 			return (-1);
 	if (cur->chain == REDIRECTO || cur->chain == APPEND)
 		if (redirect_file_out(cur, cur->chain) == -1)
@@ -112,7 +111,7 @@ int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)
 		cur->pipe[0] = 0;
 	else
 		cur->pipe[0] = nfd[i - 1][0];
-	if ((cur + 1)->exec == NULL)
+	if ((cur + 1)->exec == 0)
 	{
 		close(nfd[i][0]);
 		close(nfd[i][1]);
@@ -153,7 +152,7 @@ int	open_pipe(t_cmd **cmd)
 }
 
 //? should be return code
-int	msh_execute(t_cmd *cmd, t_env_elem *env_linklist)
+int	msh_execute(t_cmd *cmd)
 {
 	pid_t	*pid;
 	int		ret;
@@ -166,7 +165,7 @@ int	msh_execute(t_cmd *cmd, t_env_elem *env_linklist)
 		return (ret);
 	if (pid == NULL)
 		return (50);
-	forking(cmd, pid, env_linklist);
+	forking(cmd, pid);
 	wait_pid(&cmd, pid);
 	free(pid);
 	handle_signals();
@@ -209,7 +208,7 @@ int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 	{
 		if (execve(exec, cmd->args, str) == -1)
 		{
-			perror("msh");
+			perror("minishell");
 			exit(EXIT_FAILURE);
 		}
 		free(exec);
@@ -237,20 +236,21 @@ void	close_fd_all(t_cmd **cmd)
 	}
 }
 
-int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid,
-	t_env_elem *env_linklist)
+int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid)
 {
 	char		**str;
+	t_env_elem	*env_linklist;
 
+	env_linklist = env_singleton(NULL);
 	dup2((*cmd)->pipe[0], STDIN_FILENO);
 	dup2((*cmd)->pipe[1], STDOUT_FILENO);
 	close_fd_all(first);
 	str = convert_linked_list_to_array(env_linklist);
-	free_env_llist(env_linklist);
+	//free_env_llist(env_linklist);
 	if (str == NULL)
 		exit(42);
 	if (is_builtin(*cmd))
-		execute_builtins(*cmd, env_linklist, pid, 1);
+		execute_builtins(*cmd, pid, 1);
 	else
 		exec_sysfunction_two(*cmd, first, str, pid);
 	free_array((void**)str);
@@ -258,8 +258,7 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid,
 	return (0);
 }
 
-int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur,
-	t_env_elem *env_linklist)
+int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
@@ -270,7 +269,7 @@ int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur,
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		ft_execve_fct(cur, cmd, pid, env_linklist);
+		ft_execve_fct(cur, cmd, pid);
 		exit (0);
 	}
 	if ((*cur)->pipe[0] != 0)
@@ -280,7 +279,7 @@ int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur,
 	return (0);
 }
 
-int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
+int	forking(t_cmd *cmd, pid_t *pid)
 {
 	int		len;
 	int		i;
@@ -291,18 +290,18 @@ int	forking(t_cmd *cmd, pid_t *pid, t_env_elem *env_linklist)
 	len = cmd_len(cur);
 	while (cur->exec)
 	{
-		open_fd(cur, env_linklist);
+		open_fd(cur);
 		cur++;
 	}
 	cur = cmd;
 	if (len == 1 && is_builtin(cur))
 	{
-		execute_builtins(cmd, env_linklist, pid, cmd->pipe[1]);
+		execute_builtins(cmd, pid, cmd->pipe[1]);
 		return (1);
 	}
 	while (++i < len)
 	{
-		multi_fork(pid, i, &cmd, &cur, env_linklist);
+		multi_fork(pid, i, &cmd, &cur);
 		cur++;
 	}
 	return (0);

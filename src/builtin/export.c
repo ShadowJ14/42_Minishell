@@ -12,24 +12,6 @@
 
 #include "minishell.h"
 
-void	print_export(t_env_elem *env_linklist)
-{
-	t_env_elem	*env_elem;
-
-	env_elem = env_linklist;
-	while (env_elem != NULL)
-	{
-		print_message(env_elem->name);
-		print_message("=");
-		if (env_elem->value[0] == '\0')
-			print_message("''");
-		else
-			print_message(env_elem->value);
-		print_message("\n");
-		env_elem = env_elem->next_element;
-	}
-}
-
 static void	verify_args(char **args)
 {
 	size_t	index;
@@ -46,87 +28,84 @@ static void	verify_args(char **args)
 
 static t_argument	*get_argument(char *arg)
 {
-	t_argument	*argument;
-	size_t		index_1;
+	t_argument	*arg2;
+	size_t		i1;
 	size_t		index_2;
 
-	index_1 = 0;
-	while (arg[index_1] != '=' && arg[index_1] != '\0')
-		index_1++;
-	argument = allocate_memory(sizeof(*argument));
-	argument->name = allocate_memory(sizeof(*(argument->name)) * (index_1 + 1));
-	index_2 = 0;
-	while (index_2 < index_1)
+	i1 = 0;
+	while (arg[i1] != '=' && arg[i1] != '\0')
+		i1++;
+	arg2 = alloc_mem(sizeof(*arg2));
+	arg2->name = alloc_mem(sizeof(*(arg2->name)) * (i1 + 1));
+	index_2 = -1;
+	while (++index_2 < i1)
+		arg2->name[index_2] = arg[index_2];
+	arg2->name[index_2] = '\0';
+	arg2->value = alloc_mem(sizeof(*(arg2->value)) * (ft_strlen(arg) - i1));
+	arg2->set_value = false;
+	if (arg[i1] == '=')
 	{
-		argument->name[index_2] = arg[index_2];
-		index_2++;
+		i1++;
+		arg2->set_value = true;
 	}
-	argument->name[index_2] = '\0';
-	argument->value = allocate_memory(sizeof(*(argument->value)) * \
-		(calculate_string_length(arg) - index_1));
-	argument->set_value = false;
-	if (arg[index_1] == '=')
-	{
-		index_1++;
-		argument->set_value = true;
-	}
-	index_2 = 0;
-	while (arg[index_1 + index_2] != '\0')
-	{
-		argument->value[index_2] = arg[index_1 + index_2];
-		index_2++;
-	}
-	argument->value[index_2] = '\0';
-	return (argument);
+	index_2 = -1;
+	while (arg[i1 + ++index_2] != '\0')
+		arg2->value[index_2] = arg[i1 + index_2];
+	arg2->value[index_2] = '\0';
+	return (arg2);
+}
+
+static t_env_elem	*allocate_new_node(t_argument *argument)
+{
+	t_env_elem	*new_env_linklist;
+
+	new_env_linklist = alloc_mem(sizeof(*new_env_linklist));
+	new_env_linklist->name = argument->name;
+	if (argument->value)
+		new_env_linklist->value = argument->value;
+	else
+		new_env_linklist->value = 0;
+	return (new_env_linklist);
 }
 
 static void	set_args(char **args, \
 	t_env_elem **env_linklist)
 {
 	t_argument	*argument;
-	t_env_elem	**env_elem;
 	size_t		index;
-	t_env_elem	*new_env_elem;
 
-	index = 1;
-	while (args[index] != NULL)
+	index = 0;
+	while (args[++index] != NULL)
 	{
 		argument = get_argument(args[index]);
-		env_elem = env_linklist;
-		while (*env_elem != NULL)
+		while (*env_linklist != NULL)
 		{
-			if (!ft_strcmp((*env_elem)->name, argument->name))
+			if (!ft_strcmp((*env_linklist)->name, argument->name))
 			{
 				if (argument->set_value)
-					(*env_elem)->value = argument->value;
+					(*env_linklist)->value = argument->value;
 				break ;
 			}
-			if ((*env_elem)->next_element == NULL)
+			if ((*env_linklist)->next_element == NULL)
 				break ;
-			env_elem = &(*env_elem)->next_element;
+			env_linklist = &(*env_linklist)->next_element;
 		}
-		if (ft_strcmp((*env_elem)->name, argument->name))
-		{
-			new_env_elem = allocate_memory(sizeof(*new_env_elem));
-			new_env_elem->name = argument->name;
-			if (argument->value)
-				new_env_elem->value = argument->value;
-			else
-				new_env_elem->value = 0;
-			(*env_elem)->next_element = new_env_elem;
-		}
-		index++;
+		if (ft_strcmp((*env_linklist)->name, argument->name))
+			(*env_linklist)->next_element = allocate_new_node(argument);
 	}
 }
 
 // implements export builtin
-void	do_export(char **args, t_env_elem **env_linklist)
+void	do_export(char **args)
 {
+	t_env_elem	*env_linklist;
+
+	env_linklist = env_singleton(NULL);
 	if (args[1] == NULL)
 	{
-		print_export(*env_linklist);
+		print_export();
 		return ;
 	}
 	verify_args(args);
-	set_args(args, env_linklist);
+	set_args(args, &env_linklist);
 }
