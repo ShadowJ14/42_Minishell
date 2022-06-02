@@ -144,7 +144,6 @@ int			msh_execute_two(t_cmd *cmd, char **builtin_funcs, \
 	t_env_elem *env_linklist);
 char		*check_sysfunction(char *func);
 int			forking(t_cmd *cmd, pid_t *pid);
-char		*expand_env_var_string(char *str, char *first);
 
 //testing
 
@@ -166,10 +165,14 @@ void		print_export(void);
 
 // redirections
 
-//		heredoc
 int			create_heredoc_fd(t_cmd *cmd);
 int			random_char(void);
 char		*create_random_name(void);
+int			open_pipe(t_cmd **cmd);
+int			init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd);
+int			redirect_file_in(t_cmd *cmd, int chain);
+int			redirect_file_out(t_cmd *cmd, int chain);
+int			wait_pid(t_cmd **cmd, pid_t *pid);
 
 // cleanup
 
@@ -185,5 +188,17 @@ void		update_shlvl(void);
 char		*move_to_end_redirect(char *s, char delim, char *from);
 char		*move_to_delim(char *s, char delim, char *from);
 void		set_args(char **ret, char const *s, char *from, int idx);
+
+// commands
+
+void		close_fd_all(t_cmd **cmd);
+int			open_fd(t_cmd *cmd);
+
+// environment
+
+char		*word_will_double(char *str, int *cur, char *s1);
+char		*word_will_unquote(char *str, int *cur, char *s1);
+char		*get_env(int *cur, char *str);
+char		*alloc_dollar(int *cur);
 
 #endif

@@ -24,16 +24,15 @@ browsing.") and setted up the "launch.json" the "tasks.json" files in the folder
 
 static void	expand_env_in_args(t_cmd *cmd)
 {
-	int			i;
 	int			j;
 
-	i = -1;
 	j = -1;
 	while (cmd->exec)
 	{
 		j = -1;
 		while (cmd->args[++j])
 		{
+			printf("before arg%i:%s\n", j, cmd->args[j]);
 			cmd->args[j] = word_modif_two(cmd->args[j], NONE, NONE);
 			printf("arg%i:%s\n", j, cmd->args[j]);
 		}

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_exit_code;
+
 int	ft_sup_int(char *str)
 {
 	long	res;
@@ -79,7 +81,7 @@ int	do_exit(char **args, pid_t *pid)
 		if (args[2] != NULL)
 		{
 			write(STDERR_FILENO, "minishell: exit: too many arguments\n", 36);
-			//g_exit_status = 1;
+			g_exit_code = 1;
 			return (2);
 		}
 		//free_in_builin(first, pid, ret);

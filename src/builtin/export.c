@@ -68,7 +68,7 @@ static t_env_elem	*allocate_new_node(t_argument *argument)
 	return (new_env_linklist);
 }
 
-static void	set_args(char **args, \
+static void	set_arguments(char **args, \
 	t_env_elem **env_linklist)
 {
 	t_argument	*argument;
@@ -107,5 +107,5 @@ void	do_export(char **args)
 		return ;
 	}
 	verify_args(args);
-	set_args(args, &env_linklist);
+	set_arguments(args, &env_linklist);
 }
