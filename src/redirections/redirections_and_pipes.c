@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 23:41:39 by lprates           #+#    #+#             */
-/*   Updated: 2022/06/02 00:08:23 by lprates          ###   ########.fr       */
+/*   Updated: 2022/06/03 01:12:12 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,5 @@ int	open_pipe(t_cmd **cmd)
 		cur++;
 	}
 	free_array((void **)nfd);
-	free(nfd);
 	return (0);
 }

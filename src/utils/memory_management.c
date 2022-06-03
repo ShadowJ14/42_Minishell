@@ -23,3 +23,15 @@ t_env_elem	*env_singleton(t_env_elem *set_env_linklist)
 	}
 	return (env_linklist);
 }
+
+t_cmd	*cmd_singleton(t_cmd *set_cmd)
+{
+	static t_cmd	*cmd;
+
+	if (set_cmd != NULL)
+	{
+		cmd = set_cmd;
+		set_cmd = 0;
+	}
+	return (cmd);
+}

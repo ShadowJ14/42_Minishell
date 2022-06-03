@@ -45,7 +45,7 @@ int	execute_builtins(t_cmd *cmd, pid_t *pid, int fd)
 		print_export();
 	if (!ft_strcmp(cmd->args[0], "exit"))
 		do_exit(cmd->args, pid);
-	return (1);
+	return (0);
 }
 
 int	is_builtin(t_cmd *cmd)
@@ -55,6 +55,8 @@ int	is_builtin(t_cmd *cmd)
 
 	set_builtin_funcs(builtin_funcs);
 	idx = -1;
+	if (cmd->args[0] == NULL)
+		return (1);
 	while (++idx < BUILTIN_FUNCS_NB)
 	{
 		if (!ft_strcmp(cmd->args[0], builtin_funcs[idx]))

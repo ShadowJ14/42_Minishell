@@ -12,33 +12,44 @@
 
 #include <minishell.h>
 
-int	free_all(t_cmd **cmd)
+int	free_all(char *env)
 {
-	int		i;
+	t_cmd	*cmd;
+	t_cmd	*tmp;
 
-	i = -1;
+	cmd = cmd_singleton(NULL);
+	tmp = cmd;
 	if (cmd)
 	{
-		while (cmd[++i]->exec)
+		while (cmd->exec)
 		{
-			if (cmd[i]->args)
-				free(cmd[i]->args);
-			if (cmd[i]->file)
-				free(cmd[i]->file);
-			free(cmd[i]);
+			if (cmd->args)
+				free_array((void **)cmd->args);
+			if (cmd->file)
+				free(cmd->file);
+			if (cmd->file_name)
+				free(cmd->file_name);
+			cmd++;
 		}
 	}
-	free_env_llist(env_singleton(NULL));
+	free(tmp);
+	if (env && !ft_strcmp(env, "ENV"))
+		free_env_llist(env_singleton(NULL));
 	return (1);
 }
 
 int	free_array(void **str)
 {
+	void	**tmp;
+
+	tmp = str;
 	while (*str)
 	{
 		free(*str);
+		*str = NULL;
 		str++;
 	}
+	free(tmp);
 	return (1);
 }
 

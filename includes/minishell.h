@@ -176,7 +176,7 @@ int			wait_pid(t_cmd **cmd, pid_t *pid);
 
 // cleanup
 
-int			free_all(t_cmd **cmd);
+int			free_all(char *env);
 void		free_both(char *s1, char *s2);
 char		*free_str_ret_null(char *s1);
 int			free_array(void **str);
@@ -193,6 +193,7 @@ void		set_args(char **ret, char const *s, char *from, int idx);
 
 void		close_fd_all(t_cmd **cmd);
 int			open_fd(t_cmd *cmd);
+t_cmd		*cmd_singleton(t_cmd *set_cmd);
 
 // environment
 

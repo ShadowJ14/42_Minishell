@@ -25,6 +25,8 @@ t_cmd	*realloc_n_initialize_cmd(t_cmd *cmd, int idx)
 		return (NULL);
 	ft_memset(&cmd[idx], 0, cmd_size * 2);
 	cmd[idx].exec = 0;
+	cmd[idx].file = 0;
+	cmd = cmd_singleton(cmd);
 	return (cmd);
 }
 	//ft_memset(&cmd[idx + 1], 0, sizeof(t_cmd));

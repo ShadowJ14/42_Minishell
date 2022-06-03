@@ -23,6 +23,7 @@ void	update_shlvl(void)
 		if (!ft_strcmp(new_env_llist->name, "SHLVL"))
 		{
 			old_value = ft_atoi(new_env_llist->value);
+			free(new_env_llist->value);
 			old_value++;
 			new_env_llist->value = ft_itoa(old_value);
 		}

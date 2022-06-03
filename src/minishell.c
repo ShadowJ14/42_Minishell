@@ -65,8 +65,10 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 			cmd = msh_split_line(input);
 			expand_env_in_args(cmd);
 			msh_execute(cmd);
+			free(input);
+			free_all(NULL);
 		}
 	}
-	free_all(&cmd);
+	free_all("ENV");
 	return (EXIT_SUCCESS);
 }

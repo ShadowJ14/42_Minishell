@@ -62,6 +62,14 @@ int	ft_non_int(char *str)
 	return (ft_sup_int(str));
 }
 
+int	free_in_builin(pid_t *pid, int ret)
+{
+	free(pid);
+	free_all("ENV");
+	exit (ret);
+	return (ret);
+}
+
 int	do_exit(char **args, pid_t *pid)
 {
 	int	ret;
@@ -72,8 +80,7 @@ int	do_exit(char **args, pid_t *pid)
 	{
 		if (ft_non_int(args[1]))
 		{
-			//ft_clean_env();
-			//free_all(first);
+			free_all("ENV");
 			free(pid);
 			exit (2);
 		}
@@ -84,13 +91,7 @@ int	do_exit(char **args, pid_t *pid)
 			g_exit_code = 1;
 			return (2);
 		}
-		//free_in_builin(first, pid, ret);
-		exit(ret);
+		free_in_builin(pid, ret);
 	}
-	else
-	{
-		exit(EXIT_SUCCESS);
-	}
-	return (0);
-	//return (free_in_builin(first, pid, 0));
+	return (free_in_builin(pid, 0));
 }

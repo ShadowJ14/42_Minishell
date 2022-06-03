@@ -37,6 +37,7 @@ int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 {
 	char	*exec;
 
+	(void) first;
 	exec = check_sysfunction(cmd->args[0]);
 	if (exec)
 	{
@@ -46,7 +47,7 @@ int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 			exit(EXIT_FAILURE);
 		}
 		free(exec);
-		free_all(first);
+		free_all(NULL);
 		free(str);
 		free(pid);
 	}
