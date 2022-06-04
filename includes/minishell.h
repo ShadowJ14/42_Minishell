@@ -16,6 +16,9 @@
 // Definition of the include guard macro.
 # define MINISHELL_H
 
+// Include the "errno" global variable.
+#include <errno.h>
+
 // Include the "open" function.
 # include <fcntl.h>
 

@@ -38,4 +38,5 @@ void	do_echo(char **args, int fd)
 		}
 		ft_putchar_fd('\n', fd);
 	}
+	g_exit_code = EXIT_SUCCESS;
 }

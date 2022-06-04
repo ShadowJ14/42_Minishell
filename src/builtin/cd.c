@@ -32,8 +32,8 @@ static char	*cd_home(char *path)
 }
 
 /* implements cd builtin
-** returns 1 on success
-** returns 0 on failure
+** returns EXIT_SUCCESS on success
+** returns EXIT_FAILURE on failure
 ** needs to update old pwd because of cd -
 ** old pwd implemented but needs cleaning
 ** cd with no arguments is implemented but needs cleaning
@@ -48,6 +48,11 @@ int	do_cd(char *path)
 
 	env_elem = env_singleton(NULL);
 	old = getcwd(NULL, 0);
+	if (old == NULL)
+	{
+		g_exit_code = errno;
+		return (EXIT_FAILURE);
+	}
 	if (!path || ft_strchr(path, '~'))
 		path = cd_home(path);
 	if (!ft_strcmp(path, "-"))
@@ -64,11 +69,17 @@ int	do_cd(char *path)
 			change_success = chdir(path);
 			free(env_elem->value);
 			env_elem->value = getcwd(NULL, 0);
+			if (env_elem->value == NULL)
+			{
+				g_exit_code = errno;
+				return (EXIT_FAILURE);
+			}
 		}
 		env_elem = env_elem->next_element;
 	}
 	if (!change_success)
-		return (1);
+		return (EXIT_FAILURE);
+	g_exit_code = EXIT_FAILURE;
 	perror("minishell");
-	return (0);
+	return (EXIT_SUCCESS);
 }

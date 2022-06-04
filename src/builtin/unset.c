@@ -54,6 +54,7 @@ void	do_unset(char **args)
 	env_linklist = env_singleton(NULL);
 	if (args[1] == NULL)
 	{
+		g_exit_code = EXIT_FAILURE;
 		print_error_message("unset: not enough arguments\n");
 		return ;
 	}
