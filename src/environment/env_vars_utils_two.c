@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 00:42:51 by lprates           #+#    #+#             */
-/*   Updated: 2022/06/02 00:52:45 by lprates          ###   ########.fr       */
+/*   Updated: 2022/06/04 02:02:09 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*expand_env_var(char *env_name)
 		if (!ft_strcmp(env_linklist->name, env_name))
 		{
 			expanded_size = ft_strlen(env_linklist->value);
+			if (!expanded_size)
+				return (NULL);
 			expanded_name = malloc(sizeof(char) * expanded_size + 1);
 			ft_strlcpy(expanded_name, env_linklist->value, \
 				expanded_size + 1);
@@ -36,7 +38,7 @@ char	*expand_env_var(char *env_name)
 		}
 		env_linklist = env_linklist->next_element;
 	}
-	return ("");
+	return (NULL);
 }
 
 t_quote	update_quote_succes(int *i, t_quote quote, char **s1)

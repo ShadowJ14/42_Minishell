@@ -32,6 +32,6 @@ static void	signal_handler(int signal)
 void	handle_signals(void)
 {
 	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTERM, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

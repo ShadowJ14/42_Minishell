@@ -66,15 +66,14 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid)
 	dup2((*cmd)->pipe[1], STDOUT_FILENO);
 	close_fd_all(first);
 	str = convert_linked_list_to_array(env_linklist);
-	free_env_llist(env_linklist);
 	if (str == NULL)
 		exit(42);
 	if (is_builtin(*cmd))
 		execute_builtins(*cmd, pid, 1);
 	else
 		exec_sysfunction_two(*cmd, first, str, pid);
+	free_env_llist(env_linklist);
 	free_array((void **)str);
-	free(str);
 	return (0);
 }
 

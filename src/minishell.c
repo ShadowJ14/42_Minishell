@@ -40,27 +40,44 @@ static void	expand_env_in_args(t_cmd *cmd)
 	}
 }
 
+void	init_shell(t_terminal *terminal, char **environment)
+{
+	t_env_elem	*env_linklist;
+
+	env_linklist = format_environment(environment);
+	env_singleton(env_linklist);
+	update_shlvl();
+	open_terminal(terminal);
+	handle_signals();
+}
+
+void	activate_controlchars(t_terminal *terminal)
+{
+	terminal->attributes_new = terminal->attributes;
+	terminal->attributes_new.c_lflag &= ~(ICANON | ECHO);
+	terminal->attributes_new.c_cc[VMIN] = 1;
+	terminal->attributes_new.c_cc[VTIME] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &terminal->attributes_new);
+}
+
 int	main(int amount_of_program_arguments, char **program_arguments, \
 	char **environment)
 {
-	t_env_elem	*env_linklist;
 	t_terminal	terminal;
 	t_cmd		*cmd;
 	char		*input;
 
 	(void)amount_of_program_arguments;
 	(void)program_arguments;
-	handle_signals();
-	env_linklist = format_environment(environment);
-	env_singleton(env_linklist);
-	update_shlvl();
-	open_terminal(&terminal);
+	init_shell(&terminal, environment);
 	g_exit_code = 0;
 	while (true)
 	{
-		input = read_input_until_new_line(terminal);
+		//open_terminal(&terminal);
+		input = read_input_until_new_line();
 		if (input != NULL)
 		{
+			//activate_controlchars(&terminal);
 			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
 			expand_env_in_args(cmd);

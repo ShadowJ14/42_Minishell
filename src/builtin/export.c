@@ -60,11 +60,13 @@ static t_env_elem	*allocate_new_node(t_argument *argument)
 	t_env_elem	*new_env_linklist;
 
 	new_env_linklist = alloc_mem(sizeof(*new_env_linklist));
-	new_env_linklist->name = argument->name;
+	new_env_linklist->name = ft_strdup(argument->name);
 	if (argument->value)
-		new_env_linklist->value = argument->value;
+		new_env_linklist->value = ft_strdup(argument->value);
 	else
 		new_env_linklist->value = 0;
+	free_both(argument->name, argument->value);
+	free(argument);
 	return (new_env_linklist);
 }
 
@@ -93,6 +95,8 @@ static void	set_arguments(char **args, \
 		if (ft_strcmp((*env_linklist)->name, argument->name))
 			(*env_linklist)->next_element = allocate_new_node(argument);
 	}
+	env_linklist = &(*env_linklist)->next_element;
+	(*env_linklist)->next_element = 0;
 }
 
 // implements export builtin

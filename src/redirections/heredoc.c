@@ -21,10 +21,10 @@ static char	*if_no_env(char *str, char *s1, int *cur)
 	start = *cur;
 	while (str[*cur] && str[*cur] != '$')
 		(*cur)++;
-	new = malloc(sizeof(char) * ((*cur) - start));
+	new = malloc(sizeof(char) * ((*cur) - start) + 1);
 	if (new == NULL)
 		return (free_str_ret_null(s1));
-	ft_strlcpy(new, str + start, ((*cur) - start + 1));
+	new = ft_strncpy(new, str + start, ((*cur) - start));
 	if (s1)
 		join = ft_strjoin(s1, new);
 	else

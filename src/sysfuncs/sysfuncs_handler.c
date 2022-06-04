@@ -12,25 +12,45 @@
 
 #include "minishell.h"
 
+static char	*free_second(char *s1, char *s2)
+{
+	char	*ret;
+
+	ret = ft_strjoin(s1, s2);
+	if (s2)
+		free(s2);
+	return (ret);
+}
+
 char	*check_sysfunction(char *func)
 {
 	char	*envs;
 	char	**ret;
 	char	*cmd;
+	char	**tmp;
 
-	envs = getenv("PATH");
+	if (access(func, X_OK) == 0)
+		return (func);
+	envs = expand_env_var("PATH");
+	if (!envs)
+		return (NULL);
 	ret = ft_split(envs, ':');
+	tmp = ret;
 	while (*ret)
 	{
-		cmd = ft_strjoin(*ret, ft_strjoin("/", func));
+		cmd = free_second(*ret, ft_strjoin("/", func));
 		if (access(cmd, X_OK) == 0)
+		{
+			free_array((void **)tmp);
+			free(envs);
 			return (cmd);
-		if (access(func, X_OK) == 0)
-			return (func);
+		}
 		free(cmd);
 		if (*ret)
 			ret++;
 	}
+	free(envs);
+	free_array((void **)tmp);
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 00:33:02 by lprates           #+#    #+#             */
-/*   Updated: 2022/06/02 01:51:14 by lprates          ###   ########.fr       */
+/*   Updated: 2022/06/03 19:16:35 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static char	*if_env_unquote(char *str, char *s1, int *i)
 		return (free_str_ret_null(s1));
 	if (s1 == NULL)
 	{
-		join = malloc(sizeof(char));
-		join[0] = '\0';
+		s1 = malloc(sizeof(char));
+		s1[0] = '\0';
 	}
 	join = ft_strjoin(s1, env);
 	free_both(s1, env);

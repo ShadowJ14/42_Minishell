@@ -56,7 +56,7 @@ int	is_builtin(t_cmd *cmd)
 	set_builtin_funcs(builtin_funcs);
 	idx = -1;
 	if (cmd->args[0] == NULL)
-		return (1);
+		return (0);
 	while (++idx < BUILTIN_FUNCS_NB)
 	{
 		if (!ft_strcmp(cmd->args[0], builtin_funcs[idx]))

@@ -84,6 +84,8 @@ char	*get_envp(char *str, int *cur)
 		return (fake_env(cur, len_str));
 	*cur = *cur + len_str + 1;
 	cpy = ft_strdup(env);
+	if (env)
+		free(env);
 	return (cpy);
 }
 

@@ -18,16 +18,15 @@ return 0 if no input is inserted, or return the amount of bytes inserted without
 ending in a newline (since the "enter" key wasn't pressed).
 */
 
-char	*read_input_until_new_line(t_terminal terminal)
+char	*read_input_until_new_line(void)
 {
 	char	*str;
 
-	(void) terminal;
 	str = readline("minishell> ");
 	if (!str)
 	{
 		ft_putstr_fd("exit\n", 1);
-		exit(0);
+		exit(-1);
 	}
 	else if (*str == '\0')
 	{

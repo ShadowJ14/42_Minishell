@@ -84,6 +84,7 @@ typedef struct s_terminal
 	int				amount_of_colums;
 	int				amount_of_lines;
 	struct termios	attributes;
+	struct termios	attributes_new;
 	char			*environment_variable;
 	int				file_descriptor;
 	char			*path;
@@ -125,7 +126,7 @@ void		open_terminal(t_terminal *terminal);
 void		print_error_message(char *error_message);
 // void		print_all_tracked_memory(char **memory_management);
 void		print_message(char *message);
-char		*read_input_until_new_line(t_terminal terminal);
+char		*read_input_until_new_line();
 t_env_elem	*env_singleton(t_env_elem *set_env_linklist);
 // void		track_memory(char ***memory_management, char *memory_to_track);
 // void		untrack_all_memory(char **memory_management);
@@ -201,5 +202,9 @@ char		*word_will_double(char *str, int *cur, char *s1);
 char		*word_will_unquote(char *str, int *cur, char *s1);
 char		*get_env(int *cur, char *str);
 char		*alloc_dollar(int *cur);
+
+// terminal
+
+//void		change_terminal_attributes(t_terminal *terminal);
 
 #endif

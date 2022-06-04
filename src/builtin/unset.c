@@ -15,12 +15,15 @@
 static void	unset_args(char **args, t_env_elem **env_linklist)
 {
 	t_env_elem	*env_elem_freed;
+	t_env_elem	**tmp;
 
+	tmp = env_linklist;
 	while (*args != NULL)
 	{
-		if (!ft_strcmp((*env_linklist)->name, *args))
+		if (*env_linklist != NULL && !ft_strcmp((*env_linklist)->name, *args))
 		{
 			*env_linklist = (*env_linklist)->next_element;
+			free_both((*env_linklist)->name, (*env_linklist)->value);
 			free_memory((void **)env_linklist);
 			args++;
 			continue ;
@@ -31,12 +34,14 @@ static void	unset_args(char **args, t_env_elem **env_linklist)
 			{
 				env_elem_freed = *env_linklist;
 				*env_linklist = (*env_linklist)->next_element;
+				free_both(env_elem_freed->name, env_elem_freed->value);
 				free_memory((void **)&env_elem_freed);
 				break ;
 			}
 			else
 				env_linklist = &(*env_linklist)->next_element;
 		}
+		env_linklist = tmp;
 		args++;
 	}
 }

@@ -20,22 +20,14 @@ static char	*cd_home(char *path)
 	homestring = NULL;
 	home = expand_env_var("HOME");
 	if (!home)
-	{
-		if (path)
-			free(path);
 		return (NULL);
-	}
 	if (!path)
 		return (home);
 	if (ft_strlen(path) > 1)
 		homestring = ft_strjoin(home, &(*(path + 1)));
 	else
-	{
-		if (path)
-			free(path);
 		return (home);
-	}
-	free_both(home, path);
+	free(home);
 	return (homestring);
 }
 
@@ -63,10 +55,14 @@ int	do_cd(char *path)
 	while (env_elem != NULL)
 	{
 		if (!ft_strcmp(env_elem->name, "OLDPWD"))
+		{
+			free(env_elem->value);
 			env_elem->value = old;
+		}
 		if (!ft_strcmp(env_elem->name, "PWD"))
 		{
 			change_success = chdir(path);
+			free(env_elem->value);
 			env_elem->value = getcwd(NULL, 0);
 		}
 		env_elem = env_elem->next_element;

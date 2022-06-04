@@ -18,16 +18,20 @@ int	set_chain(char *tmp)
 	char	*s2;
 
 	s = ft_strchr(tmp, '"');
+	if (!s)
+		s = ft_strchr(tmp, '\'');
 	s2 = tmp;
 	while (s != NULL)
 	{
 		s++;
-		while (*s && *s != '\"')
+		while (*s && (*s != '\"' && *s != '\''))
 			s++;
 		if (*s == 0)
 			break ;
 		s2 = s;
-		s = ft_strchr(s, '\"');
+		s = ft_strchr(s2, '\"');
+		if (!s)
+			s = ft_strchr(s2, '\'');
 	}
 	if (ft_strstr(s2, ">>"))
 		return (APPEND);
