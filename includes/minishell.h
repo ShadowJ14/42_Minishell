@@ -19,6 +19,8 @@
 // Include the "open" function.
 # include <fcntl.h>
 
+# include <curses.h>
+
 // Include the "signal" function, and the "SIGINT" macro.
 # include <signal.h>
 
@@ -38,6 +40,7 @@
 // Include the "tcgetattr" and "tcsetattr" functions, the "TCSANOW" macro, and
 // the "termios" structure.
 # include <termios.h>
+# include <termcap.h>
 
 // Include the "read" and "write" functions, and the "STDERR_FILENO",
 // "STDIN_FILENO", and "STDOUT_FILENO" macros.
@@ -85,7 +88,15 @@ typedef struct s_terminal
 	int				amount_of_lines;
 	struct termios	attributes;
 	struct termios	attributes_new;
-	char			*environment_variable;
+	char			*buffer;
+	char			*keys_on;
+	char			*keys_off;
+	char			*up_arrow;
+	char			*down_arrow;
+	char			*backspace;
+	char			*del_line;
+	char			*set_cursor_begin;
+	//char			*environment_variable;
 	int				file_descriptor;
 	char			*path;
 }	t_terminal;
@@ -206,5 +217,7 @@ char		*alloc_dollar(int *cur);
 // terminal
 
 //void		change_terminal_attributes(t_terminal *terminal);
+void		turn_off_canonical_mode(t_terminal *terminal);
+void		turn_on_canonical_mode(t_terminal *terminal);
 
 #endif
