@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-//? should be return code
 int	msh_execute(t_cmd *cmd)
 {
 	pid_t	*pid;
@@ -80,12 +79,6 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid)
 	free_env_llist(env_linklist);
 	free_array((void **)str);
 	return (g_exit_code);
-}
-
-void	ft_sigint(int signal)
-{
-	(void) signal;
-	ft_putchar('\n');
 }
 
 int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur)

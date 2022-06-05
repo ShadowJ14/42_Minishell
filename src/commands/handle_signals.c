@@ -35,3 +35,9 @@ void	handle_signals(void)
 	signal(SIGTERM, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void	ft_sigint(int signal)
+{
+	(void) signal;
+	ft_putchar('\n');
+}

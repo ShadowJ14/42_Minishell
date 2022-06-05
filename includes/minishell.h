@@ -139,15 +139,10 @@ void		free_memory(void **memory_pointer);
 void		handle_signals(void);
 void		open_terminal(t_terminal *terminal);
 void		print_error_message(char *error_message);
-// void		print_all_tracked_memory(char **memory_management);
 void		print_message(char *message);
 char		*read_input_until_new_line(void);
 t_env_elem	*env_singleton(t_env_elem *set_env_linklist);
-// void		track_memory(char ***memory_management, char *memory_to_track);
-// void		untrack_all_memory(char **memory_management);
-// void		untrack_memory(char ***memory_management, char *memory_to_free);
 
-// lprates
 int			msh_execute(t_cmd *cmd);
 t_cmd		*msh_split_line(char *line);
 t_cmd		*realloc_n_initialize_cmd(t_cmd *cmd, int idx);
@@ -228,5 +223,9 @@ int			termios_change(bool echo_ctl_chr);
 
 // error
 int			set_error_return(int error, int return_code);
+char		*set_error_return_null(int error, char *return_code);
+
+// signals
+void		ft_sigint(int signal);
 
 #endif
