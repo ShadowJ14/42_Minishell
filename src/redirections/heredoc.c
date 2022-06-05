@@ -117,13 +117,12 @@ int	create_heredoc_fd(t_cmd *cmd)
 	write_in_fd(fd, cmd->file, cmd->no_expand);
 	fd = open(name_file, O_RDONLY);
 	cmd->pipe[0] = fd;
+	cmd->file_name = name_file;
 	if (cmd->file_name != NULL)
 	{
-		printf("filename %s\n", cmd->file_name);
-		char *test = ft_strjoin(expand_env_var("PWD"), cmd->file_name);
-		unlink(test);
-		free(cmd->file_name);
+		unlink(cmd->file_name);
+		//free(cmd->file_name);
 	}
-	cmd->file_name = name_file;
+	//cmd->file_name = name_file;
 	return (fd);
 }
