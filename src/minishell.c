@@ -32,9 +32,9 @@ static void	expand_env_in_args(t_cmd *cmd)
 		j = -1;
 		while (cmd->args[++j])
 		{
-			printf("before arg%i:%s\n", j, cmd->args[j]);
+			//printf("before arg%i:%s\n", j, cmd->args[j]);
 			cmd->args[j] = word_modif_two(cmd->args[j], NONE, NONE);
-			printf("arg%i:%s\n", j, cmd->args[j]);
+			//printf("arg%i:%s\n", j, cmd->args[j]);
 		}
 		cmd++;
 	}

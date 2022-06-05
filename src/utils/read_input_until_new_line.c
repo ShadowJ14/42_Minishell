@@ -30,7 +30,7 @@ char	*read_input_until_new_line(void)
 	}
 	else if (*str == '\0')
 	{
-		free (str);
+		free_memory((void **)&str);
 		return (NULL);
 	}
 	else

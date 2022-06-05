@@ -24,9 +24,9 @@ void	free_memory(void **memory_pointer)
 void	free_both(char *s1, char *s2)
 {
 	if (s1)
-		free(s1);
+		free_memory((void **)&s1);
 	if (s2)
-		free(s2);
+		free_memory((void **)&s2);
 	return ;
 }
 

@@ -226,4 +226,7 @@ void		turn_off_canonical_mode(t_terminal *terminal);
 void		turn_on_canonical_mode(t_terminal *terminal);
 int			termios_change(bool echo_ctl_chr);
 
+// error
+int			set_error_return(int error, int return_code);
+
 #endif

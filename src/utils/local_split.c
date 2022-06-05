@@ -32,6 +32,8 @@ int	set_chain(char *tmp)
 		s = ft_strchr(s2, '\"');
 		if (!s)
 			s = ft_strchr(s2, '\'');
+		if (s)
+			s2 = s;
 	}
 	if (ft_strstr(s2, ">>"))
 		return (APPEND);

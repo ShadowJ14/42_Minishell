@@ -43,16 +43,13 @@ static char	*cd_home(char *path)
 int	do_cd(char *path)
 {
 	t_env_elem	*env_elem;
-	int			change_success;
+	int			change_failed;
 	char		*old;
 
 	env_elem = env_singleton(NULL);
 	old = getcwd(NULL, 0);
 	if (old == NULL)
-	{
-		g_exit_code = errno;
-		return (EXIT_FAILURE);
-	}
+		return (set_error_return(errno, EXIT_FAILURE));
 	if (!path || ft_strchr(path, '~'))
 		path = cd_home(path);
 	if (!ft_strcmp(path, "-"))
@@ -66,20 +63,16 @@ int	do_cd(char *path)
 		}
 		if (!ft_strcmp(env_elem->name, "PWD"))
 		{
-			change_success = chdir(path);
+			change_failed = chdir(path);
 			free(env_elem->value);
 			env_elem->value = getcwd(NULL, 0);
 			if (env_elem->value == NULL)
-			{
-				g_exit_code = errno;
-				return (EXIT_FAILURE);
-			}
+				return (set_error_return(errno, EXIT_FAILURE));
 		}
 		env_elem = env_elem->next_element;
 	}
-	if (!change_success)
-		return (EXIT_FAILURE);
-	g_exit_code = EXIT_FAILURE;
+	if (!change_failed)
+		return (set_error_return(EXIT_SUCCESS, EXIT_SUCCESS));
 	perror("minishell");
-	return (EXIT_SUCCESS);
+	return (set_error_return(EXIT_FAILURE, EXIT_FAILURE));
 }

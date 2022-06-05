@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 23:41:39 by lprates           #+#    #+#             */
-/*   Updated: 2022/06/05 03:37:53 by lprates          ###   ########.fr       */
+/*   Updated: 2022/06/05 09:06:02 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,25 @@ int	wait_pid(t_cmd **cmd, pid_t *pid)
 	int		len;
 	int		i;
 
-	i = 0;
+	i = -1;
 	cur = *cmd;
 	len = cmd_len(cur);
 	if (len == 1 && is_builtin(*cmd))
-	{
 		return (0);
-	}
-	while (i < len)
+	while (++i < len)
 	{
 		waitpid(pid[i], &g_exit_code, 0);
 		if (WIFEXITED(g_exit_code))
 			g_exit_code = WEXITSTATUS(g_exit_code);
 		else if (WIFSIGNALED(g_exit_code))
+		{
+			if (WTERMSIG(g_exit_code) == 3)
+				ft_putendl_fd("Quit: 3", STDERR_FILENO);
 			g_exit_code = 128 + WTERMSIG(g_exit_code);
-		i++;
+		}
 		cur++;
 	}
-	return (0);
+	return (g_exit_code);
 }
 
 int	init_pipe(int **nfd, int i, t_cmd *cur, t_cmd *cmd)

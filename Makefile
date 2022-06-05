@@ -5,6 +5,7 @@ enable_warnings := -Wall -Wextra -Werror -g -fsanitize=address
 #header_file := ./minishell.h
 library_option := -l
 new_curses_library := ncurses # https://en.wikipedia.org/wiki/Ncurses
+termcap_lib := termcap
 NAME := minishell
 norminette := norminette
 output_name_option := -o
@@ -37,8 +38,8 @@ norminette:
 
 compile: libft.a ${program_file}
 
-execute_program:
-	@${program_file}
+#execute_program:
+#	@${program_file}
 
 libft.a:
 	make -C libs/libft/
@@ -47,7 +48,7 @@ libft.a:
 # The "all", "${NAME}", "clean", "fclean" and "re" make rules are mandatory
 # by 42's Norm (version 3 at the time of writting this comment).
 
-all: libft.a ${program_file}
+all: libft.a ${NAME} #${program_file}
 
 %.o: %.c
 	@${compile} \
@@ -63,7 +64,7 @@ ${NAME}: ${object_files}
 		${turn_warnings_into_errors} \
 		${output_name_option} ${program_file} \
 		${object_files} \
-		${library_option}${new_curses_library}\
+		${library_option}${new_curses_library} ${library_option}${termcap_lib}\
 		${includes} ${libft} ${readline} -L${HOME}/.brew/opt/readline/lib
 
 clean:

@@ -38,7 +38,7 @@ static long long	w_cnt(char *s)
 			else
 				s = move_to_delim((char *)s, ' ', s);
 		}
-		if (s && *s)
+		else if (s && *s)
 			s++;
 	}
 	return (cnt);
@@ -54,7 +54,7 @@ static char	*move_it(char *s, char *from)
 			s = move_to_delim((char *)s, '\'', from);
 		else if (*s == '<' || *s == '>')
 			return (s);
-		if (*s)
+		else if (*s)
 			s++;
 	}
 	return (s);

@@ -17,6 +17,7 @@ static void	unset_args(char **args, t_env_elem **env_linklist)
 	t_env_elem	*env_elem_freed;
 	t_env_elem	**tmp;
 
+	env_elem_freed = NULL;
 	tmp = env_linklist;
 	while (*args != NULL)
 	{
@@ -54,8 +55,7 @@ void	do_unset(char **args)
 	env_linklist = env_singleton(NULL);
 	if (args[1] == NULL)
 	{
-		g_exit_code = EXIT_FAILURE;
-		print_error_message("unset: not enough arguments\n");
+		g_exit_code = 0;
 		return ;
 	}
 	unset_args(args, &env_linklist);

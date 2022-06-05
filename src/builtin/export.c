@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	verify_args(char **args)
+static int	verify_args(char **args)
 {
 	size_t	index;
 
@@ -21,12 +21,17 @@ static void	verify_args(char **args)
 	{
 		if (!(ft_isalpha(args[index][0]) || args[index][0] == '_'))
 		{
-			g_exit_code = errno;
+			g_exit_code = 1;
 			print_error_message(ft_strjoin(ft_strjoin("minishell: export: `", \
 				args[index]), "': not a valid identifier\n"));
+			return (EXIT_FAILURE);
 		}
+		if (!ft_strchr(args[index], '='))
+			set_error_return(0, EXIT_SUCCESS);
 		index++;
 	}
+	g_exit_code = 0;
+	return (EXIT_SUCCESS);
 }
 
 static t_argument	*get_argument(char *arg)
@@ -89,6 +94,8 @@ static void	set_arguments(char **args, \
 			{
 				if (argument->set_value)
 					(*env_linklist)->value = argument->value;
+				if (!args[index + 1])
+					return ;
 				break ;
 			}
 			if ((*env_linklist)->next_element == NULL)
@@ -98,7 +105,8 @@ static void	set_arguments(char **args, \
 		if (ft_strcmp((*env_linklist)->name, argument->name))
 			(*env_linklist)->next_element = allocate_new_node(argument);
 	}
-	env_linklist = &(*env_linklist)->next_element;
+	if ((*env_linklist)->next_element != NULL)
+		env_linklist = &(*env_linklist)->next_element;
 	(*env_linklist)->next_element = 0;
 }
 
@@ -113,6 +121,7 @@ void	do_export(char **args)
 		print_export();
 		return ;
 	}
-	verify_args(args);
+	if (verify_args(args))
+		return ;
 	set_arguments(args, &env_linklist);
 }

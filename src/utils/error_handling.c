@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_error_message.c                              :+:      :+:    :+:   */
+/*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/06 11:19:00 by rramos            #+#    #+#             */
-/*   Updated: 2022/06/05 03:42:55 by lprates          ###   ########.fr       */
+/*   Created: 2022/06/05 04:05:50 by lprates           #+#    #+#             */
+/*   Updated: 2022/06/05 04:16:43 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_error_message(char *error_message)
+int	set_error_return(int error, int return_code)
 {
-	print_message(error_message);
-	//exit(EXIT_FAILURE);
+	g_exit_code = error;
+	return (return_code);
 }

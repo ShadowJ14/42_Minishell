@@ -45,7 +45,7 @@ int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 	{
 		if (execve(exec, cmd->args, str) == -1)
 		{
-			perror("minishell2");
+			perror("minishell");
 			exit(EXIT_FAILURE);
 		}
 		free(exec);
@@ -54,7 +54,10 @@ int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 		free(pid);
 	}
 	else
-		printf("cmd '%s' not found.\n", cmd->args[0]);
+	{
+		printf("minishell: %s: command not found.\n", cmd->args[0]);
+		return (set_error_return(127, 127));
+	}
 	return (0);
 }
 
@@ -76,7 +79,7 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid)
 		exec_sysfunction_two(*cmd, first, str, pid);
 	free_env_llist(env_linklist);
 	free_array((void **)str);
-	return (0);
+	return (g_exit_code);
 }
 
 void	ft_sigint(int signal)
@@ -96,8 +99,7 @@ int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		ft_execve_fct(cur, cmd, pid);
-		exit (0);
+		exit (ft_execve_fct(cur, cmd, pid));
 	}
 	if ((*cur)->pipe[0] != 0)
 		close((*cur)->pipe[0]);
