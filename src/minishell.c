@@ -31,11 +31,7 @@ static void	expand_env_in_args(t_cmd *cmd)
 	{
 		j = -1;
 		while (cmd->args[++j])
-		{
-			//printf("before arg%i:%s\n", j, cmd->args[j]);
 			cmd->args[j] = word_modif_two(cmd->args[j], NONE, NONE);
-			//printf("arg%i:%s\n", j, cmd->args[j]);
-		}
 		cmd++;
 	}
 }
@@ -52,15 +48,26 @@ void	init_shell(char **environment)
 	handle_signals();
 }
 
-char	*missing_quote(void)
+int	missing_quote(char **s, char tmp)
 {
-	printf("minishell: missing quote\n");
-	return (NULL);
+	char	quote;
+
+	quote = 0;
+	(*s)++;
+	while (**s && **s != tmp)
+		(*s)++;
+	if (**s == tmp)
+		quote = 1;
+	if (!quote)
+	{
+		printf("minishell: missing quote\n");
+		return (1);
+	}
+	return (0);
 }
 
 char	*check_str(char *s)
 {
-	char	quote;
 	char	tmp;
 	char	*ret;
 
@@ -73,16 +80,8 @@ char	*check_str(char *s)
 		if (ft_strchr("\"\'", *s))
 			tmp = *s;
 		if (tmp)
-		{
-			quote = 0;
-			s++;
-			while (*s && *s != tmp)
-				s++;
-			if (*s == tmp)
-				quote = 1;
-			if (!quote)
-				return (missing_quote());
-		}
+			if (missing_quote(&s, tmp))
+				return (NULL);
 		if (*s)
 			s++;
 	}
@@ -107,7 +106,6 @@ int	main(int amount_of_program_arguments, char **program_arguments, \
 		if (input != NULL)
 		{
 			termios_change(true);
-			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
 			expand_env_in_args(cmd);
 			msh_execute(cmd);
