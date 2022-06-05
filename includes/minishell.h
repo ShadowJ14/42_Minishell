@@ -156,12 +156,13 @@ int			msh_execute_two(t_cmd *cmd, char **builtin_funcs, \
 char		*check_sysfunction(char *func);
 int			forking(t_cmd *cmd, pid_t *pid);
 
-//testing
+// parsing
 
 t_quote		update_quote_status(char c, t_quote quote);
 t_quote		update_quote_succes(int *i, t_quote quote, char **s1);
 char		*word_modif_two(char *duplica, t_quote quote, t_quote prec);
 char		*string_env(char *str, char *tmp, int *cur);
+int			set_chain(char *tmp);
 
 // builtins
 

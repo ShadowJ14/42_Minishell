@@ -12,40 +12,6 @@
 
 #include "minishell.h"
 
-int	set_chain(char *tmp)
-{
-	char	*s;
-	char	*s2;
-
-	s = ft_strchr(tmp, '"');
-	if (!s)
-		s = ft_strchr(tmp, '\'');
-	s2 = tmp;
-	while (s != NULL)
-	{
-		s++;
-		while (*s && (*s != '\"' && *s != '\''))
-			s++;
-		if (*s == 0)
-			break ;
-		s2 = s;
-		s = ft_strchr(s2, '\"');
-		if (!s)
-			s = ft_strchr(s2, '\'');
-		if (s)
-			s2 = s;
-	}
-	if (ft_strstr(s2, ">>"))
-		return (APPEND);
-	if (ft_strstr(s2, ">"))
-		return (REDIRECTO);
-	if (ft_strstr(s2, "<<"))
-		return (HEREDOC);
-	if (ft_strstr(s2, "<"))
-		return (REDIRECTI);
-	return (0);
-}
-
 static void	loc_strcpy(char *dst, char *from, char *until)
 {
 	while (from < until)
