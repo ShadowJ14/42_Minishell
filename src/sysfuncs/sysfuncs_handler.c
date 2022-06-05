@@ -22,6 +22,13 @@ static char	*free_second(char *s1, char *s2)
 	return (ret);
 }
 
+static int	free_tmp_n_envs(char **tmp, char *envs)
+{
+	free_array((void **)tmp);
+	free(envs);
+	return (1);
+}
+
 char	*check_sysfunction(char *func)
 {
 	char	*envs;
@@ -40,21 +47,12 @@ char	*check_sysfunction(char *func)
 	{
 		cmd = free_second(*ret, ft_strjoin("/", func));
 		if (access(cmd, X_OK) == 0)
-		{
-			free_array((void **)tmp);
-			free(envs);
-			return (cmd);
-		}
+			if (free_tmp_n_envs(tmp, envs))
+				return (cmd);
 		free(cmd);
 		if (*ret)
 			ret++;
 	}
-	free(envs);
-	free_array((void **)tmp);
+	free_tmp_n_envs(tmp, envs);
 	return (NULL);
 }
-
-/*
-** funtions that handles the redirection in and append in to file
-**
-*/

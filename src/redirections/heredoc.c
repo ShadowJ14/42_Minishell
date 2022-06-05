@@ -119,10 +119,6 @@ int	create_heredoc_fd(t_cmd *cmd)
 	cmd->pipe[0] = fd;
 	cmd->file_name = name_file;
 	if (cmd->file_name != NULL)
-	{
 		unlink(cmd->file_name);
-		//free(cmd->file_name);
-	}
-	//cmd->file_name = name_file;
 	return (fd);
 }

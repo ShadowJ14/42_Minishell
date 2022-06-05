@@ -65,7 +65,6 @@ char	*get_envp(char *str, int *cur)
 	char	*cpy;
 	char	*env;
 
-	cpy = NULL;
 	len_str = get_len_env_var(str);
 	if (len_str == 0)
 		return (alloc_dollar(cur));
