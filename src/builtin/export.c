@@ -83,10 +83,13 @@ static void	set_arguments(char **args, \
 {
 	t_argument	*argument;
 	size_t		index;
+	t_env_elem	**tmp_env;
 
 	index = 0;
+	tmp_env = env_linklist;
 	while (args[++index] != NULL)
 	{
+		env_linklist = tmp_env;
 		argument = get_argument(args[index]);
 		while (*env_linklist != NULL)
 		{
@@ -103,11 +106,13 @@ static void	set_arguments(char **args, \
 			env_linklist = &(*env_linklist)->next_element;
 		}
 		if (ft_strcmp((*env_linklist)->name, argument->name))
+		{
 			(*env_linklist)->next_element = allocate_new_node(argument);
+			(*env_linklist)->next_element->next_element = 0;
+		}
 	}
 	if ((*env_linklist)->next_element != NULL)
-		env_linklist = &(*env_linklist)->next_element;
-	(*env_linklist)->next_element = 0;
+		(*env_linklist)->next_element->next_element = 0;
 }
 
 // implements export builtin
