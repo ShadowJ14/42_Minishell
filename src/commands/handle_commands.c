@@ -38,12 +38,14 @@ int	exec_sysfunction_two(t_cmd *cmd, t_cmd **first, char **str, pid_t *pid)
 	char	*exec;
 
 	(void) first;
+	if (!cmd->args[0])
+		return (0);
 	exec = check_sysfunction(cmd->args[0]);
 	if (exec)
 	{
 		if (execve(exec, cmd->args, str) == -1)
 		{
-			perror("minishell");
+			perror("minishell2");
 			exit(EXIT_FAILURE);
 		}
 		free(exec);
@@ -77,9 +79,15 @@ int	ft_execve_fct(t_cmd **cmd, t_cmd **first, pid_t *pid)
 	return (0);
 }
 
+void	ft_sigint(int signal)
+{
+	(void) signal;
+	ft_putchar('\n');
+}
+
 int	multi_fork(pid_t *pid, int i, t_cmd **cmd, t_cmd **cur)
 {
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	pid[i] = fork();
 	if (pid[i] == -1)

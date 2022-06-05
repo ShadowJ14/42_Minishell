@@ -81,7 +81,8 @@ int	do_exit(char **args, pid_t *pid)
 		if (ft_non_int(args[1]))
 		{
 			free_all("ENV");
-			free(pid);
+			if (pid)
+				free(pid);
 			exit (2);
 		}
 		ret = ft_atoi(args[1]);

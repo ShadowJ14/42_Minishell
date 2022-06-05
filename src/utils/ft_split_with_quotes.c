@@ -24,7 +24,7 @@ static long long	w_cnt(char *s)
 	long long	cnt;
 
 	cnt = 0;
-	while (*s)
+	while (s && *s)
 	{
 		if (*s != ' ')
 		{
@@ -38,7 +38,7 @@ static long long	w_cnt(char *s)
 			else
 				s = move_to_delim((char *)s, ' ', s);
 		}
-		if (*s != 0)
+		if (s && *s)
 			s++;
 	}
 	return (cnt);
@@ -46,14 +46,17 @@ static long long	w_cnt(char *s)
 
 static char	*move_it(char *s, char *from)
 {
-	if (*s == '"')
-		s = move_to_delim((char *)s, '"', from);
-	else if (*s == '\'')
-		s = move_to_delim((char *)s, '\'', from);
-	else if (*s == '<' || *s == '>')
-		s = move_to_end_redirect((char *)s, *s, from);
-	else
-		s = move_to_delim((char *)s, ' ', from);
+	while (*s && !ft_isblank(*s))
+	{
+		if (*s == '"')
+			s = move_to_delim((char *)s, '"', from);
+		else if (*s == '\'')
+			s = move_to_delim((char *)s, '\'', from);
+		else if (*s == '<' || *s == '>')
+			return (s);
+		if (*s)
+			s++;
+	}
 	return (s);
 }
 
@@ -62,6 +65,9 @@ static char	*set_filename(t_cmd *cmd, char *from, char *s)
 	while (*s && ft_isblank(*s))
 		if (*s != 0 && !ft_strchr("><", *s))
 			s++;
+	s = move_to_end_redirect((char *)s, *s, from);
+	while (*s && ft_isblank(*s))
+		s++;
 	from = s;
 	s = move_it((char *)s, from);
 	if (ft_strstr(from, "\"\""))

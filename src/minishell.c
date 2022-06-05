@@ -40,7 +40,7 @@ static void	expand_env_in_args(t_cmd *cmd)
 	}
 }
 
-void	init_shell(t_terminal *terminal, char **environment)
+void	init_shell(char **environment)
 {
 	t_env_elem	*env_linklist;
 
@@ -49,41 +49,64 @@ void	init_shell(t_terminal *terminal, char **environment)
 	env_linklist = format_environment(environment);
 	env_singleton(env_linklist);
 	update_shlvl();
-	open_terminal(terminal);
 	handle_signals();
 }
 
-void	activate_controlchars(t_terminal *terminal)
+char	*missing_quote(void)
 {
-	terminal->attributes_new = terminal->attributes;
-	//terminal->attributes_new.c_lflag &= ~(ICANON | ECHO);
-	terminal->attributes_new.c_lflag &= (ECHOCTL);
-	terminal->attributes_new.c_lflag &= (ICANON | ECHO);
-	terminal->attributes_new.c_cc[VMIN] = 1;
-	terminal->attributes_new.c_cc[VTIME] = 0;
-	tcsetattr(terminal->file_descriptor, TCSANOW, &terminal->attributes_new);
+	printf("minishell: missing quote\n");
+	return (NULL);
+}
+
+char	*check_str(char *s)
+{
+	char	quote;
+	char	tmp;
+	char	*ret;
+
+	ret = s;
+	if (!s)
+		return (NULL);
+	while (*s)
+	{
+		tmp = 0;
+		if (ft_strchr("\"\'", *s))
+			tmp = *s;
+		if (tmp)
+		{
+			quote = 0;
+			s++;
+			while (*s && *s != tmp)
+				s++;
+			if (*s == tmp)
+				quote = 1;
+			if (!quote)
+				return (missing_quote());
+		}
+		if (*s)
+			s++;
+	}
+	return (ret);
 }
 
 int	main(int amount_of_program_arguments, char **program_arguments, \
 	char **environment)
 {
-	t_terminal	terminal;
 	t_cmd		*cmd;
 	char		*input;
 
 	(void)amount_of_program_arguments;
 	(void)program_arguments;
-	init_shell(&terminal, environment);
+	init_shell(environment);
 	g_exit_code = 0;
 	while (true)
 	{
-		//open_terminal(&terminal);
-		turn_off_canonical_mode(&terminal);
+		termios_change(false);
 		input = read_input_until_new_line();
+		input = check_str(input);
 		if (input != NULL)
 		{
-			turn_on_canonical_mode(&terminal);
-			//activate_controlchars(&terminal);
+			termios_change(true);
 			printf("input: %s\n", input);
 			cmd = msh_split_line(input);
 			expand_env_in_args(cmd);

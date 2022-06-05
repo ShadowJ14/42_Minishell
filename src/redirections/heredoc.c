@@ -119,7 +119,9 @@ int	create_heredoc_fd(t_cmd *cmd)
 	cmd->pipe[0] = fd;
 	if (cmd->file_name != NULL)
 	{
-		unlink(cmd->file_name);
+		printf("filename %s\n", cmd->file_name);
+		char *test = ft_strjoin(expand_env_var("PWD"), cmd->file_name);
+		unlink(test);
 		free(cmd->file_name);
 	}
 	cmd->file_name = name_file;

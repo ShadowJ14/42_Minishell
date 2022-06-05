@@ -52,6 +52,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
+# define ERROR -1
+
 # define BUILTIN_FUNCS_NB 7
 # define PIPE 1
 # define REDIRECTI 2
@@ -219,5 +221,6 @@ char		*alloc_dollar(int *cur);
 //void		change_terminal_attributes(t_terminal *terminal);
 void		turn_off_canonical_mode(t_terminal *terminal);
 void		turn_on_canonical_mode(t_terminal *terminal);
+int			termios_change(bool echo_ctl_chr);
 
 #endif
