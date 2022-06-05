@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+static int	nextlink_free(t_env_elem **env_linklist)
+{
+	*env_linklist = (*env_linklist)->next_element;
+	free_both((*env_linklist)->name, (*env_linklist)->value);
+	free_memory((void **)env_linklist);
+	return (1);
+}
+
+static int	env_elem_free(t_env_elem **env_linklist, t_env_elem *env_elem_freed)
+{
+	*env_linklist = (*env_linklist)->next_element;
+	free_both(env_elem_freed->name, env_elem_freed->value);
+	free_memory((void **)&env_elem_freed);
+	return (1);
+}
+
 static void	unset_args(char **args, t_env_elem **env_linklist)
 {
 	t_env_elem	*env_elem_freed;
@@ -22,21 +38,14 @@ static void	unset_args(char **args, t_env_elem **env_linklist)
 	while (*args != NULL)
 	{
 		if (*env_linklist != NULL && !ft_strcmp((*env_linklist)->name, *args))
-		{
-			*env_linklist = (*env_linklist)->next_element;
-			free_both((*env_linklist)->name, (*env_linklist)->value);
-			free_memory((void **)env_linklist);
-			args++;
-			continue ;
-		}
+			if (nextlink_free(env_linklist) && args++)
+				continue ;
 		while (*env_linklist != NULL)
 		{
 			if (!ft_strcmp((*env_linklist)->name, *args))
 			{
 				env_elem_freed = *env_linklist;
-				*env_linklist = (*env_linklist)->next_element;
-				free_both(env_elem_freed->name, env_elem_freed->value);
-				free_memory((void **)&env_elem_freed);
+				env_elem_free(env_linklist, env_elem_freed);
 				break ;
 			}
 			else
@@ -47,7 +56,6 @@ static void	unset_args(char **args, t_env_elem **env_linklist)
 	}
 }
 
-// implements unset builtin
 void	do_unset(char **args)
 {
 	t_env_elem	*env_linklist;

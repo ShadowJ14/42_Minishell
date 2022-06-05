@@ -17,7 +17,7 @@
 # define MINISHELL_H
 
 // Include the "errno" global variable.
-#include <errno.h>
+# include <errno.h>
 
 // Include the "open" function.
 # include <fcntl.h>
@@ -101,7 +101,6 @@ typedef struct s_terminal
 	char			*backspace;
 	char			*del_line;
 	char			*set_cursor_begin;
-	//char			*environment_variable;
 	int				file_descriptor;
 	char			*path;
 }	t_terminal;
@@ -142,7 +141,7 @@ void		open_terminal(t_terminal *terminal);
 void		print_error_message(char *error_message);
 // void		print_all_tracked_memory(char **memory_management);
 void		print_message(char *message);
-char		*read_input_until_new_line();
+char		*read_input_until_new_line(void);
 t_env_elem	*env_singleton(t_env_elem *set_env_linklist);
 // void		track_memory(char ***memory_management, char *memory_to_track);
 // void		untrack_all_memory(char **memory_management);
@@ -179,6 +178,7 @@ int			do_cd(char *path);
 void		do_unset(char **args);
 void		do_export(char **args);
 void		print_export(void);
+int			f_strdup(t_env_elem *env_linklist, t_argument *argument);
 
 // redirections
 
