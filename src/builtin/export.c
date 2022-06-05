@@ -73,15 +73,21 @@ static t_env_elem	*allocate_new_node(t_argument *argument)
 		new_env_linklist->value = ft_strdup(argument->value);
 	else
 		new_env_linklist->value = 0;
-	free_both(argument->name, argument->value);
-	free(argument);
+	new_env_linklist->next_element = 0;
 	return (new_env_linklist);
+}
+
+int	f_strdup(t_env_elem *env_linklist, t_argument *argument)
+{
+	free(env_linklist->value);
+	env_linklist->value = ft_strdup(argument->value);
+	return (1);
 }
 
 static void	set_arguments(char **args, \
 	t_env_elem **env_linklist)
 {
-	t_argument	*argument;
+	t_argument	*arg;
 	size_t		index;
 	t_env_elem	**tmp_env;
 
@@ -90,29 +96,21 @@ static void	set_arguments(char **args, \
 	while (args[++index] != NULL)
 	{
 		env_linklist = tmp_env;
-		argument = get_argument(args[index]);
+		arg = get_argument(args[index]);
 		while (*env_linklist != NULL)
 		{
-			if (!ft_strcmp((*env_linklist)->name, argument->name))
-			{
-				if (argument->set_value)
-					(*env_linklist)->value = argument->value;
-				if (!args[index + 1])
-					return ;
-				break ;
-			}
+			if (!ft_strcmp((*env_linklist)->name, arg->name))
+				if ((arg->set_value && f_strdup(*env_linklist, arg)) || 1)
+					break ;
 			if ((*env_linklist)->next_element == NULL)
 				break ;
 			env_linklist = &(*env_linklist)->next_element;
 		}
-		if (ft_strcmp((*env_linklist)->name, argument->name))
-		{
-			(*env_linklist)->next_element = allocate_new_node(argument);
-			(*env_linklist)->next_element->next_element = 0;
-		}
+		if (ft_strcmp((*env_linklist)->name, arg->name))
+			(*env_linklist)->next_element = allocate_new_node(arg);
+		free_both(arg->name, arg->value);
+		free(arg);
 	}
-	if ((*env_linklist)->next_element != NULL)
-		(*env_linklist)->next_element->next_element = 0;
 }
 
 // implements export builtin
