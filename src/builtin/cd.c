@@ -31,15 +31,28 @@ static char	*cd_home(char *path)
 	return (homestring);
 }
 
-/* implements cd builtin
-** returns EXIT_SUCCESS on success
-** returns EXIT_FAILURE on failure
-** needs to update old pwd because of cd -
-** old pwd implemented but needs cleaning
-** cd with no arguments is implemented but needs cleaning
-** added OLDPWD and PWD update
-** needs to implement "~" to expand variable - done
-*/
+static char	*free_and_assign(t_env_elem	*env_elem, char *s)
+{
+	free(env_elem->value);
+	return (s);
+}
+
+static int	perror_error_return(int error, int return_code)
+{
+	perror("minishell");
+	return (set_error_return(error, return_code));
+}
+
+static int	cd_and_update_pwd(int *change_failed, char *path, \
+	t_env_elem *env_elem)
+{
+	*change_failed = chdir(path);
+	env_elem->value = free_and_assign(env_elem, getcwd(NULL, 0));
+	if (env_elem->value == NULL)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
 int	do_cd(char *path)
 {
 	t_env_elem	*env_elem;
@@ -57,22 +70,13 @@ int	do_cd(char *path)
 	while (env_elem != NULL)
 	{
 		if (!ft_strcmp(env_elem->name, "OLDPWD"))
-		{
-			free(env_elem->value);
-			env_elem->value = old;
-		}
+			env_elem->value = free_and_assign(env_elem, old);
 		if (!ft_strcmp(env_elem->name, "PWD"))
-		{
-			change_failed = chdir(path);
-			free(env_elem->value);
-			env_elem->value = getcwd(NULL, 0);
-			if (env_elem->value == NULL)
+			if (cd_and_update_pwd(&change_failed, path, env_elem))
 				return (set_error_return(errno, EXIT_FAILURE));
-		}
 		env_elem = env_elem->next_element;
 	}
 	if (!change_failed)
 		return (set_error_return(EXIT_SUCCESS, EXIT_SUCCESS));
-	perror("minishell");
-	return (set_error_return(EXIT_FAILURE, EXIT_FAILURE));
+	return (perror_error_return(EXIT_FAILURE, EXIT_FAILURE));
 }

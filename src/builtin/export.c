@@ -77,13 +77,6 @@ static t_env_elem	*allocate_new_node(t_argument *argument)
 	return (new_env_linklist);
 }
 
-int	f_strdup(t_env_elem *env_linklist, t_argument *argument)
-{
-	free(env_linklist->value);
-	env_linklist->value = ft_strdup(argument->value);
-	return (1);
-}
-
 static void	set_arguments(char **args, \
 	t_env_elem **env_linklist)
 {

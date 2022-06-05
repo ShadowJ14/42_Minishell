@@ -29,3 +29,10 @@ void	print_export(void)
 		env_linklist = env_linklist->next_element;
 	}
 }
+
+int	f_strdup(t_env_elem *env_linklist, t_argument *argument)
+{
+	free(env_linklist->value);
+	env_linklist->value = ft_strdup(argument->value);
+	return (1);
+}
