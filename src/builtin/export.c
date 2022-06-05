@@ -20,8 +20,11 @@ static void	verify_args(char **args)
 	while (args[index] != NULL)
 	{
 		if (!(ft_isalpha(args[index][0]) || args[index][0] == '_'))
-			print_error_message(ft_strjoin(ft_strjoin("export: not an" \
-				" identifier: ", args[index]), "\n"));
+		{
+			g_exit_code = errno;
+			print_error_message(ft_strjoin(ft_strjoin("minishell: export: `", \
+				args[index]), "': not a valid identifier\n"));
+		}
 		index++;
 	}
 }
@@ -41,7 +44,7 @@ static t_argument	*get_argument(char *arg)
 	while (++index_2 < i1)
 		arg2->name[index_2] = arg[index_2];
 	arg2->name[index_2] = '\0';
-	arg2->value = alloc_mem(sizeof(*(arg2->value)) * (ft_strlen(arg) - i1));
+	arg2->value = alloc_mem(sizeof(*(arg2->value)) * (ft_strlen(arg) - i1 + 1));
 	arg2->set_value = false;
 	if (arg[i1] == '=')
 	{

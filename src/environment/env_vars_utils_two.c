@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars_utils_two.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: rramos <rramos@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 00:42:51 by lprates           #+#    #+#             */
-/*   Updated: 2022/06/04 02:02:09 by lprates          ###   ########.fr       */
+/*   Updated: 2022/06/04 16:57:34 by rramos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ char	*expand_env_var(char *env_name)
 			if (!expanded_size)
 				return (NULL);
 			expanded_name = malloc(sizeof(char) * expanded_size + 1);
+			if (expanded_name == NULL)
+			{
+				g_exit_code = errno;
+				return (NULL);
+			}
 			ft_strlcpy(expanded_name, env_linklist->value, \
 				expanded_size + 1);
 			return (expanded_name);
